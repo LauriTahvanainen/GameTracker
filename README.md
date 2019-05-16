@@ -18,3 +18,6 @@ Käyttäjien täytyy rekisteröityä sivulle.
 * Oman tilin poistaminen
 * Uusien eläimien lisääminen tietokantaan (Mahdollisesti vain ylläpitäjän toiminto, mutta mahdollista, että myös normaalikäyttäjille)
 * Ylläpitäjän mahdollisuus lisätä uusia havaintovälineitä
+
+## Linkit
+[Tietokantarakenne](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tietokantarakenne.md)

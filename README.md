@@ -21,3 +21,5 @@ Käyttäjien täytyy rekisteröityä sivulle.
 
 ## Linkit
 [Tietokantarakenne](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tietokantarakenne.md)
+
+[Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kaytt%C3%A4jatarinat.md)

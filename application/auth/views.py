@@ -1,8 +1,8 @@
 from application import app, db
 from application.auth.models import User
-from application.auth.forms import LoginForm, CreateNewForm
+from application.auth.forms import LoginForm, CreateUserForm
 from flask_login import login_user, logout_user
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 @app.route("/auth/login", methods = ["GET", "POST"])
@@ -18,6 +18,7 @@ def auth_login():
         return render_template("auth/loginform.html", form = form, error = "Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!")
 
     login_user(user)
+    flash('Kirjautuminen onnistui!')
     return redirect(url_for("index"))
 
 @app.route("/auth/logout")
@@ -28,13 +29,18 @@ def auth_logout():
 @app.route("/auth/create", methods = ["GET", "POST"])
 def auth_create():
     if request.method == "GET":
-        return render_template("auth/createuserform.html", form = CreateNewForm())
+        return render_template("auth/createuserform.html", form = CreateUserForm())
     
-    form = CreateNewForm(request.form)
+    form = CreateUserForm(request.form)
     # Create the new user from the form
-
-    newUser = User(form.username.data, form.name.data, form.password.data, form.city.data, int(form.age.data))
-
-    db.session().add(newUser)
-    db.session().commit()
-    return redirect(url_for("index"))
+    if form.validate():
+        newUser = User(form.username.data, form.name.data, form.password.data, form.city.data, int(form.age.data))
+        try:
+            db.session().add(newUser)
+            db.session().commit()
+        except Exception:
+            db.session().rollback()
+            return render_template("auth/createuserform.html", form = CreateUserForm(), error = "Käyttäjänimi on jo käytössä!")
+        flash('Rekisteröityminen onnistui!')
+        return redirect(url_for("index"))
+    return render_template("auth/createuserform.html", form=form)

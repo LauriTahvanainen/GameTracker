@@ -4,23 +4,32 @@
 <head>
   <meta charset="utf-8">
   <title>GameTracker</title>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul class=flashes>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
 </head>
 
 <body>
   <h1>GameTracker</h1>
   {% if current_user.is_authenticated %}
-    <p>
-      Kirjautunut nimellä {{ current_user.name }}
-    </p>
-    <p>
-      <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
-    </p>
+  <p>
+    Kirjautunut nimellä {{ current_user.name }}
+  </p>
+  <p>
+    <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+  </p>
   {% else %}
-    <a href="{{ url_for('auth_login') }}">Kirjaudu</a>. <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>
+  <a href="{{ url_for('auth_login') }}">Kirjaudu</a>. <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>
   {% endif %}
   {% block body %}
-    <p>
-    </p>
+  <p>
+  </p>
   {% endblock %}
 </body>
 

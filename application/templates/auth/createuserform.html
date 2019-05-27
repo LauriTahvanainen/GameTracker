@@ -11,6 +11,11 @@
             <td>
                 {{ form.username }}
             </td>
+            <td>
+                {% for error in form.username.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>
@@ -18,6 +23,19 @@
             </td>
             <td>
                 {{ form.password }}
+            </td>
+            <td>
+                {% for error in form.password.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.confirmPwd.label }}
+            </td>
+            <td>
+                {{ form.confirmPwd }}
             </td>
         </tr>
         <tr>
@@ -27,6 +45,11 @@
             <td>
                 {{ form.name }}
             </td>
+            <td>
+                {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>
@@ -35,6 +58,11 @@
             <td>
                 {{ form.city }}
             </td>
+            <td>
+                {% for error in form.city.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>
@@ -42,6 +70,11 @@
             </td>
             <td>
                 {{ form.age }}
+            </td>
+            <td>
+                {% for error in form.age.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
             </td>
         </tr>
         <tr>

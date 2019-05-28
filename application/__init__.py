@@ -2,10 +2,17 @@ from flask import Flask
 app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
+# Tietokanta eri herokussa ja paikallisella laitteella
+
+import os
+
 # observations.db niminen tietokanta.
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///observations.db"
-# Tulosta kaikki SQL-kyselyt
-app.config["SQLALCHEMY_ECHO"] = True
+if os.environ.get("HEROKU"):
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+else:    
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///observations.db"
+    # Tulosta kaikki SQL-kyselyt
+    app.config["SQLALCHEMY_ECHO"] = True
 
 # db-olio.
 db = SQLAlchemy(app)
@@ -38,4 +45,7 @@ def load_user(user_id):
     return User.query.get(user_id)
     
 # Luo taulut
-db.create_all()
+try :
+    db.create_all()
+except:
+    pass

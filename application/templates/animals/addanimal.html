@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('animal_add') }}">
+    <table>
+        <tr>
+            <td>
+                {{ form.name.label }}
+            </td>
+            <td>
+                {{ form.name }}
+            </td>
+            <td>
+                {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.lat_name.label }}
+            </td>
+            <td>
+                {{ form.lat_name }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.info.label }}
+            </td>
+            <td>
+                {{ form.info }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Lisää eläin" />
+            </td>
+        </tr>
+</form>
+{% endblock %}

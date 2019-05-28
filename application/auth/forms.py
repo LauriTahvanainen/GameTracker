@@ -2,8 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, validators, IntegerField
 
 class LoginForm(FlaskForm):
-    username = StringField("Username")
-    password = PasswordField("Password")
+    username = StringField("Käyttäjänimi")
+    password = PasswordField("Salasana")
 
     class Meta:
         csrf = False
@@ -20,8 +20,18 @@ class CreateUserForm(FlaskForm):
     confirmPwd = PasswordField("Vahvista salasana")
     name = StringField("Nimi", [validators.input_required(message='Nimi ei voi olla tyhjä!')])
     city = StringField("Kaupunki")
-# Todo, Validate age to always be a number
     age = IntegerField("Syntymävuosi", [validators.number_range(min=1888, max=2012)])
+
+    class Meta:
+        csrf = False
+
+class ChangePasswordForm(FlaskForm):
+    oldPassword = PasswordField("Nykyinen salasana")
+    password = PasswordField("Uusi salasana", [
+        validators.Length(min=8, max=30, message='Salasanan on oltava pituudeltaan 8-30 merkkiä!'),
+        validators.equal_to('confirmPassword', message='Salasanojen on oltava samat!')
+    ])
+    confirmPassword = PasswordField("Vahvista uusi salasana")
 
     class Meta:
         csrf = False

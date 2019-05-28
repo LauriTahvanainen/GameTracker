@@ -4,6 +4,20 @@
 <head>
   <meta charset="utf-8">
   <title>GameTracker</title>
+  <div class="topnav">
+    <h1>GameTracker</h1>
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+    <a href="{{ url_for('animal_add') }}">Lisää eläin</a>
+    <a href="{{ url_for('auth_changepw') }}">Vaihda salasana</a>
+    <a href="{{ url_for('auth_delete') }}">Poista käyttäjätili</a>
+    {% else %}
+    <a href="{{ url_for('auth_login') }}">Kirjaudu</a>
+    <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>
+    {% endif %}
+    {% block body %}
+    {% endblock %}
+  </div>
   {% with messages = get_flashed_messages() %}
   {% if messages %}
   <ul class=flashes>
@@ -16,21 +30,11 @@
 </head>
 
 <body>
-  <h1>GameTracker</h1>
   {% if current_user.is_authenticated %}
   <p>
     Kirjautunut nimellä {{ current_user.name }}
   </p>
-  <p>
-    <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-  <a href="{{ url_for('auth_login') }}">Kirjaudu</a>. <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>
   {% endif %}
-  {% block body %}
-  <p>
-  </p>
-  {% endblock %}
 </body>
 
 </html>

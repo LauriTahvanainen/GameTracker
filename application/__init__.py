@@ -22,6 +22,7 @@ from application import views
 from application.observations import models
 
 from application.animals import models
+from application.animals import views
 
 from application.equipments import models
 

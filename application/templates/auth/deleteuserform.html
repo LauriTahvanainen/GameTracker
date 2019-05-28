@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('auth_delete') }}">
+            <td colspan="2">
+                <input type="submit" value="Poista käyttäjäsi" onclick="return confirm('Oletko varma, että haluat poistaa käyttäjätilisi? Havaintosi eivät häviä järjestelmästä.')" />
+            </td>
+        </tr>
+</form>
+{% endblock %}

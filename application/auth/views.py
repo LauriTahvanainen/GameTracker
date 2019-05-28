@@ -1,7 +1,7 @@
 from application import app, db
 from application.auth.models import User
 from application.auth.forms import LoginForm, CreateUserForm
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -22,6 +22,7 @@ def auth_login():
     return redirect(url_for("index"))
 
 @app.route("/auth/logout")
+@login_required
 def auth_logout():
     logout_user()
     return redirect(url_for("index"))

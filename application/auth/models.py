@@ -1,5 +1,6 @@
 from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.sql import text
 
 class User(db.Model):
     __tablename__ = "account"
@@ -34,3 +35,25 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.account_id).encode("utf-8").decode("utf-8")
+
+    @staticmethod
+    def find_current_user_information(cur_id):
+        stmt = text("SELECT Account.username, Account.name, Account.city, Account.age "
+                    "FROM Account WHERE Account.account_id = :acc_id").params(acc_id=cur_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"username":row[0], "name":row[1], "city":row[2], "age":row[3]})
+        return response
+
+    @staticmethod
+    def list_all_users():
+        stmt = text("SELECT Account.account_id, Account.username, Account.name, Account.city, Account.age "
+                    "FROM Account")
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"username":row[0], "name":row[1], "city":row[2], "age":row[3]})
+        return response

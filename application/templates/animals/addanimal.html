@@ -32,6 +32,11 @@
             <td>
                 {{ form.info }}
             </td>
+            <td>
+                {% for error in form.info.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td colspan="2">

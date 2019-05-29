@@ -11,6 +11,8 @@
     <a href="{{ url_for('animal_add') }}">Lisää eläin</a>
     <a href="{{ url_for('auth_changepw') }}">Vaihda salasana</a>
     <a href="{{ url_for('auth_delete') }}">Poista käyttäjätili</a>
+    <a href="{{ url_for('auth_user_info') }}">Tarkastele omia käyttäjätietoja</a>
+    <a href="{{ url_for('auth_list') }}">Listaa käyttäjät</a>
     {% else %}
     <a href="{{ url_for('auth_login') }}">Kirjaudu</a>
     <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>

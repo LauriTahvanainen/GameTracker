@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<table>
+    <caption>Käyttäjätiedot</caption>
+    {% for User in user_info %}
+    <tr>
+        <th>Käyttäjänimi: </th>
+        <td>{{ User.username }}</td>
+    </tr>
+    <tr>
+        <th>Nimi: </th>
+        <td>{{ User.name }}</td>
+    </tr>
+    <tr>
+        <th>Kaupunki: </th>
+        <td>{{ User.city }}</td>
+    </tr>
+    <tr>
+        <th>Syntymävuosi: </th>
+        <td>{{ User.age }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

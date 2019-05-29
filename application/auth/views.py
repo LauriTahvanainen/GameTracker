@@ -80,3 +80,14 @@ def auth_changepw():
         flash('Salasana vaihdettu!')
         return render_template("auth/changepasswordform.html", form=form)
     return render_template("auth/changepasswordform.html", form=form, error="Nykyinen salasana oli väärä!")
+
+@app.route("/auth/user_info")
+@login_required
+def auth_user_info():
+    return render_template("auth/userinfo.html", user_info=User.find_current_user_information(current_user.account_id))
+
+@app.route("/auth/list")
+@login_required
+def auth_list():
+    return render_template("auth/list.html", users = User.query.all())
+

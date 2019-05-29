@@ -23,3 +23,10 @@ Käyttäjien täytyy rekisteröityä sivulle.
 [Tietokantarakenne](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tietokantarakenne.md)
 
 [Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kaytt%C3%A4jatarinat.md)
+
+## Testitunnukset
+**Käyttäjä**
+
+    Käyttäjätunnus: test
+    Salasana: testtest
+

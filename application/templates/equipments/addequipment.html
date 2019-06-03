@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('equipment_add') }}">
+    <table>
+        <tr>
+            <td>
+                {{ form.name.label }}
+            </td>
+            <td>
+                {{ form.name }}
+            </td>
+            <td>
+                {% for error in form.name.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Lisää varuste" />
+            </td>
+        </tr>
+</form>
+{% endblock %}

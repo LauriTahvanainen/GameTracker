@@ -6,6 +6,10 @@ from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
 
+@app.route("/auth/menu", methods=["GET"])
+@login_required
+def auth_menu():
+    return render_template("auth/menu.html")
 
 @app.route("/auth/login", methods=["GET", "POST"])
 def auth_login():

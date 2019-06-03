@@ -8,10 +8,8 @@
     <h1>GameTracker</h1>
     {% if current_user.is_authenticated %}
     <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
-    <a href="{{ url_for('animal_add') }}">Lisää eläin</a>
-    <a href="{{ url_for('auth_changepw') }}">Vaihda salasana</a>
-    <a href="{{ url_for('auth_delete') }}">Poista käyttäjätili</a>
-    <a href="{{ url_for('auth_user_info') }}">Tarkastele omia käyttäjätietoja</a>
+    <a href="{{ url_for('animal_menu') }}">Eläimet</a>
+    <a href="{{ url_for('auth_menu') }}">Käyttäjätili</a>
     <a href="{{ url_for('auth_list') }}">Listaa käyttäjät</a>
     {% else %}
     <a href="{{ url_for('auth_login') }}">Kirjaudu</a>

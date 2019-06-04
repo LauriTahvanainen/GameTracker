@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('observation_add') }}">
+    <table>
+        <tr>
+            <td>
+                {{ form.date_observed.label }}
+            </td>
+            <td>
+                {{ form.date_observed }}
+            </td>
+            <td>
+                {% for error in form.date_observed.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.city.label }}
+            </td>
+            <td>
+                {{ form.city }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.latitude.label }}
+            </td>
+            <td>
+                {{ form.latitude }}
+            </td>
+            <td>
+                {% for error in form.latitude.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.longitude.label }}
+            </td>
+            <td>
+                {{ form.longitude }}
+            </td>
+            <td>
+                {% for error in form.longitude.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.animal.label }}
+            </td>
+            <td>
+                {{ form.animal(size=1) }}
+            </td>
+            <td>
+                {% for error in form.animal.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.weight.label }}
+            </td>
+            <td>
+                {{ form.weight }}
+            </td>
+            <td>
+                {% for error in form.weight.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.sex.label }}
+            </td>
+            <td>
+                {{ form.sex(size=1) }}
+            </td>
+            <td>
+                {% for error in form.sex.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.observ_type.label }}
+            </td>
+            <td>
+                {{ form.observ_type(size=1) }}
+            </td>
+            <td>
+                {% for error in form.observ_type.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.equipment.label }}
+            </td>
+            <td>
+                {{ form.equipment }}
+            </td>
+            <td>
+                {% for error in form.equipment.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.info.label }}
+            </td>
+            <td>
+                {{ form.info }}
+            </td>
+            <td>
+                {% for error in form.info.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Lisää havainto" />
+            </td>
+        </tr>
+</form>
+{% endblock %}

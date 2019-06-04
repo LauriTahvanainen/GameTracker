@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('equipment_listandremove') }}">
+    <table>
+        <caption>Välineet</caption>
+        <tr>
+            <th>Nimi</th>
+        </tr>
+        {% for selection in form.list_equipment %}
+        <tr>
+            <td>{{ selection.name }}</td>
+            <td>{{ selection }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Poista valitut" />
+            </td>
+        </tr>
+    </table>
+</form>
+{% endblock %}

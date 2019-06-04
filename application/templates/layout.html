@@ -8,6 +8,7 @@
     <h1>GameTracker</h1>
     {% if current_user.is_authenticated %}
     <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+    <a href="{{ url_for('observation_menu') }}">Havainnot</a>
     <a href="{{ url_for('animal_menu') }}">Eläimet</a>
     <a href="{{ url_for('equipment_menu') }}">Välineet</a>
     <a href="{{ url_for('auth_menu') }}">Käyttäjätili</a>

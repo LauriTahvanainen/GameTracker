@@ -26,5 +26,5 @@ def animal_add():
             db.session().rollback()
             return render_template("animals/addanimal.html", form=addNewAnimalForm(), error = "Eläin on jo järjestelmässä!")
         flash('Eläin lisätty onnistuneesti!')
-        return render_template("animals/addanimal.html", form=addNewAnimalForm())
+        return redirect(url_for("animal_add"))
     return render_template("animals/addanimal.html", form=form)

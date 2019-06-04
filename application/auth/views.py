@@ -6,10 +6,12 @@ from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
 
+
 @app.route("/auth/menu", methods=["GET"])
 @login_required
 def auth_menu():
     return render_template("auth/menu.html")
+
 
 @app.route("/auth/login", methods=["GET", "POST"])
 def auth_login():
@@ -65,10 +67,12 @@ def auth_delete():
         stmt = text("DELETE FROM account WHERE account_id = :cur_id").params(
             cur_id=current_user.account_id)
         db.engine.execute(stmt)
+        db.session().commit()
     except:
         pass
     flash("Käyttäjä poistettu")
     return redirect(url_for("index"))
+
 
 @app.route("/auth/changepw", methods=["GET", "POST"])
 @login_required
@@ -81,17 +85,19 @@ def auth_changepw():
         stmt = text("UPDATE account SET password = :newpw WHERE account_id = :cur_id").params(
             newpw=generate_password_hash(form.password.data), cur_id=current_user.account_id)
         db.engine.execute(stmt)
+        db.session().commit()
         flash('Salasana vaihdettu!')
         return render_template("auth/changepasswordform.html", form=form)
     return render_template("auth/changepasswordform.html", form=form, error="Nykyinen salasana oli väärä!")
+
 
 @app.route("/auth/user_info")
 @login_required
 def auth_user_info():
     return render_template("auth/userinfo.html", user_info=User.find_current_user_information(current_user.account_id))
 
+
 @app.route("/auth/list")
 @login_required
 def auth_list():
-    return render_template("auth/list.html", users = User.query.all())
-
+    return render_template("auth/list.html", users=User.query.all())

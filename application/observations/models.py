@@ -52,7 +52,11 @@ class Observation(db.Model):
                      " LEFT JOIN Equipment ON Equipment.equipment_id = Observation.equipment_id"
                      " LEFT JOIN Animal ON Animal.animal_id = Observation.animal_id"
                      " WHERE (Observation.account_id = :cur_user)"
+<<<<<<< HEAD
                      " GROUP BY Observation.date_observed, Observation.observation_id, Animal.name").params(cur_user=current_user.account_id)
+=======
+                     " GROUP BY Observation.date_observed, Observation.observation_id").params(cur_user=current_user.account_id)
+>>>>>>> 6d3ebdbfb085c5217f123166ffbf4b7bfed2dbb3
         
         res = db.engine.execute(stmt)
 

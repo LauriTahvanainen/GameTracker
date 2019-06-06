@@ -37,19 +37,19 @@
         </li>
         {% endif %}
       </ul>
-      <div class="form-inline mt-2 mt-md-0">
+      <div class="form-inline mt-2 mt-md-0" style="margin-right: 5%">
           {% with messages = get_flashed_messages() %}
           {% if messages %}
             {% for message in messages %}
-            <h4 class=nav-item>{{ message }}</h4>
+            <h4 style="margin-right: 5%" class=nav-item>{{ message }}</h4>
             {% endfor %}
           {% endif %}
           {% endwith %}
         {% if current_user.is_authenticated %}
-        <h4>Kirjautunut nimellä: {{ current_user.name }} </h4>
+        <h4 style="margin-right: 5%">Kirjautunut nimellä: {{ current_user.name }} </h4>
         <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
         {% else %}
-        <a href="{{ url_for('auth_login') }}">Kirjaudu</a>
+        <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}">Kirjaudu</a>
         <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>
         {% endif %}
       </div>

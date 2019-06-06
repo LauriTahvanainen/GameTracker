@@ -1,7 +1,9 @@
 from application import db
+from sqlalchemy.sql import text
+from flask_login import current_user
 
 class Observation(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    observation_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     account_id = db.Column(db.Integer, db.ForeignKey('account.account_id'), nullable=False)
     date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
     date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(),
@@ -30,3 +32,36 @@ class Observation(db.Model):
         self.equipment_id = equipment_id
         self.info = info
         
+
+    @staticmethod
+    def list_users_own_observations_by_observ_date():
+        stmt = text("SELECT Observation.observation_id,"
+                     " Observation.date_created,"
+                     " Observation.date_modified,"
+                     " Observation.date_observed,"
+                     " Observation.city,"
+                     " Observation.latitude,"
+                     " Observation.longitude,"
+                     " Animal.name,"
+                     " Observation.weight,"
+                     " Observation.sex,"
+                     " Observation.observ_type,"
+                     " Equipment.name,"
+                     " Observation.info"
+                     " FROM Observation"
+                     " LEFT JOIN Equipment ON Equipment.equipment_id = Observation.equipment_id"
+                     " LEFT JOIN Animal ON Animal.animal_id = Observation.animal_id"
+                     " WHERE (Observation.account_id = :cur_user)"
+                     " GROUP BY Observation.date_observed").params(cur_user=current_user.account_id)
+        
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({"Havaintonumero":row[0], "Luotu":row[1], "Muokattu":row[2], 
+                            "Havaittu":row[3], "Kaupunki":row[4], "Leveysaste":row[5], 
+                            "Pituusaste":row[6], "Elain":row[7], "Paino":row[8], 
+                            "Sukupuoli":row[9], "Havaintotapa":row[10], "Valine":row[11], 
+                            "Lisatiedot":row[12]})
+
+        return response

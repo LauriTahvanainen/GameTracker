@@ -28,15 +28,24 @@ def equipment_add():
             db.session().rollback()
             return render_template("equipments/addequipment.html", form=addEquipmentForm, error="Varuste on jo järjestelmässä!")
         flash('Varuste lisätty onnistuneesti!')
-        return render_template("equipments/addequipment.html", form=addEquipmentForm())
+        return redirect(url_for("equipment_add"))
     return render_template("equipments/addequipment.html", form=form)
 
 
 @app.route("/equipments/listandremove", methods=["GET", "POST"])
 @login_required
 def equipment_listandremove():
+    form = listEquipmentForm()
+    # this query is done and passed to the render_template to make the listing of equipment show up to date equipments.
+    equipments = Equipment.query.all()
+    form.results = equipments
+    # form.results = equipments
+    names = []
+    for equip in equipments:
+        names.append(equip.name)
+
     if request.method == "GET":
-        return render_template("equipments/list.html", form=listEquipmentForm())
+        return render_template("equipments/list.html", form=form, equipments=names)
     
     form = listEquipmentForm(request.form)
 
@@ -46,13 +55,10 @@ def equipment_listandremove():
             selected.append(line.name)
     if len(selected) == 0:
         flash("Ei poistettavaksi valittuja välineitä!")
-        return render_template("equipments/list.html", form=listEquipmentForm())
-
-    to_Be_Deleted = Equipment.__table__.delete().where(Equipment.name.in_(selected))
-    db.session().execute(to_Be_Deleted)
+        return render_template("equipments/list.html", form=listEquipmentForm(), equipments=names)
+  
+    db.session().query(Equipment).filter(Equipment.name.in_(selected)).delete(synchronize_session='fetch')
     db.session().commit()
-    
 
     flash("Valitut välineet poistettu onnistuneesti!")
-    return render_template("equipments/list.html", form=listEquipmentForm())
-    
+    return redirect(url_for("equipment_listandremove"))

@@ -2,16 +2,18 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('equipment_listandremove') }}">
+    <caption>Välineet</caption>
     <table>
-        <caption>Välineet</caption>
         <tr>
             <th>Nimi</th>
         </tr>
         {% for selection in form.list_equipment %}
+        {% if selection.name in equipments %}
         <tr>
             <td>{{ selection.name }}</td>
             <td>{{ selection }}</td>
         </tr>
+        {% endif %}
         {% endfor %}
         <tr>
             <td colspan="2">

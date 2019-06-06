@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<caption>Havainnot</caption>
+<table>
+    <tr>
+        <th>Havaintonumero</th>
+        <th>Luotu</th>
+        <th>Muokattu</th>
+        <th>Havaittu</th>
+        <th>Kaupunki</th>
+        <th>Leveysaste</th>
+        <th>Pituusaste</th>
+        <th>Eläin</th>
+        <th>Paino</th>
+        <th>Sukupuoli</th>
+        <th>Havaintotapa</th>
+        <th>Väline</th>
+        <th>Lisätiedot</th>
+    </tr>
+    {% for obs in observations %}
+    <tr>
+        <td>{{ obs.Havaintonumero }}</td>
+        <td>{{ obs.Luotu[:-3] }}</td>
+        <td>{{ obs.Muokattu[:-3] }}</td>
+        <td>{{ obs.Havaittu[:-10] }}</td>
+        <td>{{ obs.Kaupunki }}</td>
+        <td>{{ '%0.6f' | format(obs.Leveysaste|float) }}</td>
+        <td>{{ '%0.6f' | format(obs.Pituusaste|float) }}</td>
+        <td>{{ obs.Elain }}</td>
+        <td>{{ obs.Paino }}</td>
+
+        {% if obs.Sukupuoli == 0 %}
+        <td>Uros</td>
+        {% elif obs.Sukupuoli == 1 %}
+        <td>Naaras</td>
+        {% elif obs.Sukupuoli == 2 %}
+        <td>Muu</td>
+        {% else %}
+        <td>Ei tiedossa</td>
+        {% endif %}
+
+        {% if obs.Havaintotapa == 0 %}
+        <td>Saalis</td>
+        {% elif obs.Havaintotapa == 1 %}
+        <td>Näköhavainto</td>
+        {% else %}
+        <td>Kiinniotto</td>
+        {% endif %}
+
+        <td>{{ obs.Valine }}</td>
+        <td>{{ obs.Lisatiedot }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

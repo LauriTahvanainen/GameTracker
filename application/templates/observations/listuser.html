@@ -21,9 +21,9 @@
     {% for obs in observations %}
     <tr>
         <td>{{ obs.Havaintonumero }}</td>
-        <td>{{ obs.Luotu[:-3] }}</td>
-        <td>{{ obs.Muokattu[:-3] }}</td>
-        <td>{{ obs.Havaittu[:-10] }}</td>
+        <td>{{ obs.Luotu }}</td>
+        <td>{{ obs.Muokattu }}</td>
+        <td>{{ obs.Havaittu }}</td>
         <td>{{ obs.Kaupunki }}</td>
         <td>{{ '%0.6f' | format(obs.Leveysaste|float) }}</td>
         <td>{{ '%0.6f' | format(obs.Pituusaste|float) }}</td>

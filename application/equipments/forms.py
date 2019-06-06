@@ -20,11 +20,11 @@ def form_for_select(fields):
 
 
 class listEquipmentForm(FlaskForm):
-    
+    results = []
     list_equipment = FormField(
         form_for_select(
             [(equipment.name, BooleanField(equipment.name))
-             for equipment in Equipment.query.all()]
+             for equipment in results]
         )
     )
 

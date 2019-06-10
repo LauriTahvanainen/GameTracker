@@ -3,6 +3,7 @@ from application.equipments.models import Equipment
 from application.equipments.forms import addEquipmentForm, listEquipmentForm
 from flask_login import login_required, current_user, login_user
 from flask import render_template, request, redirect, url_for, flash
+from application.equipments.forms import equipment_selectForm
 
 
 @app.route("/equipments/menu", methods=["GET"])
@@ -26,7 +27,7 @@ def equipment_add():
             db.session().commit()
         except Exception:
             db.session().rollback()
-            return render_template("equipments/addequipment.html", form=addEquipmentForm, error="Varuste on jo järjestelmässä!")
+            return render_template("equipments/addequipment.html", form=addEquipmentForm(), error="Varuste on jo järjestelmässä!")
         flash('Varuste lisätty onnistuneesti!')
         return redirect(url_for("equipment_add"))
     return render_template("equipments/addequipment.html", form=form)
@@ -36,28 +37,26 @@ def equipment_add():
 @login_required
 def equipment_listandremove():
     form = listEquipmentForm()
-    # this query is done and passed to the render_template to make the listing of equipment show up to date equipments.
-    equipments = Equipment.query.all()
-    form.results = equipments
-    # form.results = equipments
-    names = []
-    for equip in equipments:
-        names.append(equip.name)
+    for equipment in Equipment.query.all():
+        equipmentform = equipment_selectForm()
+        equipmentform.equip = equipment.name
+        equipmentform.selected = False
+        form.select.append_entry(equipmentform)
 
     if request.method == "GET":
-        return render_template("equipments/list.html", form=form, equipments=names)
-    
-    form = listEquipmentForm(request.form)
+        return render_template("equipments/list.html", form=form)
 
+    form = listEquipmentForm(request.form)
     selected = []
-    for line in form.list_equipment:
-        if line.data == True:
-            selected.append(line.name)
+    for entry in form.select.entries:
+        if entry.data['selected'] == True:
+            selected.append(entry.data['equip'])
     if len(selected) == 0:
         flash("Ei poistettavaksi valittuja välineitä!")
-        return render_template("equipments/list.html", form=listEquipmentForm(), equipments=names)
-  
-    db.session().query(Equipment).filter(Equipment.name.in_(selected)).delete(synchronize_session='fetch')
+        return render_template("equipments/list.html", form=form)
+
+    db.session().query(Equipment).filter(Equipment.name.in_(
+        selected)).delete(synchronize_session='fetch')
     db.session().commit()
 
     flash("Valitut välineet poistettu onnistuneesti!")

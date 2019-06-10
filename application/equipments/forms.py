@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, BooleanField, FormField
+from wtforms import StringField, validators, BooleanField, FormField, FieldList
 from wtforms.form import BaseForm, Form
 from application.equipments.models import Equipment
 
@@ -18,15 +18,12 @@ def form_for_select(fields):
         return form
     return create_form
 
+class equipment_selectForm(FlaskForm):
+    equip = StringField("equip", render_kw={'readonly': True})
+    selected = BooleanField("selected")
 
 class listEquipmentForm(FlaskForm):
-    results = []
-    list_equipment = FormField(
-        form_for_select(
-            [(equipment.name, BooleanField(equipment.name))
-             for equipment in results]
-        )
-    )
+    select = FieldList(FormField(equipment_selectForm))
 
     class Meta:
         csrf = False

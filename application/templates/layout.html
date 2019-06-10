@@ -29,14 +29,16 @@
           <a class="nav-link" href="{{ url_for('animal_menu') }}">Eläimet</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('equipment_menu') }}">Välineet</a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="{{ url_for('auth_menu') }}">Käyttäjätili</a>
+        </li>
+         {% if current_user.get_urole() == 'ADMIN' %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('equipment_menu') }}">Välineet</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('auth_list') }}">Listaa käyttäjät</a>
         </li>
+        {% endif %}
         {% endif %}
       </ul>
       <div class="form-inline mt-2 mt-md-0" style="margin-right: 5%">

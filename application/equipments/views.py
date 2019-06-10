@@ -1,19 +1,19 @@
-from application import app, db
+from application import app, db, login_required
 from application.equipments.models import Equipment
 from application.equipments.forms import addEquipmentForm, listEquipmentForm
-from flask_login import login_required, current_user, login_user
+from flask_login import current_user, login_user
 from flask import render_template, request, redirect, url_for, flash
 from application.equipments.forms import equipment_selectForm
 
 
 @app.route("/equipments/menu", methods=["GET"])
-@login_required
+@login_required(role="ADMIN")
 def equipment_menu():
     return render_template("equipments/menu.html")
 
 
 @app.route("/equipments/add", methods=["GET", "POST"])
-@login_required
+@login_required(role="ADMIN")
 def equipment_add():
     if request.method == "GET":
         return render_template("equipments/addequipment.html", form=addEquipmentForm())
@@ -34,7 +34,7 @@ def equipment_add():
 
 
 @app.route("/equipments/listandremove", methods=["GET", "POST"])
-@login_required
+@login_required(role="ADMIN")
 def equipment_listandremove():
     form = listEquipmentForm()
     for equipment in Equipment.query.all():

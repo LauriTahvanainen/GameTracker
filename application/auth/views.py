@@ -1,14 +1,14 @@
-from application import app, db
+from application import app, db, login_required
 from application.auth.models import User
 from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, current_user
 from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
 
 
 @app.route("/auth/menu", methods=["GET"])
-@login_required
+@login_required()
 def auth_menu():
     return render_template("auth/menu.html")
 
@@ -24,13 +24,13 @@ def auth_login():
     if user is None or not check_password_hash(user.password, form.password.data):
         return render_template("auth/loginform.html", form=form, error="Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!")
 
-    login_user(user)
+    login_user(user, remember=True)
     flash('Kirjautuminen onnistui!')
     return redirect(url_for("index"))
 
 
 @app.route("/auth/logout")
-@login_required
+@login_required()
 def auth_logout():
     logout_user()
     return redirect(url_for("index"))
@@ -45,7 +45,7 @@ def auth_create():
     # Create the new user from the form
     if form.validate():
         newUser = User(form.username.data, form.name.data,
-                       form.password.data, form.city.data, form.age.data)
+                       form.password.data, form.city.data, form.age.data, 'USER')
         try:
             db.session().add(newUser)
             db.session().commit()
@@ -58,7 +58,7 @@ def auth_create():
 
 
 @app.route("/auth/delete", methods=["GET", "POST"])
-@login_required
+@login_required()
 def auth_delete():
     if request.method == "GET":
         return render_template("auth/deleteuserform.html")
@@ -75,7 +75,7 @@ def auth_delete():
 
 
 @app.route("/auth/changepw", methods=["GET", "POST"])
-@login_required
+@login_required()
 def auth_changepw():
     if request.method == "GET":
         return render_template("auth/changepasswordform.html", form=ChangePasswordForm())
@@ -92,12 +92,12 @@ def auth_changepw():
 
 
 @app.route("/auth/user_info")
-@login_required
+@login_required()
 def auth_user_info():
     return render_template("auth/userinfo.html", user_info=User.find_current_user_information(current_user.account_id))
 
 
 @app.route("/auth/list")
-@login_required
+@login_required(role="ADMIN")
 def auth_list():
     return render_template("auth/list.html", users=User.query.all())

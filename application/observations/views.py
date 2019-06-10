@@ -1,20 +1,20 @@
-from application import app, db
+from application import app, db, login_required
 from application.observations.models import Observation
 from application.animals.models import Animal
 from application.equipments.models import Equipment
 from application.observations.forms import addNewObservationForm
-from flask_login import login_required, current_user
+from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
 
 
 @app.route("/observations/menu", methods=["GET"])
-@login_required
+@login_required()
 def observation_menu():
     return render_template("observations/menu.html")
 
 
 @app.route("/observations/add", methods=["GET", "POST"])
-@login_required
+@login_required()
 def observation_add():
     form = addNewObservationForm()
     form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.all()]
@@ -47,6 +47,6 @@ def observation_add():
 
 
 @app.route("/observations/listuser", methods=["GET"])
-@login_required
+@login_required()
 def observation_listuser():
     return render_template("observations/listuser.html", observations=Observation.list_users_own_observations_by_observ_date())

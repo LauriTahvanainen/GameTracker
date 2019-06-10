@@ -4,7 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <a href="{{ url_for('index') }}"><title>GameTracker</title></a>
+  <a href="{{ url_for('index') }}">
+    <title>GameTracker</title>
+  </a>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
@@ -38,13 +40,7 @@
         {% endif %}
       </ul>
       <div class="form-inline mt-2 mt-md-0" style="margin-right: 5%">
-          {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-            <h4 style="margin-right: 5%" class=nav-item>{{ message }}</h4>
-            {% endfor %}
-          {% endif %}
-          {% endwith %}
+
         {% if current_user.is_authenticated %}
         <h4 style="margin-right: 5%">Kirjautunut nimellä: {{ current_user.name }} </h4>
         <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
@@ -56,9 +52,17 @@
     </div>
   </nav>
 
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  {% for message in messages %}
+  <h4 style="margin-right: 5%" class=modal-dialog role=dialog>{{ message }}</h4>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
   <main role="main" class="container">
     {% block body %}
-    
+
     {% endblock %}
   </main>
 

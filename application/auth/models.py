@@ -11,15 +11,17 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     city = db.Column(db.String(144))
     age = db.Column(db.Integer)
+    urole = db.Column(db.String(10))
 
     observations = db.relationship("Observation", backref='account', lazy=True)
 
-    def __init__(self, username, name, password, city, age):
+    def __init__(self, username, name, password, city, age, urole):
         self.username = username
         self.name = name
         self.set_password(password)
         self.city = city
         self.age = age
+        self.urole = urole
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -35,6 +37,9 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.account_id).encode("utf-8").decode("utf-8")
+
+    def get_urole(self):
+        return self.urole
 
     @staticmethod
     def find_current_user_information(cur_id):

@@ -84,7 +84,7 @@ class Observation(db.Model):
 
     @staticmethod
     def list_filtered(form, cur_id=-1):
-        query = db.session.query(Observation, Animal, Equipment.name).outerjoin(Animal).outerjoin(Equipment).group_by(Observation.observation_id)
+        query = db.session.query(Observation, Animal, Equipment.name).outerjoin(Animal).outerjoin(Equipment).group_by(Observation.observation_id, Animal.animal_id, Equipment.equipment_id)
         
         # Filters
         query = query.filter(Observation.account_id == cur_id)

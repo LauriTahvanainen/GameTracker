@@ -6,7 +6,7 @@ from application.equipments.models import Equipment
 
 class addEquipmentForm(FlaskForm):
     name = StringField("Nimi", [validators.input_required(
-        message='Nimi ei voi olla tyhjä!')])
+        message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Kiikarit"})
 
     class Meta:
         csrf = False

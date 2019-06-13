@@ -36,18 +36,18 @@ class BiggerThan(object):
 
 class AddNewObservationForm(FlaskForm):
     date_observed = DateTimeField("Havainnon päivämäärä ja aika",  format='%d-%m-%Y %H:%M', validators=[
-                                  validators.input_required(message="Päivämäärä ei voi olla tyhjä!")])
+                                  validators.input_required(message="Päivämäärä ei voi olla tyhjä!")], render_kw={"placeholder": "Muodossa 14-12-2019 22:45"})
     city = StringField("Kaupunki")
     latitude = FloatField("Leveysaste", [StopEmpty, validators.number_range(
-        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")])
+        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "Esimerkiksi 25.439399"})
     longitude = FloatField("Pituusaste", [StopEmpty, validators.number_range(
-        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")])
+        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], render_kw={"placeholder": "Esimerkiksi 121.203030"})
 
     animal = SelectField("Eläin", validators=[validators.input_required(
         message="Eläin pitää valita!")], coerce=int)
 
     weight = FloatField("Paino", [StopEmpty, validators.number_range(
-        min=0, message="Paino ei voi olla negatiivinen!")])
+        min=0, message="Paino ei voi olla negatiivinen!")], render_kw={"placeholder": "Kilogrammoina"})
     sex = SelectField("Sukupuoli", choices=[(0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], validators=[
                       validators.input_required(message="Sukupuoli pitää valita!")], coerce=int)
     observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto")], validators=[
@@ -56,7 +56,7 @@ class AddNewObservationForm(FlaskForm):
     equipment = SelectField("Väline",  validators=[validators.input_required(
         message="Väline pitää valita!")], coerce=int)
     info = TextAreaField("Muita tietoja", [validators.length(
-        max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")])
+        max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")], render_kw={"placeholder": "Maksimissaan 500 merkkiä!"})
 
     class Meta:
         csrf = False

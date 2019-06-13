@@ -18,12 +18,13 @@ def form_for_select(fields):
         return form
     return create_form
 
-class equipment_selectForm(FlaskForm):
+# list and remove view
+class equipmentSelectForm(FlaskForm):
     equip = StringField("equip", render_kw={'readonly': True})
     selected = BooleanField("selected")
 
 class listEquipmentForm(FlaskForm):
-    select = FieldList(FormField(equipment_selectForm))
+    select = FieldList(FormField(equipmentSelectForm))
 
     class Meta:
         csrf = False

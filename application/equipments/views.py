@@ -3,7 +3,7 @@ from application.equipments.models import Equipment
 from application.equipments.forms import addEquipmentForm, listEquipmentForm
 from flask_login import current_user, login_user
 from flask import render_template, request, redirect, url_for, flash
-from application.equipments.forms import equipment_selectForm
+from application.equipments.forms import equipmentSelectForm
 
 
 @app.route("/equipments/menu", methods=["GET"])
@@ -38,8 +38,9 @@ def equipment_add():
 def equipment_listandremove():
     form = listEquipmentForm()
     for equipment in Equipment.query.all():
-        equipmentform = equipment_selectForm()
+        equipmentform = equipmentSelectForm()
         equipmentform.equip = equipment.name
+        equipmentform.equipment_id = equipment.equipment_id
         equipmentform.selected = False
         form.select.append_entry(equipmentform)
 

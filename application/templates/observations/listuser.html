@@ -1,10 +1,188 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<h2>Omat havainnot</h2>
+<a href="#rajaus" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
+<a href="{{ url_for('observation_listuser') }}" class="btn btn-primary">Näytä kaikki</a>
+{{ error }}
 
-<div class="container">
-    <h2>Omat havainnot</h2>
-    <table class="table table-bordered">
+<div id="rajaus" class="collapse" aria-controls="rajaus">
+    <form method="POST" action="{{ url_for('observation_listuser') }}" action="">
+        {{ form.hidden_tag() }}
+        <table id="rajaus">
+            <tr>
+                <td>
+                    {{ form.date_observedLow.label }}
+                </td>
+                <td>
+                    {{ form.date_observedLow }} -
+                </td>
+                <td>
+                    {{ form.date_observedHigh }}
+                </td>
+                <td>
+                    {% for error in form.date_observedLow.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.date_observedHigh.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.city.label }}
+                </td>
+                <td>
+                    {{ form.city }}
+                </td>
+                <td>
+                    {% for error in form.city.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.latitudeLow.label }}
+                </td>
+                <td>
+                    {{ form.latitudeLow }} -
+                </td>
+                <td>
+                    {{ form.latitudeHigh }}
+                </td>
+                <td>
+                    {% for error in form.latitudeLow.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.latitudeHigh.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.longitudeLow.label }}
+                </td>
+                <td>
+                    {{ form.longitudeLow }} -
+                </td>
+                <td>
+                    {{ form.longitudeHigh }}
+                </td>
+                <td>
+                    {% for error in form.longitudeLow.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.longitudeHigh.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.animal.label }}
+                </td>
+                <td>
+                    {{ form.animal(size=4) }}
+                </td>
+                <td>
+                    {% for error in form.animal.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.weightLow.label }}
+                </td>
+                <td>
+                    {{ form.weightLow }} -
+                </td>
+                <td>
+                    {{ form.weightHigh }}
+                </td>
+                <td>
+                    {% for error in form.weightLow.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for error in form.weightHigh.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.sex.label }}
+                </td>
+                <td>
+                    {{ form.sex(size=4) }}
+                </td>
+                <td>
+                    {% for error in form.sex.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.observ_type.label }}
+                </td>
+                <td>
+                    {{ form.observ_type(size=3) }}
+                </td>
+                <td>
+                    {% for error in form.observ_type.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.equipment.label }}
+                </td>
+                <td>
+                    {{ form.equipment(size=4) }}
+                </td>
+                <td>
+                    {% for error in form.equipment.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.info.label }}
+                </td>
+                <td>
+                    {{ form.info }}
+                </td>
+                <td>
+                    {% for error in form.info.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Hae" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div id="listaus" class="container">
+    <table id="listaus" class="table table-bordered">
         <thead>
             <tr>
                 <th>Havaintonumero</th>
@@ -29,10 +207,23 @@
                 <td>{{ obs.Muokattu }}</td>
                 <td>{{ obs.Havaittu }}</td>
                 <td>{{ obs.Kaupunki }}</td>
+                {% if obs.Leveysaste == 404 %}
+                <td>Ei annettu</td>
+                {% else %}
                 <td>{{ '%0.6f' | format(obs.Leveysaste|float) }}</td>
+                {% endif %}
+                {% if obs.Pituusaste == 404 %}
+                <td>Ei annettu</td>
+                {% else %}
                 <td>{{ '%0.6f' | format(obs.Pituusaste|float) }}</td>
+                {% endif %}
                 <td>{{ obs.Elain }}</td>
-                <td>{{ obs.Paino }}</td>
+                {% if obs.Paino == -404 %}
+                <td>Ei annettu</td>
+                {% else %}
+                <td>{{ obs.Paino }} Kg</td>
+                {% endif %}
+                
 
                 {% if obs.Sukupuoli == 0 %}
                 <td>Uros</td>
@@ -52,15 +243,17 @@
                 <td>Kiinniotto</td>
                 {% endif %}
 
+                {% if obs.Valine == 'None' %}
+                <td>{{ Tyhjä }}</td>
+                {% else %}
                 <td>{{ obs.Valine }}</td>
+                {% endif %}
             </tr>
-            <tr><td colspan="12">{{ obs.Lisatiedot }}</td></tr>
+            <tr>
+                <td colspan="12">{{ obs.Lisatiedot }}</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
-<table>
-
-</table>
 {% endblock %}

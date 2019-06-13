@@ -37,7 +37,7 @@ def equipment_add():
 @login_required(role="ADMIN")
 def equipment_listandremove():
     form = listEquipmentForm()
-    for equipment in Equipment.query.all():
+    for equipment in Equipment.query.order_by(Equipment.name.asc()).all():
         equipmentform = equipmentSelectForm()
         equipmentform.equip = equipment.name
         equipmentform.equipment_id = equipment.equipment_id

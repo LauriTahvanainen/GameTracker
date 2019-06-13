@@ -28,6 +28,11 @@ Käyttäjien täytyy rekisteröityä sivulle.
 [Heroku](https://gmtrackr.herokuapp.com/)
 
 ## Testitunnukset
+**Pääkäyttäjä**
+
+    Käyttäjätunnus: admin
+    Salasana: admin123
+
 **Käyttäjä**
 
     Käyttäjätunnus: test

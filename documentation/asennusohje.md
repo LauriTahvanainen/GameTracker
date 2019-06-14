@@ -1,4 +1,5 @@
-# Asennus Paikallisesti (Terminaalissa, python3 asennettuna)
+# Asennus Paikallisesti
+__Terminaalissa, python3 asennettuna__
 1. Siirry kansioon johon haluat asentaa sovelluksen ja kloonaa repositorio komennolla:
 
     `git clone https://github.com/LauriTahvanainen/GameTracker.git`

@@ -1,1 +1,1 @@
-![](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/pictures/GameTrackerTietokantakaavio.png)
+![](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/pictures/tietokantarakenne.png)

@@ -9,11 +9,11 @@
                 {{ form.username.label }}
             </td>
             <td>
-                {{ form.username }}
+                {{ form.username }} *
             </td>
             <td>
                 {% for error in form.username.errors %}
-                <li>{{ error }}</li>
+                <div>{{ error }}</div>
                 {% endfor %}
             </td>
         </tr>
@@ -22,11 +22,11 @@
                 {{ form.password.label }}
             </td>
             <td>
-                {{ form.password }}
+                {{ form.password }} *
             </td>
             <td>
                 {% for error in form.password.errors %}
-                <li>{{ error }}</li>
+                <div>{{ error }}</div>
                 {% endfor %}
             </td>
         </tr>
@@ -35,7 +35,7 @@
                 {{ form.confirmPwd.label }}
             </td>
             <td>
-                {{ form.confirmPwd }}
+                {{ form.confirmPwd }} *
             </td>
         </tr>
         <tr>
@@ -43,11 +43,11 @@
                 {{ form.name.label }}
             </td>
             <td>
-                {{ form.name }}
+                {{ form.name }} *
             </td>
             <td>
                 {% for error in form.name.errors %}
-                <li>{{ error }}</li>
+                <div>{{ error }}</div>
                 {% endfor %}
             </td>
         </tr>
@@ -60,7 +60,7 @@
             </td>
             <td>
                 {% for error in form.city.errors %}
-                <li>{{ error }}</li>
+                <div>{{ error }}</div>
                 {% endfor %}
             </td>
         </tr>
@@ -69,13 +69,16 @@
                 {{ form.age.label }}
             </td>
             <td>
-                {{ form.age }}
+                {{ form.age }} *
             </td>
             <td>
                 {% for error in form.age.errors %}
-                <li>{{ error }}</li>
+                <div>{{ error }}</div>
                 {% endfor %}
             </td>
+        </tr>
+        <tr>
+            <td>*-merkillä merkatut kentät ovat pakollisia</td>
         </tr>
         <tr>
             <td colspan="2">

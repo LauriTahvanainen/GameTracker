@@ -22,7 +22,7 @@
 ## Ensimmäinen käynnistys
 Asennettuna tulee olla python3 ja sqlite3.
 
-Aina käynnistettäessä sovellus paikallisesti, tulee juurikansiossa ensin ottaa virtuaaliympäristö käyttöön komennolla:
+0. Aina käynnistettäessä sovellus paikallisesti, tulee juurikansiossa ensin ottaa virtuaaliympäristö käyttöön komennolla:
 
    `source venv/bin/activate`
    
@@ -56,5 +56,7 @@ Aina käynnistettäessä sovellus paikallisesti, tulee juurikansiossa ensin otta
  5. Avaa selaimella osoite:
  
     [127.0.0.1:5000](http://127.0.0.1:5000/)
+    
+*Jatkossa käynnistäminen tapahtuu toistamalla juurikansiossa kohdat 0 ja 1.*
  
 # Asennus Herokussa

@@ -50,7 +50,7 @@ class AddNewObservationForm(FlaskForm):
         min=0, message="Paino ei voi olla negatiivinen!")], render_kw={"placeholder": "Kilogrammoina"})
     sex = SelectField("Sukupuoli", choices=[(0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], validators=[
                       validators.input_required(message="Sukupuoli pitää valita!")], coerce=int)
-    observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto")], validators=[
+    observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], validators=[
                               validators.input_required(message="Havaintotapa pitää valita!")], coerce=int)
 
     equipment = SelectField("Väline",  validators=[validators.input_required(

@@ -239,10 +239,11 @@
                 <td>Saalis</td>
                 {% elif obs.Havaintotapa == 1 %}
                 <td>Näköhavainto</td>
-                {% else %}
+                {% elif obs.Havaintotapa == 2 %}
                 <td>Kiinniotto</td>
+                {% else %}
+                <td>Onnettomuus</td>
                 {% endif %}
-
                 {% if obs.Valine == 'None' %}
                 <td>{{ Tyhjä }}</td>
                 {% else %}

@@ -20,15 +20,15 @@ Käyttäjien täytyy rekisteröityä sivulle.
 * Ylläpitäjän mahdollisuus lisätä uusia havaintovälineitä
 
 ## Linkit
-[Tietokantarakenne](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tietokantarakenne.md)
-
-[Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kaytt%C3%A4jatarinat.md)
+[Asennusohje](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/asennusohje.md)
 
 [Käyttöohje](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kayttoohje.md)
 
-[Asennusohje](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/asennusohje.md)
-
 [Heroku](https://gmtrackr.herokuapp.com/)
+
+[Tietokantarakenne](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tietokantarakenne.md)
+
+[Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kaytt%C3%A4jatarinat.md)
 
 ## Testitunnukset Herokussa
 **Pääkäyttäjä**

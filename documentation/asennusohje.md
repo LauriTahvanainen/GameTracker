@@ -41,7 +41,7 @@ Asennettuna tulee olla python3 ja sqlite3.
 
     `sqlite3 application/observations.db`
     
-    * Lisää ylläpitäjän tunnus tietokantaan syöttämällä sqlite:lle komento:
+  * Lisää ylläpitäjän tunnus tietokantaan syöttämällä sqlite:lle komento:
   
   `INSERT INTO Account (account_id, username, name, password, city, age, urole) VALUES ('1', 'admin', 'admin', 'pbkdf2:sha256:150000$HjvHR88r$1932e4bbb0eb9ada9dfce1d627d085a35b2a416e97bd5265c8fa07919ac83fe1', 'admin', '2000', 'ADMIN');`
 

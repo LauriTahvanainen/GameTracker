@@ -2,8 +2,22 @@
 
 {% block body %}
 {{ error }}
+<a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi eläin!</a>
 <form method="POST" action="{{ url_for('observation_add') }}">
     <table>
+        <tr>
+            <td>
+                {{ form.animal.label }}
+            </td>
+            <td>
+                {{ form.animal(size=1) }}
+            </td>
+            <td>
+                {% for error in form.animal.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </td>
+        </tr>
         <tr>
             <td>
                 {{ form.date_observed.label }}
@@ -47,19 +61,6 @@
             </td>
             <td>
                 {% for error in form.longitude.errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.animal.label }}
-            </td>
-            <td>
-                {{ form.animal(size=1) }}
-            </td>
-            <td>
-                {% for error in form.animal.errors %}
                 <li>{{ error }}</li>
                 {% endfor %}
             </td>

@@ -77,12 +77,15 @@ __Asentaminen tapahtuu paikallisen asennuksen tapaan terminaalissa, sovelluksen 
 3. Lähetä projekti Herokuun komennoilla:
 
     `git add .`
+    
     `git commit -m "COMMIT_VIESTI"`
+    
     `git push heroku master`
     
 4. Määritetään sovellus käyttämään PostgreSql-tietokannanhallintajärjestelmää ja lisätään tietokanta komennoilla:
 
     `heroku config:set HEROKU=1`
+    
     `heroku addons:add heroku-postgresql:hobby-dev`
     
 5. Lisätään lopuksi Herokun tietokantaan pääkäyttäjän tunnukset:
@@ -92,7 +95,7 @@ __Asentaminen tapahtuu paikallisen asennuksen tapaan terminaalissa, sovelluksen 
     
     * Lisätään pääkäyttäjän tunnuksen komennolla:
     
-    `INSERT INTO Account (account_id, username, name, password, city, age, urole) VALUES ('1', 'admin', 'admin', 'pbkdf2:sha256:150000$HjvHR88r$1932e4bbb0eb9ada9dfce1d627d085a35b2a416e97bd5265c8fa07919ac83fe1', 'admin', '2000', 'ADMIN');`
+    `INSERT INTO Account (account_id, username, name, password, city, age, urole) VALUES ('1', 'admin', 'admin',               'pbkdf2:sha256:150000$HjvHR88r$1932e4bbb0eb9ada9dfce1d627d085a35b2a416e97bd5265c8fa07919ac83fe1', 'admin', '2000', 'ADMIN');`
     
     * Suljetaan yhteys komennolla:
     

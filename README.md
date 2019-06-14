@@ -24,7 +24,10 @@ Käyttäjien täytyy rekisteröityä sivulle.
 
 [Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kaytt%C3%A4jatarinat.md)
 
-## Käyttöohje
+[Käyttöohje](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kayttoohje.md)
+
+[Asennusohje](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/asennusohje.md)
+
 [Heroku](https://gmtrackr.herokuapp.com/)
 
 ## Testitunnukset Herokussa

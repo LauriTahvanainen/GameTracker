@@ -2,7 +2,8 @@
 
 {% block body %}
 {{ error }}
-<a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi eläin!</a>
+<a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
+    eläin!</a>
 <form method="POST" action="{{ url_for('observation_add') }}">
     <table>
         <tr>
@@ -10,7 +11,7 @@
                 {{ form.animal.label }}
             </td>
             <td>
-                {{ form.animal(size=1) }}
+                {{ form.animal(size=1) }} *
             </td>
             <td>
                 {% for error in form.animal.errors %}
@@ -23,7 +24,7 @@
                 {{ form.date_observed.label }}
             </td>
             <td>
-                {{ form.date_observed }}
+                {{ form.date_observed }} *
             </td>
             <td>
                 {% for error in form.date_observed.errors %}
@@ -36,7 +37,12 @@
                 {{ form.city.label }}
             </td>
             <td>
-                {{ form.city }}
+                {{ form.city }} *
+            </td>
+            <td>
+                {% for error in form.city.errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
             </td>
         </tr>
         <tr>
@@ -83,7 +89,7 @@
                 {{ form.sex.label }}
             </td>
             <td>
-                {{ form.sex(size=1) }}
+                {{ form.sex(size=1) }} *
             </td>
             <td>
                 {% for error in form.sex.errors %}
@@ -96,7 +102,7 @@
                 {{ form.observ_type.label }}
             </td>
             <td>
-                {{ form.observ_type(size=1) }}
+                {{ form.observ_type(size=1) }} *
             </td>
             <td>
                 {% for error in form.observ_type.errors %}
@@ -109,7 +115,7 @@
                 {{ form.equipment.label }}
             </td>
             <td>
-                {{ form.equipment }}
+                {{ form.equipment }} *
             </td>
             <td>
                 {% for error in form.equipment.errors %}
@@ -129,6 +135,9 @@
                 <div>{{ error }}</div>
                 {% endfor %}
             </td>
+        </tr>
+        <tr>
+            <td>*-merkillä merkatut kentät ovat pakollisia</td>
         </tr>
         <tr>
             <td colspan="2">

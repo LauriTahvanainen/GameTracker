@@ -2,6 +2,7 @@
 
 {% block body %}
 {{ error }}
+<p>*-merkillä merkatut kentät ovat pakollisia</p>
 <form method="POST" action="{{ url_for('animal_add') }}">
     <table>
         <tr>
@@ -9,7 +10,7 @@
                 {{ form.name.label }}
             </td>
             <td>
-                {{ form.name }}
+                {{ form.name }} *
             </td>
             <td>
                 {% for error in form.name.errors %}

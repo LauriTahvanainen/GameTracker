@@ -43,7 +43,7 @@
       <div class="form-inline mt-2 mt-md-0" style="margin-right: 5%">
 
         {% if current_user.is_authenticated %}
-        <h4 style="margin-right: 5%">Kirjautunut nimellä: {{ current_user.username }} </h4>
+        <h4 style="margin-right: 5%">Kirjautunut käyttäjänimellä: {{ current_user.username }} </h4>
         <a href="{{ url_for('auth_logout') }}" class="btn btn-primary">Kirjaudu ulos</a>
         {% else %}
         <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}" class="btn btn-outline-primary">Kirjaudu</a>

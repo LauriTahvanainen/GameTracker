@@ -8,7 +8,6 @@
 | Käyttäjä | poistaa havaintojani | korjata virheellisen havainnon, jos en jaksa muokata vanhaa havaintoa. | - |
 | Käyttäjä | muokata havaintojani | korjata virheellisiä havaintojani. | - |
 | Käyttäjä | lisätä uusia eläimiä | lisätä havaintoja joissa on löytämättömiä/harvinaisia/tietokannassa olemattomia eläimiä. | X |
-| Käyttäjä | päivittää eläimiä | korjata virheellisiä eläimiä | - |
 | Käyttäjä | tarkastella havaintojani | nähdä kokonaiskuvan omista havainnoistani | X |
 | Käyttäjä | tarkastella muiden havaintoja | nähdä kokonaiskuvan kaikista havainnoista | - |
 | Käyttäjä | tarkastella havaintoja erinlaisin suodattimin | tarkastella esimerkiksi yhden lajin havaintoja | - |
@@ -16,10 +15,11 @@
 | Käyttäjä | poistaa oman tilini | irrottautua palvelusta | X |
 | Pääkäyttäjä | poistaa tilejä | poistaa tilejä jotka käyttävät palvelua sääntöjenvastaisesti. | - |
 | Pääkäyttäjä | poistaa havaintoja | poistaa palvelusta virheellisiä havaintoja. | - | 
-| Pääkäyttäjä | lisätä uusia välineitä | mahdollistaa uusien välineiden lisäämisen havaintoihin. | - |
-| Pääkäyttäjä | muokata välineitä | muokata virheellisiä välineitä | - |
-| Pääkäyttäjä | poistaa välineitä | poistaa virheellisiä välineitä | - |
-| Pääkäyttäjä | poistaa eläimiä | poistaa virheellisiä eläimiä| - |
+| Pääkäyttäjä | lisätä uusia välineitä | mahdollistaa uusien välineiden lisäämisen havaintoihin. | X |
+| Pääkäyttäjä | muokata välineitä | muokata virheellisiä välineitä | X |
+| Pääkäyttäjä | poistaa välineitä | poistaa virheellisiä välineitä | X |
+| Pääkäyttäjä | poistaa eläimiä | poistaa virheellisiä eläimiä| X |
+| Pääkäyttäjä | muokata eläimiä | korjata virheellisiä eläimiä | X |
 
 ## SQL-Kyselyt
 

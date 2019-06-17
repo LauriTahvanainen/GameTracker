@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+    <h2>Eläimet</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nimi</th>
+                <th>Latinankielinen nimi</th>
+                <th>Lisätietoja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for animal in animals %}
+                    <td>{{ animal.name }}</td>
+                    <td>{{ animal.lat_name }}</td>
+                    <td><a href={{ animal.info }}>{{ animal.info }}</a></td>
+                    {% if current_user.get_urole() == 'ADMIN' %}
+                    <td><a href={{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }} class="btn btn-primary">Muokkaa tai poista</a></td>
+                    {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

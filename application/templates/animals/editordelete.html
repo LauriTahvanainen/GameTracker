@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+        <a href="{{ url_for('animal_list_all') }}" class="btn btn-primary">Takaisin eläinten tarkasteluun</a>
+    <h2>Eläin</h2>
+    <form method="POST" action="{{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }}">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nimi</th>
+                    <th>Latinankielinen nimi</th>
+                    <th>Lisätietoja</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ animal.animal_id }}</td>
+                    <td>{{ form.name }}</td>
+                    <td>{{ form.lat_name }}</td>
+                    <td>{{ form.info(size='45') }}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        {% for error in form.name.errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for error in form.lat_name.errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for error in form.info.errors %}
+                        <div>{{ error }}</div>
+                        {% endfor %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="submit" value="Suorita muokkaus" onclick="return confirm('Haluatko varmasti muokata eläintä? Jos kyllä, paina OK.')" />
+    </form>
+    <form method="POST" action="{{ url_for('animal_delete', animal_id=animal.animal_id) }}">
+        <input type="submit" value="Poista eläin" onclick="return confirm('Haluatko varmasti poistaa eläimen? Jos kyllä, paina OK.')"/>
+    </form>
+</div>
+{% endblock %}

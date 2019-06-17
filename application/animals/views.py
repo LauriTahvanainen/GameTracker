@@ -27,3 +27,50 @@ def animal_add():
         flash('Eläin lisätty onnistuneesti!')
         return redirect(url_for("animal_add"))
     return render_template("animals/addanimal.html", form=form)
+
+@app.route("/animals/list", methods=["GET"])
+@login_required()
+def animal_list_all():
+    return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all())
+
+@app.route("/animals/edit_or_delete/<animal_id>", methods=["GET", "POST"])
+@login_required(role="ADMIN")
+def animal_edit_or_delete(animal_id):
+    animal = Animal.query.get(animal_id)
+    if request.method == "GET":
+        form = addNewAnimalForm()
+        form.name.data = animal.name
+        form.lat_name.data = animal.lat_name
+        form.info.data = animal.info
+        return render_template("animals/editordelete.html", animal=animal, form=form)
+
+    form = addNewAnimalForm(request.form)
+    print(form.name.data)
+    print(form.lat_name.data)
+    print(form.info.data)
+    if form.validate():
+        try:
+            animalToEdit = Animal.query.get(animal_id)
+            animalToEdit.name = form.name.data
+            animalToEdit.lat_name = form.lat_name.data
+            animalToEdit.info = form.info.data
+            db.session().commit()
+        except:
+            return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all(), error="Muokatessa tapahtui virhe! Eläintä ei muokattu!")
+        flash("Eläintä muokattu onnistuneesti!")
+        return redirect(url_for("animal_list_all"))
+    return render_template("animals/editordelete.html", animal=animal, form=form)
+    
+@app.route("/animals/delete/<animal_id>", methods=["POST"])
+@login_required(role="ADMIN")
+def animal_delete(animal_id):
+    try:
+        Animal.query.filter_by(animal_id=animal_id).delete()
+        db.session().commit()
+    except:
+        return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all(), error="Poistettaessa tapahtui virhe! Eläintä ei poistettu!")
+    flash("Eläin poistettu onnistuneesti")
+    return redirect(url_for("animal_list_all"))
+
+
+    

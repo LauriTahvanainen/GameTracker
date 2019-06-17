@@ -45,10 +45,10 @@
 
         {% if current_user.is_authenticated %}
         <h4 style="margin-right: 5%">Kirjautunut nimellä: {{ current_user.name }} </h4>
-        <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+        <a href="{{ url_for('auth_logout') }}" class="btn btn-primary">Kirjaudu ulos</a>
         {% else %}
-        <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}">Kirjaudu</a>
-        <a href="{{ url_for('auth_create') }}">Luo uusi käyttäjä</a>
+        <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}" class="btn btn-primary">Kirjaudu</a>
+        <a href="{{ url_for('auth_create') }}" class="btn btn-primary">Luo uusi käyttäjä</a>
         {% endif %}
       </div>
     </div>

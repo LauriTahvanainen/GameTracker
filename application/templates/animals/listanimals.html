@@ -17,7 +17,7 @@
                     <td>{{ animal.lat_name }}</td>
                     <td><a href={{ animal.info }}>{{ animal.info }}</a></td>
                     {% if current_user.get_urole() == 'ADMIN' %}
-                    <td><a href={{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }} class="btn btn-primary">Muokkaa tai poista</a></td>
+                    <td><a href={{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }} class="btn btn-outline-primary">Muokkaa tai poista</a></td>
                     {% endif %}
             </tr>
             {% endfor %}

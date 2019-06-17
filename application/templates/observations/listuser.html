@@ -210,12 +210,12 @@
                 {% if obs.Leveysaste == 404 %}
                 <td>Ei annettu</td>
                 {% else %}
-                <td>{{ '%0.6f' | format(obs.Leveysaste|float) }}</td>
+                <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs.Pituusaste|float) }}&mlon={{ '%0.6f' | format(obs.Leveysaste|float) }}&zoom=12">{{ '%0.6f' | format(obs.Leveysaste|float) }}</a></td>
                 {% endif %}
                 {% if obs.Pituusaste == 404 %}
                 <td>Ei annettu</td>
                 {% else %}
-                <td>{{ '%0.6f' | format(obs.Pituusaste|float) }}</td>
+                <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs.Pituusaste|float) }}&mlon={{ '%0.6f' | format(obs.Leveysaste|float) }}&zoom=12">{{ '%0.6f' | format(obs.Pituusaste|float) }}</a></td>
                 {% endif %}
                 <td>{{ obs.Elain }}</td>
                 {% if obs.Paino == -404 %}

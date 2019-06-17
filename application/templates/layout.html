@@ -4,9 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <a href="{{ url_for('index') }}">
-    <title>GameTracker</title>
-  </a>
+  <title>GameTracker</title>
+  
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
@@ -14,7 +13,7 @@
 <body>
 
   <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="#">GameTracker</a>
+    <a class="navbar-brand" href="{{ url_for('index') }}">GameTracker</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
       aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -31,7 +30,7 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('auth_menu') }}">Käyttäjätili</a>
         </li>
-         {% if current_user.get_urole() == 'ADMIN' %}
+        {% if current_user.get_urole() == 'ADMIN' %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('equipment_menu') }}">Välineet</a>
         </li>
@@ -44,11 +43,11 @@
       <div class="form-inline mt-2 mt-md-0" style="margin-right: 5%">
 
         {% if current_user.is_authenticated %}
-        <h4 style="margin-right: 5%">Kirjautunut nimellä: {{ current_user.name }} </h4>
+        <h4 style="margin-right: 5%">Kirjautunut nimellä: {{ current_user.username }} </h4>
         <a href="{{ url_for('auth_logout') }}" class="btn btn-primary">Kirjaudu ulos</a>
         {% else %}
-        <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}" class="btn btn-primary">Kirjaudu</a>
-        <a href="{{ url_for('auth_create') }}" class="btn btn-primary">Luo uusi käyttäjä</a>
+        <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}" class="btn btn-outline-primary">Kirjaudu</a>
+        <a href="{{ url_for('auth_create') }}" class="btn btn-outline-primary">Luo uusi käyttäjä</a>
         {% endif %}
       </div>
     </div>

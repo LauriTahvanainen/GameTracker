@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('auth_change_username') }}">
+    <table>
+        <tr>
+            <td>
+                Nykyinen käyttäjänimi:
+            </td>
+            <td>
+                {{ current_user.username }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.username.label }}
+            </td>
+            <td>
+                {{ form.username }}
+            </td>
+            <td>
+                {% for error in form.username.errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Vaihda käyttäjänimi" />
+            </td>
+        </tr>
+</form>
+<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary">Takaisin</a>
+{% endblock %}

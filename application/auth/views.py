@@ -1,6 +1,6 @@
 from application import app, db, login_required
 from application.auth.models import User
-from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm
+from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm, ChangeUsernameForm
 from flask_login import login_user, logout_user, current_user
 from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -101,3 +101,25 @@ def auth_user_info():
 @login_required(role="ADMIN")
 def auth_list():
     return render_template("auth/list.html", users=User.query.all())
+
+@app.route("/auth/change_username", methods=["GET", "POST"])
+@login_required()
+def auth_change_username():
+    if request.method == "GET":
+        return render_template("auth/changeusername.html", form=ChangeUsernameForm())
+    
+    form = ChangeUsernameForm(request.form)
+    if form.username.data == current_user.username:
+        return render_template("auth/changeusername.html", form=form, error="Uusi käyttäjänimi on sama kuin nykyinen käyttäjänimi!")
+    if form.validate():
+        try:
+            current_user.username = form.username.data
+            db.session().commit()
+        except:
+            db.session().rollback()
+            return render_template("auth/changeusername.html", form=form, error="Käyttäjänimi on varattu!")
+        flash("Käyttäjänimi vaihdettu onnistuneesti")
+        return render_template("auth/menu.html")
+    return render_template("auth/changeusername.html", form=form)
+        
+

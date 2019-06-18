@@ -3,6 +3,7 @@ from sqlalchemy.sql import text
 from flask_login import current_user
 from application.equipments.models import Equipment
 from application.animals.models import Animal
+from application.auth.models import User
 
 
 class Observation(db.Model):
@@ -84,10 +85,13 @@ class Observation(db.Model):
 
     @staticmethod
     def list_filtered(form, cur_id=-1):
-        query = db.session.query(Observation, Animal, Equipment.name).outerjoin(Animal).outerjoin(Equipment).group_by(Observation.observation_id, Animal.animal_id, Equipment.equipment_id)
+        query = db.session.query(Observation, Animal, Equipment.name, User).outerjoin(Animal).outerjoin(Equipment).outerjoin(User).group_by(Observation.observation_id, Animal.animal_id, Equipment.equipment_id, User.account_id)
         
         # Filters
-        query = query.filter(Observation.account_id == cur_id)
+        if cur_id != -1:
+            query = query.filter(Observation.account_id == cur_id)
+        if form.username.data is not None and form.username.data != "":
+            query = query.filter(User.username == form.username.data)
         if form.date_observedLow.data is not None:
             query = query.filter(Observation.date_observed >= form.date_observedLow.data)
         if form.date_observedHigh.data is not None:
@@ -114,7 +118,7 @@ class Observation(db.Model):
             query = query.filter(Observation.observ_type.in_(form.observ_type.data))
         if form.equipment.data:
             query = query.filter(Equipment.equipment_id.in_(form.equipment.data))
-        if form.info.data != '':
+        if form.info.data != '' and form.info.data is not None:
             query = query.filter(Observation.info == form.info.data)
 
         res = query.order_by(Observation.date_observed.desc()).all() 
@@ -125,6 +129,6 @@ class Observation(db.Model):
                              "Havaittu": row[0].date_observed, "Kaupunki": row[0].city, "Leveysaste": row[0].latitude,
                              "Pituusaste": row[0].longitude, "Elain": row[1].name, "Paino": row[0].weight,
                              "Sukupuoli": row[0].sex, "Havaintotapa": row[0].observ_type, "Valine": row[2],
-                             "Lisatiedot": row[0].info})
+                             "Lisatiedot": row[0].info, "Kayttajanimi": row[3].username, "KayttajaId": row[3].account_id})
 
         return response

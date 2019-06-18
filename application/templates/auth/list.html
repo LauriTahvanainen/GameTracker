@@ -18,7 +18,7 @@
             {% if user.urole != "ADMIN" %}
             <tr>
                 <td>{{ user.account_id }}</td>
-                <td>{{ user.username }}</td>
+                <td><a href="{{ url_for('observation_list_by_id', user_id = user.account_id) }}">{{ user.username }}</a></td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.city }}</td>
                 <td>{{ user.age }}</td>

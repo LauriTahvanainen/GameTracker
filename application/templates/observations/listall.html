@@ -1,15 +1,28 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h2>Omat havainnot</h2>
+<h2>Kaikki havainnot</h2>
 <a href="#filter" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
-<a href="{{ url_for('observation_listuser') }}" class="btn btn-primary">Näytä kaikki</a>
+<a href="{{ url_for('observation_list_all') }}" class="btn btn-primary">Näytä kaikki</a>
 {{ error }}
 
 <div id="filter" class="collapse" aria-controls="filter">
-    <form method="POST" action="{{ url_for('observation_listuser') }}">
+    <form method="POST" action="{{ url_for('observation_list_all') }}">
         {{ form.hidden_tag() }}
         <table id="filter">
+            <tr>
+                <td>
+                    {{ form.username.label }}
+                </td>
+                <td>
+                    {{ form.username }}
+                </td>
+                <td>
+                    {% for error in form.username.errors %}
+                    <div>{{ error }}</div>
+                    {% endfor %}
+                </td>
+            </tr>
             <tr>
                 <td>
                     {{ form.date_observedLow.label }}
@@ -181,11 +194,12 @@
     </form>
 </div>
 
-<div id="list" class="container">
-    <table id="list" class="table table-bordered">
+<div id="listaus" class="container">
+    <table id="listaus" class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Havaitsija</th>
                 <th>Luotu</th>
                 <th>Muokattu</th>
                 <th>Havaittu</th>
@@ -203,6 +217,9 @@
             {% for obs in observations %}
             <tr>
                 <td>{{ obs.Havaintonumero }}</td>
+                <td><a
+                        href="{{ url_for('observation_list_by_id', user_id = obs.KayttajaId) }}">{{ obs.Kayttajanimi }}</a>
+                </td>
                 <td>{{ obs.Luotu }}</td>
                 <td>{{ obs.Muokattu }}</td>
                 <td>{{ obs.Havaittu }}</td>
@@ -251,15 +268,19 @@
                 {% else %}
                 <td>{{ obs.Valine }}</td>
                 {% endif %}
+                {% if obs.KayttajaId == current_user.account_id or current_user.urole == "ADMIN" %}
                 <td rowspan="2">
                     <div style="line-height: 70px"><a
                             href="{{ url_for('observation_delete', obs_id=obs.Havaintonumero, last_path=request.path) }}"
                             class="btn btn-primary"
                             onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista havainto</a></div>
                 </td>
+                {% else %}
+                <td rowspan="2"></td>
+                {% endif %}
             </tr>
             <tr>
-                <td colspan="12">{{ obs.Lisatiedot }}</td>
+                <td colspan="13">{{ obs.Lisatiedot }}</td>
             </tr>
             {% endfor %}
         </tbody>

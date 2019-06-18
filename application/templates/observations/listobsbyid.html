@@ -1,13 +1,36 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h2>Omat havainnot</h2>
+<h2>Käyttäjä: {{ account.username }}</h2>
+<div id="userinfo">
+    <table id="listaus" class="table table-bordered">
+        <tbody>
+            <tr>
+                <th style="width: 5px">Käyttäjänimi</th>
+                <td>{{ account.username }}</td>
+            </tr>
+            <tr>
+                <th>Nimi</th>
+                <td>{{ account.name }}</td>
+            </tr>
+            <tr>
+                <th>Kaupunki</th>
+                <td>{{ account.city }}</td>
+            </tr>
+            <tr>
+                <th>Syntymävuosi</th>
+                <td>{{ account.age }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h3>Käyttäjän havainnot</h3>
 <a href="#filter" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
-<a href="{{ url_for('observation_listuser') }}" class="btn btn-primary">Näytä kaikki</a>
+<a href="{{ url_for('observation_list_by_id', user_id = account.account_id) }}" class="btn btn-primary">Näytä kaikki</a>
 {{ error }}
 
 <div id="filter" class="collapse" aria-controls="filter">
-    <form method="POST" action="{{ url_for('observation_listuser') }}">
+    <form method="POST" action="{{ url_for('observation_list_by_id', user_id = account.account_id) }}">
         {{ form.hidden_tag() }}
         <table id="filter">
             <tr>
@@ -181,8 +204,8 @@
     </form>
 </div>
 
-<div id="list" class="container">
-    <table id="list" class="table table-bordered">
+<div id="listaus" class="container">
+    <table id="listaus" class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -251,12 +274,14 @@
                 {% else %}
                 <td>{{ obs.Valine }}</td>
                 {% endif %}
+                {% if obs.KayttajaId == current_user.account_id or current_user.urole == "ADMIN" %}
                 <td rowspan="2">
                     <div style="line-height: 70px"><a
                             href="{{ url_for('observation_delete', obs_id=obs.Havaintonumero, last_path=request.path) }}"
                             class="btn btn-primary"
                             onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista havainto</a></div>
                 </td>
+                {% endif %}
             </tr>
             <tr>
                 <td colspan="12">{{ obs.Lisatiedot }}</td>

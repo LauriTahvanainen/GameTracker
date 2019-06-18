@@ -9,6 +9,7 @@ def StopEmpty(form, field):
         field.errors[:] = []
         raise StopValidation()
 
+
 class BiggerThan(object):
     def __init__(self, fieldname, message=None):
         self.fieldname = fieldname
@@ -34,10 +35,12 @@ class BiggerThan(object):
 
             raise ValidationError(message % d)
 
+
 class AddNewObservationForm(FlaskForm):
     date_observed = DateTimeField("Havainnon päivämäärä ja aika",  format='%d-%m-%Y %H:%M', validators=[
                                   validators.input_required(message="Päivämäärä ei voi olla tyhjä!")], render_kw={"placeholder": "Muodossa 14-12-2019 22:45"})
-    city = StringField("Kaupunki", validators=[validators.input_required(message="Kaupunki ei voi olla tyhjä")])
+    city = StringField("Kaupunki", validators=[
+                       validators.input_required(message="Kaupunki ei voi olla tyhjä")])
     latitude = FloatField("Leveysaste", [StopEmpty, validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "Esimerkiksi 25.439399"})
     longitude = FloatField("Pituusaste", [StopEmpty, validators.number_range(
@@ -64,27 +67,35 @@ class AddNewObservationForm(FlaskForm):
 
 class ListFiltersForm(FlaskForm):
     date_observedLow = DateTimeField("Havainnon päivämäärän ja ajan ala- ja yläraja",
-                                     format='%d-%m-%Y %H:%M', validators=[StopEmpty, BiggerThan('date_observedHigh')])
+                                     format='%d-%m-%Y %H:%M', validators=[StopEmpty, BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
     date_observedHigh = DateTimeField(
-        "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[StopEmpty])
+        "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[StopEmpty], render_kw={"placeholder": "01-01-2010 12:00"})
     city = SelectMultipleField("Kaupunki")
     latitudeLow = FloatField("Leveysasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
-        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')])
+        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
     latitudeHigh = FloatField("Leveysasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
-        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")])
+        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "83.456722"})
 
     longitudeLow = FloatField("Pituusasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
-        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!"), BiggerThan('longitudeHigh')])
+        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!"), BiggerThan('longitudeHigh')], render_kw={"placeholder": "-104.234224"})
     longitudeHigh = FloatField("Pituusasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
-        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")])
+        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], render_kw={"placeholder": "80.224422"})
 
     animal = SelectMultipleField("Eläin", coerce=int)
 
-    weightLow = FloatField("Painon ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(min=0, message="Paino ei voi olla negatiivinen!"), BiggerThan('weightHigh')])
-    weightHigh = FloatField("Painon ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(min=0, message="Paino ei voi olla negatiivinen!")])
-    sex = SelectMultipleField("Sukupuoli", choices=[(0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], coerce=int)
-    observ_type = SelectMultipleField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto")], coerce=int)
+    weightLow = FloatField("Painon ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+        min=0, message="Paino ei voi olla negatiivinen!"), BiggerThan('weightHigh')], render_kw={"placeholder": "3"})
+    weightHigh = FloatField("Painon ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+        min=0, message="Paino ei voi olla negatiivinen!")], render_kw={"placeholder": "50"})
+    sex = SelectMultipleField("Sukupuoli", choices=[(
+        0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], coerce=int)
+    observ_type = SelectMultipleField("Havaintotapa", choices=[(
+        0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto")], coerce=int)
 
     equipment = SelectMultipleField("Väline", coerce=int)
     info = TextAreaField("Muita tietoja", validators=[validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")])
+    username = StringField("Käyttäjänimi", [StopEmpty,
+                                            validators.Length(
+                                                min=4, max=16, message='Käyttäjänimen on oltava pituudeltaan 4-16 merkkiä!')
+                                            ], render_kw={"placeholder": "Min. 4, maks. 16 merkkiä"})

@@ -36,7 +36,7 @@ Käyttäjätili-valikko sisältää linkit `Vaihda salasana`, `Poista käyttäj�
 `Vaihda salasana` näkymässä on lomake, jossa käyttäjä voi vaihtaa tilinsä salasanan syöttämällä lomakkeeseen vanhan salasanansa, sekä uuden salasanan kaksi kertaa. Vaihto tapahtuu painamalla nappia `Vaihda salasana`. Järjestelmä ilmoittaa vaihdon lopputuloksesta.
 
 ### Poista käyttäjätili
-Käyttäjätilin poistaminen onnistuu painamalla nappia `Poista käyttäjäsi`, ja painamalla `OK` varmistus-dialogissa. Käyttäjätilin poistaminen ei poista luotuja havaintoja järjestelmästä. Poistaminen poistaa käyttäjätiedot.
+Käyttäjätilin poistaminen onnistuu painamalla nappia `Poista käyttäjäsi`, ja painamalla `OK` varmistus-dialogissa. Käyttäjätilin poistaminen poistaa sekä käyttäjätiedot, että käyttäjän luomat havainnot.
 
 ### Tarkastele omia käyttäjätietoja
 Näkymä listaa käyttäjälle hänen käyttäjätietonsa.

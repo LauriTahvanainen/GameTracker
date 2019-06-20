@@ -72,15 +72,16 @@ def observation_list_by_id(user_id):
     form = ListFiltersForm()
     form = fill_choices(form, user_id)
     observations = Observation.list_filtered(form, user_id)
+    obs_count = Observation.count_observations_on_user(user_id)
     if request.method == "GET":
-        return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account)
+        return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, obs_count=obs_count)
 
     form = ListFiltersForm(request.form)
     form = fill_choices(form, user_id)
     if form.validate():
         observations = Observation.list_filtered(form, user_id)
-        return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account)
-    return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+        return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, obs_count=obs_count)
+    return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, obs_count=obs_count, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
 
 @app.route("/observations/list/all", methods=["GET", "POST"])
 @login_required()

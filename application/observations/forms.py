@@ -39,7 +39,7 @@ class BiggerThan(object):
 class AddNewObservationForm(FlaskForm):
     date_observed = DateTimeField("Havainnon päivämäärä ja aika",  format='%d-%m-%Y %H:%M', validators=[
                                   validators.input_required(message="Päivämäärä ei voi olla tyhjä!")], render_kw={"placeholder": "Muodossa 14-12-2019 22:45"})
-    city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-Z]*$', message='Kaupungin nimessä on vain kirjaimia!'),
+    city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-ZåöäÅÖÄ]*$', message='Kaupungin nimessä on vain kirjaimia!'),
                                                validators.input_required(message="Kaupunki ei voi olla tyhjä")])
     latitude = DecimalField("Leveysaste", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], places=6, render_kw={"placeholder": "Esimerkiksi 25.439399"})
@@ -90,7 +90,7 @@ class ListFiltersForm(FlaskForm):
     sex = SelectMultipleField("Sukupuoli", choices=[(
         0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], coerce=int)
     observ_type = SelectMultipleField("Havaintotapa", choices=[(
-        0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto")], coerce=int)
+        0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], coerce=int)
 
     equipment = SelectMultipleField("Väline", coerce=int)
     info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('[\w.?!]+', message="Vain kirjaimet, numerot ja '. ? ! , ' ovat sallittuja merkkejä!"), validators.length(

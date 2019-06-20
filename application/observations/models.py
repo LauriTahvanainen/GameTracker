@@ -123,3 +123,10 @@ class Observation(db.Model):
                              "Lisatiedot": row[0].info, "Kayttajanimi": row[3].username, "KayttajaId": row[3].account_id})
 
         return response
+
+    @staticmethod
+    def count_observations_on_user(account_id):
+        stmt = text("SELECT COUNT(Observation.observation_id) as obs_count"
+                    " FROM Observation WHERE Observation.account_id = :acc_id").params(acc_id=account_id)
+        res = db.engine.execute(stmt)
+        return res.fetchone()['obs_count']

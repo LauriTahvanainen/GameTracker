@@ -45,15 +45,12 @@ def animal_edit_or_delete(animal_id):
         return render_template("animals/editordelete.html", animal=animal, form=form)
 
     form = addNewAnimalForm(request.form)
-    print(form.name.data)
-    print(form.lat_name.data)
-    print(form.info.data)
     if form.validate():
         try:
-            animalToEdit = Animal.query.get(animal_id)
-            animalToEdit.name = form.name.data
-            animalToEdit.lat_name = form.lat_name.data
-            animalToEdit.info = form.info.data
+            animal = Animal.query.get(animal_id)
+            animal.name = form.name.data
+            animal.lat_name = form.lat_name.data
+            animal.info = form.info.data
             db.session().commit()
         except:
             return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all(), error="Muokatessa tapahtui virhe! Eläintä ei muokattu!")

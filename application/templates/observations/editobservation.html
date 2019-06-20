@@ -4,7 +4,8 @@
 {{ error }}
 <a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
     eläin!</a>
-<form method="POST" action="{{ url_for('observation_add') }}">
+<h2>Muokattavana havainto numero: {{ observation.observation_id }}</h2>
+<form method="POST" action="{{ url_for('observation_edit', obs_id = observation.observation_id, last_path = last_path) }}">
     <table>
         <tr>
             <td>
@@ -141,7 +142,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Lisää havainto" />
+                <input type="submit" value="Suorita havainnon muokkaus" />
             </td>
         </tr>
 </form>

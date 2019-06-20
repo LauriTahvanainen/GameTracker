@@ -16,8 +16,8 @@ class Observation(db.Model):
                               onupdate=db.func.current_timestamp())
     date_observed = db.Column(db.DateTime, nullable=False)
     city = db.Column(db.String(144), nullable=False)
-    latitude = db.Column(db.Numeric, nullable=False)
-    longitude = db.Column(db.Numeric, nullable=False)
+    latitude = db.Column(db.Numeric)
+    longitude = db.Column(db.Numeric)
     animal_id = db.Column(db.Integer, db.ForeignKey(
         "animal.animal_id"), nullable=False)
     weight = db.Column(db.Numeric)
@@ -31,20 +31,11 @@ class Observation(db.Model):
         self.account_id = account_id
         self.date_observed = date_observed
         self.city = city
-        if latitude is not None:
-            self.latitude = latitude
-        else:
-            self.latitude = 404
-        if longitude is not None:
-            self.longitude = longitude
-        else:
-            self.longitude = 404
+        self.latitude = latitude
+        self.longitude = longitude
         self.animal_id = animal_id
         self.weight = weight
-        if weight is not None:
-            self.weight = weight
-        else:
-            self.weight = -404
+        self.weight = weight
         self.sex = sex
         self.observ_type = observ_type
         self.equipment_id = equipment_id

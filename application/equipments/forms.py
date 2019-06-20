@@ -5,7 +5,7 @@ from application.equipments.models import Equipment
 
 
 class addEquipmentForm(FlaskForm):
-    name = StringField("Nimi", [validators.input_required(
+    name = StringField("Nimi", [validators.Regexp('^[a-zA-Z]*$', message='Välineen nimessä on vain kirjaimia!'), validators.input_required(
         message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Kiikarit"})
 
     class Meta:

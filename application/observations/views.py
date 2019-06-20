@@ -52,14 +52,14 @@ def observation_add():
 @login_required()
 def observation_listuser():
     form = ListFiltersForm()
-    form = fill_choices_by_id(form, current_user.account_id)
+    form = fill_choices(form, current_user.account_id)
     observations = Observation.list_users_own_observations_by_observ_date()
     if request.method == "GET":
         return render_template("observations/listuser.html", form=form, observations=observations)
     
     # filtering
     form = ListFiltersForm(request.form)
-    form = fill_choices_by_id(form, current_user.account_id)
+    form = fill_choices(form, current_user.account_id)
     if form.validate():
         observations = Observation.list_filtered(form, current_user.account_id)
         return render_template("observations/listuser.html", form=form, observations=observations)
@@ -70,13 +70,13 @@ def observation_listuser():
 def observation_list_by_id(user_id):
     account = User.query.get(user_id)
     form = ListFiltersForm()
-    form = fill_choices_by_id(form, user_id)
+    form = fill_choices(form, user_id)
     observations = Observation.list_filtered(form, user_id)
     if request.method == "GET":
         return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account)
 
     form = ListFiltersForm(request.form)
-    form = fill_choices_by_id(form, user_id)
+    form = fill_choices(form, user_id)
     if form.validate():
         observations = Observation.list_filtered(form, user_id)
         return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account)
@@ -86,13 +86,13 @@ def observation_list_by_id(user_id):
 @login_required()
 def observation_list_all():
     form = ListFiltersForm()
-    form = fill_choices_by_id(form)
+    form = fill_choices(form)
     observations = Observation.list_filtered(form)
     if request.method == "GET":
         return render_template("observations/listall.html", form=form, observations=observations)
 
     form = ListFiltersForm(request.form)
-    form = fill_choices_by_id(form)
+    form = fill_choices(form)
     if form.validate():
         observations = Observation.list_filtered(form)
         return render_template("observations/listall.html", form=form, observations=observations)
@@ -116,15 +116,59 @@ def observation_delete(obs_id):
     flash("Sinulla ei ole oikeuksia poistaa kyseistä havaintoa!")
     return redirect(last_path)
 
-def fill_choices_by_id(form, acc_id=-1):
-    form = fill_choices(form)
+@app.route("/observations/edit/<obs_id>", methods=["POST", "GET"])
+@login_required()
+def observation_edit(obs_id):
+    obs = Observation.query.get(obs_id)
+    last_path = request.args.get('last_path', None)
+    if obs.account_id == current_user.account_id or current_user.urole == "ADMIN":
+        if request.method == "GET":
+            form = AddNewObservationForm()
+            form = fill_choices(form)
+            form.animal.data = obs.animal_id
+            form.date_observed.data = obs.date_observed
+            form.city.data = obs.city
+            form.latitude.data = obs.latitude
+            form.longitude.data = obs.longitude
+            form.weight.data = obs.weight
+            form.sex.data = obs.sex
+            form.observ_type.data = obs.observ_type
+            form.equipment.data = obs.equipment_id
+            form.info.data = obs.info
+            return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
+        
+        form = AddNewObservationForm(request.form)
+        form = fill_choices(form)
+        if form.validate():
+            try:
+                obs.animal_id = form.animal.data
+                obs.date_observed = form.date_observed.data
+                obs.city = form.city.data
+                obs.latitude = form.latitude.data
+                obs.longitude = form.longitude.data
+                obs.weight = form.weight.data
+                obs.sex = form.sex.data
+                obs.observ_type = form.observ_type.data
+                obs.equipment_id = form.equipment.data
+                obs.info = form.info.data
+                db.session().commit()
+            except:
+                flash("Muokatessa tapahtui virhe! Havaintoa ei muokattu")
+                return redirect(last_path)
+            flash("Havaintoa muokattu onnistuneesti!")
+            return redirect(last_path)
+        return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
+    flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!")
+    return redirect(last_path)
+
+def fill_choices(form, acc_id=-1):
     if acc_id == -1:
         form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).order_by(Observation.city.asc()).distinct()]
+        form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
+        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.order_by(Animal.name.asc()).all()]
     else:
+        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
         form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).filter(Observation.account_id == acc_id).order_by(Observation.city.asc()).distinct()]
+        form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
     return form
 
-def fill_choices(form):
-    form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.order_by(Animal.name.asc()).all()]
-    form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
-    return form

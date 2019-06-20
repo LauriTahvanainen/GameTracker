@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, DateTimeField, FloatField, SelectField, TextAreaField, SelectMultipleField, ValidationError
+from wtforms import StringField, validators, DateTimeField, DecimalField, SelectField, TextAreaField, SelectMultipleField, ValidationError
 from wtforms.validators import StopValidation
 # Compares the value in the given field to the validating field and raises an validationError if the given fields value is bigger than this fields value
 
 
-def StopEmpty(form, field):
-    if not field.data:
+def stopEmpty(form, field):
+    if not field.data or field.data == '':
         field.errors[:] = []
         raise StopValidation()
 
@@ -39,18 +39,18 @@ class BiggerThan(object):
 class AddNewObservationForm(FlaskForm):
     date_observed = DateTimeField("Havainnon päivämäärä ja aika",  format='%d-%m-%Y %H:%M', validators=[
                                   validators.input_required(message="Päivämäärä ei voi olla tyhjä!")], render_kw={"placeholder": "Muodossa 14-12-2019 22:45"})
-    city = StringField("Kaupunki", validators=[
-                       validators.input_required(message="Kaupunki ei voi olla tyhjä")])
-    latitude = FloatField("Leveysaste", [StopEmpty, validators.number_range(
-        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "Esimerkiksi 25.439399"})
-    longitude = FloatField("Pituusaste", [StopEmpty, validators.number_range(
-        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], render_kw={"placeholder": "Esimerkiksi 121.203030"})
+    city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-Z]*$', message='Kaupungin nimessä on vain kirjaimia!'),
+                                               validators.input_required(message="Kaupunki ei voi olla tyhjä")])
+    latitude = DecimalField("Leveysaste", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], places=6, render_kw={"placeholder": "Esimerkiksi 25.439399"})
+    longitude = DecimalField("Pituusaste", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], places=6, render_kw={"placeholder": "Esimerkiksi 121.203030"})
 
     animal = SelectField("Eläin", validators=[validators.input_required(
         message="Eläin pitää valita!")], coerce=int)
 
-    weight = FloatField("Paino", [StopEmpty, validators.number_range(
-        min=0, message="Paino ei voi olla negatiivinen!")], render_kw={"placeholder": "Kilogrammoina"})
+    weight = DecimalField("Paino", [validators.optional(strip_whitespace=True), validators.number_range(
+        min=0, message="Paino ei voi olla negatiivinen!")], places=3, render_kw={"placeholder": "Kilogrammoina"})
     sex = SelectField("Sukupuoli", choices=[(0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], validators=[
                       validators.input_required(message="Sukupuoli pitää valita!")], coerce=int)
     observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], validators=[
@@ -58,7 +58,7 @@ class AddNewObservationForm(FlaskForm):
 
     equipment = SelectField("Väline",  validators=[validators.input_required(
         message="Väline pitää valita!")], coerce=int)
-    info = TextAreaField("Muita tietoja", [validators.length(
+    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('[\w.?!]+', message="Vain kirjaimet, numerot ja piste ovat sallittuja merkkejä!"), validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")], render_kw={"placeholder": "Maksimissaan 500 merkkiä!"})
 
     class Meta:
@@ -67,25 +67,25 @@ class AddNewObservationForm(FlaskForm):
 
 class ListFiltersForm(FlaskForm):
     date_observedLow = DateTimeField("Havainnon päivämäärän ja ajan ala- ja yläraja",
-                                     format='%d-%m-%Y %H:%M', validators=[StopEmpty, BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
+                                     format='%d-%m-%Y %H:%M', validators=[stopEmpty, BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
     date_observedHigh = DateTimeField(
-        "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[StopEmpty], render_kw={"placeholder": "01-01-2010 12:00"})
+        "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[stopEmpty], render_kw={"placeholder": "01-01-2010 12:00"})
     city = SelectMultipleField("Kaupunki")
-    latitudeLow = FloatField("Leveysasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+    latitudeLow = DecimalField("Leveysasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
-    latitudeHigh = FloatField("Leveysasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+    latitudeHigh = DecimalField("Leveysasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "83.456722"})
 
-    longitudeLow = FloatField("Pituusasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+    longitudeLow = DecimalField("Pituusasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!"), BiggerThan('longitudeHigh')], render_kw={"placeholder": "-104.234224"})
-    longitudeHigh = FloatField("Pituusasteen ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+    longitudeHigh = DecimalField("Pituusasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], render_kw={"placeholder": "80.224422"})
 
     animal = SelectMultipleField("Eläin", coerce=int)
 
-    weightLow = FloatField("Painon ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+    weightLow = DecimalField("Painon ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=0, message="Paino ei voi olla negatiivinen!"), BiggerThan('weightHigh')], render_kw={"placeholder": "3"})
-    weightHigh = FloatField("Painon ajan ala- ja yläraja", validators=[StopEmpty, validators.number_range(
+    weightHigh = DecimalField("Painon ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=0, message="Paino ei voi olla negatiivinen!")], render_kw={"placeholder": "50"})
     sex = SelectMultipleField("Sukupuoli", choices=[(
         0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], coerce=int)
@@ -93,9 +93,11 @@ class ListFiltersForm(FlaskForm):
         0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto")], coerce=int)
 
     equipment = SelectMultipleField("Väline", coerce=int)
-    info = TextAreaField("Muita tietoja", validators=[validators.length(
+    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('[\w.?!]+', message="Vain kirjaimet, numerot ja '. ? ! , ' ovat sallittuja merkkejä!"), validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")])
-    username = StringField("Käyttäjänimi", [StopEmpty,
+    username = StringField("Käyttäjänimi", [stopEmpty,
+                                            validators.Regexp(
+                                                '^[a-zA-Z0-9_]*$', message='Käyttäjänimessä saa olla vain aakkosia, numeroita tai alaviivoja!'),
                                             validators.Length(
                                                 min=4, max=16, message='Käyttäjänimen on oltava pituudeltaan 4-16 merkkiä!')
                                             ], render_kw={"placeholder": "Min. 4, maks. 16 merkkiä"})

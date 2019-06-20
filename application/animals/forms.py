@@ -1,11 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators
-from application.observations.forms import StopEmpty
 
 class addNewAnimalForm(FlaskForm):
-    name = StringField("Nimi", [validators.input_required(message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Susi"})
-    lat_name = StringField("Latinankielinen nimi", render_kw={"placeholder": "Canis lupus"})
-    info = StringField("Tietoja", [StopEmpty, validators.url(message='Tiedon on oltava url-osoite')], render_kw={"placeholder": "URL-osoite. Esim. Wikipedia"})
+    name = StringField("Nimi", [validators.input_required(message='Nimi ei voi olla tyhjä!'), validators.Regexp('^[a-zA-Z]*$', message='Eläimen nimessä on vain kirjaimia!')], render_kw={"placeholder": "Susi"})
+    lat_name = StringField("Latinankielinen nimi", validators=[validators.Regexp('^[a-zA-Z]*$', message='Latinankielisessä nimessä on vain kirjaimia!')], render_kw={"placeholder": "Canis lupus"})
+    info = StringField("Tietoja", [validators.optional(), validators.url(message='Tiedon on oltava url-osoite')], render_kw={"placeholder": "URL-osoite. Esim. Wikipedia"})
 
     class Meta:
         csrf = False

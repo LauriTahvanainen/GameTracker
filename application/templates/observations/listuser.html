@@ -7,6 +7,7 @@
 {{ error }}
 
 <div id="filter" class="collapse" aria-controls="filter">
+    {% if observations %}
     <form method="POST" action="{{ url_for('observation_listuser') }}">
         {{ form.hidden_tag() }}
         <table id="filter">
@@ -179,6 +180,10 @@
             </tr>
         </table>
     </form>
+    {% else %}
+    <p>Sinulla ei ole havaintoja joita rajata!</p>
+    <a href="{{ url_for('observation_add') }}" class="btn btn-outline-primary">Siirry tästä lisäämään havaintoja!</a>
+    {% endif %}
 </div>
 
 <div id="list" class="container">
@@ -207,20 +212,20 @@
                 <td>{{ obs.Muokattu }}</td>
                 <td>{{ obs.Havaittu }}</td>
                 <td>{{ obs.Kaupunki }}</td>
-                {% if obs.Leveysaste == 404 %}
+                {% if not obs.Leveysaste %}
                 <td>Ei annettu</td>
                 {% else %}
                 <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs.Pituusaste|float) }}&mlon={{ '%0.6f' | format(obs.Leveysaste|float) }}&zoom=12"
                         target="_blank">{{ '%0.6f' | format(obs.Leveysaste|float) }}</a></td>
                 {% endif %}
-                {% if obs.Pituusaste == 404 %}
+                {% if not obs.Pituusaste %}
                 <td>Ei annettu</td>
                 {% else %}
                 <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs.Pituusaste|float) }}&mlon={{ '%0.6f' | format(obs.Leveysaste|float) }}&zoom=12"
                         target="_blank">{{ '%0.6f' | format(obs.Pituusaste|float) }}</a></td>
                 {% endif %}
                 <td>{{ obs.Elain }}</td>
-                {% if obs.Paino == -404 %}
+                {% if not obs.Paino %}
                 <td>Ei annettu</td>
                 {% else %}
                 <td>{{ '%0.1f' | format(obs.Paino|float) }} Kg</td>
@@ -255,7 +260,12 @@
                     <div style="line-height: 70px"><a
                             href="{{ url_for('observation_delete', obs_id=obs.Havaintonumero, last_path=request.path) }}"
                             class="btn btn-primary"
-                            onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista havainto</a></div>
+                            onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista</a></div>
+                </td>
+                <td rowspan="2">
+                    <div style="line-height: 70px"><a
+                            href="{{ url_for('observation_edit', obs_id=obs.Havaintonumero, last_path=request.path) }}"
+                            class="btn btn-primary">Muokkaa</a></div>
                 </td>
             </tr>
             <tr>

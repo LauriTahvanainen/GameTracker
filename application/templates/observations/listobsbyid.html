@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
+{% if current_user.urole == "ADMIN" %}
+<div><h2 style="float: left">Käyttäjä: {{ account.username }}</h2><a href="{{ url_for('auth_delete_account', account_id=account.account_id) }}" class="btn btn-danger" style="float: right"  onclick="return confirm('Oletko varma, että haluat poistaa käyttäjätilin? Myös kaikki käyttäjän havainnot poistetaan järjestelmästä. Jos kyllä, paina OK')">Poista käyttäjä</a></div>
+{% else %}
 <h2>Käyttäjä: {{ account.username }}</h2>
+{% endif %}
 <div id="userinfo">
     <table id="listaus" class="table table-bordered">
         <tbody>

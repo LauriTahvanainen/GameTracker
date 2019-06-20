@@ -64,14 +64,24 @@ def auth_delete():
         return render_template("auth/deleteuserform.html")
 
     try:
-        stmt = text("DELETE FROM account WHERE account_id = :cur_id").params(
-            cur_id=current_user.account_id)
-        db.engine.execute(stmt)
-        db.session().commit()
+        User.delete_account(current_user.account_id)
+        logout_user()
     except:
-        pass
+        return render_template("auth/deleteuserform.html", error="Virhe poistettaessa käyttäjää!, käyttäjää ei poistettu!")
     flash("Käyttäjä poistettu")
     return redirect(url_for("index"))
+
+
+@app.route("/auth/delete/<account_id>", methods=["GET", "POST"])
+@login_required(role="ADMIN")
+def auth_delete_account(account_id):
+    try:
+        User.delete_account(account_id)
+        flash("Käyttäjä poistettu onnistuneesti!")
+        return redirect(url_for("index"))
+    except:
+        flash("Poistaminen epäonnistui!")
+        return redirect(url_for("index"))
 
 
 @app.route("/auth/changepw", methods=["GET", "POST"])

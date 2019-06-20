@@ -1,5 +1,6 @@
 from application import app, db, login_required
 from application.animals.models import Animal
+from application.observations.models import Observation
 from application.animals.forms import addNewAnimalForm
 from flask import render_template, request, redirect, url_for, flash
 
@@ -62,7 +63,9 @@ def animal_edit_or_delete(animal_id):
 @login_required(role="ADMIN")
 def animal_delete(animal_id):
     try:
+        # Could not get cascade working
         Animal.query.filter_by(animal_id=animal_id).delete()
+        Observation.query.filter_by(animal_id=animal_id).delete()
         db.session().commit()
     except:
         return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all(), error="Poistettaessa tapahtui virhe! Eläintä ei poistettu!")

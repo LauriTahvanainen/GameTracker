@@ -41,10 +41,10 @@
                 </tr>
             </tbody>
         </table>
-        <input type="submit" value="Suorita muokkaus" onclick="return confirm('Haluatko varmasti muokata eläintä? Jos kyllä, paina OK.')" />
+        <input class="btn btn-warning" type="submit" value="Suorita muokkaus" onclick="return confirm('Haluatko varmasti muokata eläintä? Jos kyllä, paina OK.')" />
     </form>
     <form method="POST" action="{{ url_for('animal_delete', animal_id=animal.animal_id) }}">
-        <input type="submit" value="Poista eläin" onclick="return confirm('Haluatko varmasti poistaa eläimen? Jos kyllä, paina OK.')"/>
+        <input class="btn btn-danger" type="submit" value="Poista eläin" onclick="return confirm('Haluatko varmasti poistaa eläimen? Eläimen poistaminen poistaa myös eläimeen liitetyt havainnot. Jos kyllä, paina OK.')"/>
     </form>
 </div>
 {% endblock %}

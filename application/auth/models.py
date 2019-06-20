@@ -1,6 +1,8 @@
 from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
+from flask_login import current_user
+
 
 class User(db.Model):
     __tablename__ = "account"
@@ -13,7 +15,8 @@ class User(db.Model):
     age = db.Column(db.Integer)
     urole = db.Column(db.String(10))
 
-    observations = db.relationship("Observation", backref='account', lazy=True)
+    observations = db.relationship(
+        "Observation", backref='account', lazy=True)
 
     def __init__(self, username, name, password, city, age, urole):
         self.username = username
@@ -49,7 +52,8 @@ class User(db.Model):
 
         response = []
         for row in res:
-            response.append({"username":row[0], "name":row[1], "city":row[2], "age":row[3]})
+            response.append(
+                {"username": row[0], "name": row[1], "city": row[2], "age": row[3]})
         return response
 
     @staticmethod
@@ -60,5 +64,17 @@ class User(db.Model):
 
         response = []
         for row in res:
-            response.append({"username":row[0], "name":row[1], "city":row[2], "age":row[3]})
+            response.append(
+                {"username": row[0], "name": row[1], "city": row[2], "age": row[3]})
         return response
+
+    # Could not get the cascading to works so deletion is done with two statements
+    @staticmethod
+    def delete_account(account_id):
+        stmt1 = text("DELETE FROM account WHERE account_id = :account_id").params(
+            account_id=account_id)
+        stmt2 = text("DELETE FROM observation WHERE account_id = :account_id").params(
+            account_id=account_id)
+        db.engine.execute(stmt1)
+        db.engine.execute(stmt2)
+        db.session().commit()

@@ -25,6 +25,11 @@
             <td>
                 {{ form.lat_name }}
             </td>
+            <td>
+                {% for error in form.lat_name.errors %}
+                <div>{{ error }}</div>
+                {% endfor %}
+            </td>
         </tr>
         <tr>
             <td>

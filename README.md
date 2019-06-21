@@ -30,6 +30,8 @@ Käyttäjien täytyy rekisteröityä sivulle.
 
 [Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kaytt%C3%A4jatarinat.md)
 
+[Rajoitteet, puuttuvat ominaisuudet sekä jatkokehitysideoita](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/puutteet.md)
+
 ## Testitunnukset Herokussa
 **Pääkäyttäjä**
 

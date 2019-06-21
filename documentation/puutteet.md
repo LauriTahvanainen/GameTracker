@@ -1,4 +1,4 @@
-# Sovelluksen rajoitteet ja puuttuvat ominaisuudet
+# Sovelluksen rajoitteet, puuttuvat ominaisuudet sekä jatkokehitysidoita
 
 ## Rajoitteet
 - Havaintojen listaaminen on tällä hetkellä rakennettu niin, että käyttäjän poiston yhteydessä on mahdotonta jättää käyttäjän havaintoja tietokantaan. Tämä olisi tarpeellinen toiminnallisuus, jotta dataa ei menetettäisi. Käyttäjä voisi esimerkiksi itse valita, poistetaanko hänen havaintonsakin, vai jätetäänkö ne muiden käyttäjien tarkasteltavaksi.

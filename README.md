@@ -5,7 +5,7 @@ Sivusto mahdollistaa käyttäjille siis esimerkiksi yhden eläimen havaintojen t
 
 Käyttäjien täytyy rekisteröityä sivulle.
 
-## Toiminnot
+## Esimerkki toimintoja
 * Rekisteröityminen
 * Kirjautuminen
 * Uuden havainnon lisääminen

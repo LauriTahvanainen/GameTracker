@@ -30,14 +30,95 @@
 Kirjautuessa haetaan käyttäjä-olio tietyllä käyttäjänimellä.
 
 
-    SELECT account.account_id AS account_account_id, account.username
-    AS account_username, account.name
-    AS account_name, account.password
-    AS account_password, account.city 
-    AS account_city, account.age
-    AS account_age FROM account
+    SELECT account.account_id AS account_account_id, 
+    account.username AS account_username, 
+    account.name AS account_name,
+    account.password AS account_password,
+    account.city AS account_city,
+    account.age AS account_age,
+    account.urole AS account_urole
+    FROM account
     WHERE account.account_id = ?
 
 ### Uuden havainnon lisääminen
     INSERT INTO Observation (account_id, date_created, date_modified, date_observed, city, latitude, longitude, animal_id, weight, sex, observ_type, equipment_id, info)
     VALUES (Current_Account_id, Current_Timestamp, Current_Timestamp, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    
+### Havaintojen tarkasteleminen ja rajaaminen
+Havaintojen listaukseen ja rajaukseen käytetään samaa kyselyä, rajatessa kyselyyn vain lisätään filttereitä. Flask-muokkaa myös kyselyä sivutuksen takia. Tässä esitetään kysely ilman sivutuksen aiheuttamia muutoksia
+    
+Tarkastelu
+
+    SELECT observation.observation_id AS observation_observation_id,
+    observation.account_id AS observation_account_id,
+    observation.date_created AS observation_date_created,
+    observation.date_modified AS observation_date_modified,
+    observation.date_observed AS observation_date_observed,
+    observation.city AS observation_city,
+    observation.latitude AS observation_latitude,
+    observation.longitude AS observation_longitude,
+    observation.animal_id AS observation_animal_id, 
+    observation.weight AS observation_weight, 
+    observation.sex AS observation_sex,
+    observation.observ_type AS observation_observ_type, 
+    observation.equipment_id AS observation_equipment_id, 
+    observation.info AS observation_info,
+    animal.animal_id AS animal_animal_id,
+    animal.name AS animal_name, 
+    animal.lat_name AS animal_lat_name,
+    animal.info AS animal_info,
+    equipment.name AS equipment_name,
+    account.account_id AS account_account_id, 
+    account.username AS account_username,
+    account.name AS account_name,
+    account.password AS account_password,
+    account.city AS account_city,
+    account.age AS account_age,
+    account.urole AS account_urole 
+    FROM observation
+    LEFT OUTER JOIN animal ON animal.animal_id = observation.animal_id
+    LEFT OUTER JOIN equipment ON equipment.equipment_id = observation.equipment_id
+    LEFT OUTER JOIN account ON account.account_id = observation.account_id 
+    GROUP BY observation.observation_id, animal.animal_id, equipment.equipment_id, account.account_id
+    ORDER BY observation.date_observed DESC
+    
+Rajaus lisää samaan kyselyyn vain filttereitä ohjelmallisesti sen mukaan onko filtterilomakkeen kentässä syötettä. Esimerkiksi rajaus jossa rajataan kaupungin (Helsinki, Espoo), käyttäjän (test) ja havaintotyypin (Saalis=0) mukaan:
+
+    SELECT observation.observation_id AS observation_observation_id,
+    observation.account_id AS observation_account_id,
+    observation.date_created AS observation_date_created,
+    observation.date_modified AS observation_date_modified,
+    observation.date_observed AS observation_date_observed,
+    observation.city AS observation_city,
+    observation.latitude AS observation_latitude,
+    observation.longitude AS observation_longitude,
+    observation.animal_id AS observation_animal_id, 
+    observation.weight AS observation_weight, 
+    observation.sex AS observation_sex,
+    observation.observ_type AS observation_observ_type, 
+    observation.equipment_id AS observation_equipment_id, 
+    observation.info AS observation_info,
+    animal.animal_id AS animal_animal_id,
+    animal.name AS animal_name, 
+    animal.lat_name AS animal_lat_name,
+    animal.info AS animal_info,
+    equipment.name AS equipment_name,
+    account.account_id AS account_account_id, 
+    account.username AS account_username,
+    account.name AS account_name,
+    account.password AS account_password,
+    account.city AS account_city,
+    account.age AS account_age,
+    account.urole AS account_urole 
+    FROM observation
+    LEFT OUTER JOIN animal ON animal.animal_id = observation.animal_id
+    LEFT OUTER JOIN equipment ON equipment.equipment_id = observation.equipment_id
+    LEFT OUTER JOIN account ON account.account_id = observation.account_id
+    WHERE account.username = test AND observation.city IN (Helsinki, Espoo) AND observation.observ_type IN (0)
+    GROUP BY observation.observation_id, animal.animal_id, equipment.equipment_id, account.account_id
+    ORDER BY observation.date_observed DESC
+    
+### Havainnon muokkaaminen
+Muokkaus tapahtuu hyvin yksinkertaisella kyselyllä. Esimerkkinä havainnon painon päivittäminen. Päivittäessä date_modified päivittyy automaattisesti.
+
+    UPDATE observation SET date_modified=CURRENT_TIMESTAMP, weight=30 WHERE observation.observation_id = OBSERVAATION_ID

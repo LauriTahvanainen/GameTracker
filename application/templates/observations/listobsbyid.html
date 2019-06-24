@@ -36,7 +36,6 @@
 <h3>Käyttäjän havainnot</h3>
 <a href="#filter" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
 <a href="{{ url_for('observation_list_by_id', user_id = account.account_id) }}" class="btn btn-primary">Näytä kaikki</a>
-<a href="{{ url_for('observation_list_all') }}" class="btn btn-outline-primary">Takaisin</a>
 {{ error }}
 
 <div id="filter" class="collapse" aria-controls="filter">

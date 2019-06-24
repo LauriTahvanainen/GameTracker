@@ -71,14 +71,14 @@ class ListFiltersForm(FlaskForm):
     date_observedHigh = DateTimeField(
         "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[stopEmpty], render_kw={"placeholder": "01-01-2010 12:00"})
     city = SelectMultipleField("Kaupunki")
-    latitudeLow = DecimalField("Leveysasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    latitudeLow = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
-    latitudeHigh = DecimalField("Leveysasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    latitudeHigh = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "83.456722"})
 
-    longitudeLow = DecimalField("Pituusasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    longitudeLow = DecimalField("Pituusasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!"), BiggerThan('longitudeHigh')], render_kw={"placeholder": "-104.234224"})
-    longitudeHigh = DecimalField("Pituusasteen ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    longitudeHigh = DecimalField("Pituusasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], render_kw={"placeholder": "80.224422"})
 
     animal = SelectMultipleField("Eläin", coerce=int)

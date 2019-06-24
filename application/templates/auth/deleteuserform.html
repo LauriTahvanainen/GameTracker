@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary">Takaisin käyttäjävalikkoon</a>
 {{ error }}
 <form method="POST" action="{{ url_for('auth_delete') }}">
             <td colspan="2">

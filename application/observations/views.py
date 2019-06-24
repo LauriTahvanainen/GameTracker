@@ -6,6 +6,7 @@ from application.auth.models import User
 from application.observations.forms import AddNewObservationForm, ListFiltersForm
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
+from datetime import datetime
 
 
 @app.route("/observations/menu", methods=["GET"])
@@ -51,53 +52,69 @@ def observation_add():
 @app.route("/observations/listuser", methods=["GET", "POST"])
 @login_required()
 def observation_listuser():
+    page = request.args.get('page', 1, type=int)
     form = ListFiltersForm()
     form = fill_choices(form, current_user.account_id)
-    observations = Observation.list_users_own_observations_by_observ_date()
+    # The input of the filter-form is passed as url parameters
+    # for repeated calls of the same filters when changing pages
+    form = fill_filter_data(form, request.args)
+
+    pagination = Observation.list_filtered(form, page, current_user.account_id)
     if request.method == "GET":
-        return render_template("observations/listuser.html", form=form, observations=observations)
+        return render_template("observations/listuser.html", form=form, pagination=pagination)
     
     # filtering
     form = ListFiltersForm(request.form)
     form = fill_choices(form, current_user.account_id)
     if form.validate():
-        observations = Observation.list_filtered(form, current_user.account_id)
-        return render_template("observations/listuser.html", form=form, observations=observations)
-    return render_template("observations/listuser.html", form=form, observations=observations, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+        pagination = Observation.list_filtered(form, page, current_user.account_id)
+        return render_template("observations/listuser.html", form=form, pagination=pagination)
+    return render_template("observations/listuser.html", form=form, pagination=pagination, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
 
 @app.route("/observations/list/<user_id>", methods=["GET", "POST"])
 @login_required()
 def observation_list_by_id(user_id):
+    page = request.args.get('page', 1, type=int)
     account = User.query.get(user_id)
     form = ListFiltersForm()
     form = fill_choices(form, user_id)
-    observations = Observation.list_filtered(form, user_id)
+    # The input of the filter-form is passed as url parameters
+    # for repeated calls of the same filters when changing pages
+    form = fill_filter_data(form, request.args)
+
+    pagination = Observation.list_filtered(form, page, user_id)
     obs_count = Observation.count_observations_on_user(user_id)
     if request.method == "GET":
-        return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, obs_count=obs_count)
+        return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account = account, obs_count=obs_count)
 
     form = ListFiltersForm(request.form)
     form = fill_choices(form, user_id)
     if form.validate():
-        observations = Observation.list_filtered(form, user_id)
-        return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, obs_count=obs_count)
-    return render_template("observations/listobsbyid.html", form=form, observations=observations, account = account, obs_count=obs_count, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+        pagination = Observation.list_filtered(form, page, user_id)
+        return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account = account, obs_count=obs_count)
+    return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account = account, obs_count=obs_count, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
 
 @app.route("/observations/list/all", methods=["GET", "POST"])
 @login_required()
 def observation_list_all():
+    page = request.args.get('page', 1, type=int)
+
     form = ListFiltersForm()
     form = fill_choices(form)
-    observations = Observation.list_filtered(form)
+    # The input of the filter-form is passed as url parameters
+    # for repeated calls of the same filters when changing pages
+    form = fill_filter_data(form, request.args)
+
+    pagination = Observation.list_filtered(form, page)
     if request.method == "GET":
-        return render_template("observations/listall.html", form=form, observations=observations)
+        return render_template("observations/listall.html", form=form, pagination=pagination)
 
     form = ListFiltersForm(request.form)
     form = fill_choices(form)
     if form.validate():
-        observations = Observation.list_filtered(form)
-        return render_template("observations/listall.html", form=form, observations=observations)
-    return render_template("observations/listall.html", form=form, observations=observations, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+        pagination = Observation.list_filtered(form, page)
+        return render_template("observations/listall.html", form=form, pagination=pagination)
+    return render_template("observations/listall.html", form=form, pagination=pagination, error="Virhe rajaussyötteissä! Näytetään kaikki havainnot!")
 
 @app.route("/observations/delete/<obs_id>", methods=["POST", "GET"])
 @login_required()
@@ -173,3 +190,35 @@ def fill_choices(form, acc_id=-1):
         form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
     return form
 
+def fill_filter_data(form, args):
+    form.username.data = args.get('username', type=str)
+    # datetimes are not passed in the right format as a parameter,
+    # so they have to be formatted first
+    if 'dateObservedLow' in args.keys():
+        date_observedLow = args['dateObservedLow']
+        date_observedLow = date_observedLow[0:16]
+        date_observedLow = datetime.strptime(date_observedLow, '%Y-%m-%d %H:%M')
+        form.date_observedLow.data = date_observedLow
+
+    if 'dateObservedHigh' in args.keys():
+        date_observedHigh = args['dateObservedHigh']
+        date_observedHigh = date_observedHigh[0:16]
+        date_observedHigh = datetime.strptime(date_observedHigh, '%Y-%m-%d %H:%M')
+        form.date_observedHigh.data = date_observedHigh
+
+    form.city.data = args.getlist('city')
+    form.latitudeLow.data = args.get('latitudeLow', type=float)
+    form.latitudeHigh.data = args.get('latitudeHigh', type=float)
+    form.longitudeLow.data = args.get('longitudeLow', type=float)
+    form.longitudeHigh.data = args.get('longitudeHigh', type=float)
+    form.animal.data = args.getlist('animal')
+    form.weightLow.data = args.get('weightLow', type=float)
+    form.weightHigh.data = args.get('weightHigh', type=float)
+    form.sex.data = args.getlist('sex')
+    form.observ_type.data = args.getlist('observ_type')
+    form.equipment.data = args.getlist('equipment')
+    form.info.data = args.get('info', type=str)
+    return form
+
+def toDate(dateString): 
+    return datetime.strptime(dateString, '%d-%m-%Y %H:%M').date()

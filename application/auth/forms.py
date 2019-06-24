@@ -25,7 +25,7 @@ class CreateUserForm(FlaskForm):
             'confirmPwd', message='Salasanojen on oltava samat!')
     ], render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
     confirmPwd = PasswordField("Vahvista salasana")
-    name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(
+    name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z ]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(
         message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Matti Meikäläinen"})
     city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-ZåöäÅÖÄ]*$', message='Kaupungin nimessä on vain kirjaimia!')], render_kw={"placeholder": "Nurmes"})
     age = IntegerField("Syntymävuosi", [validators.number_range(min=int(date.today().year) - 125, max=int(date.today().year), message=(

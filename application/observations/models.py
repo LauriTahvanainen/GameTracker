@@ -75,7 +75,7 @@ class Observation(db.Model):
         return response
 
     @staticmethod
-    def list_filtered(form, cur_id=-1):
+    def list_filtered(form, page_num, cur_id=-1):
         query = db.session.query(Observation, Animal, Equipment.name, User).outerjoin(Animal).outerjoin(Equipment).outerjoin(User).group_by(Observation.observation_id, Animal.animal_id, Equipment.equipment_id, User.account_id)
         
         # Filters
@@ -92,11 +92,11 @@ class Observation(db.Model):
         if form.latitudeLow.data is not None:
             query = query.filter(Observation.latitude >= form.latitudeLow.data)
         if form.latitudeHigh.data is not None:
-            query = query.filter(Observation.latitude >= form.latitudeHigh.data)
+            query = query.filter(Observation.latitude <= form.latitudeHigh.data)
         if form.longitudeLow.data is not None:
             query = query.filter(Observation.longitude >= form.longitudeLow.data)
         if form.longitudeHigh.data is not None:
-            query = query.filter(Observation.longitude >= form.longitudeHigh.data)
+            query = query.filter(Observation.longitude <= form.longitudeHigh.data)
         if form.animal.data:
             query = query.filter(Animal.animal_id.in_(form.animal.data))
         if form.weightLow.data is not None:
@@ -112,17 +112,7 @@ class Observation(db.Model):
         if form.info.data != '' and form.info.data is not None:
             query = query.filter(Observation.info == form.info.data)
 
-        res = query.order_by(Observation.date_observed.desc()).all() 
-
-        response = []
-        for row in res:
-            response.append({"Havaintonumero": row[0].observation_id, "Luotu": row[0].date_created, "Muokattu": row[0].date_modified,
-                             "Havaittu": row[0].date_observed, "Kaupunki": row[0].city, "Leveysaste": row[0].latitude,
-                             "Pituusaste": row[0].longitude, "Elain": row[1].name, "Paino": row[0].weight,
-                             "Sukupuoli": row[0].sex, "Havaintotapa": row[0].observ_type, "Valine": row[2],
-                             "Lisatiedot": row[0].info, "Kayttajanimi": row[3].username, "KayttajaId": row[3].account_id})
-
-        return response
+        return query.order_by(Observation.date_observed.desc()).paginate(page_num, 10, False) 
 
     @staticmethod
     def count_observations_on_user(account_id):

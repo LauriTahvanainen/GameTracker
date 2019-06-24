@@ -12,9 +12,9 @@
                 {{ form.username }} *
             </td>
             <td>
-                {% for error in form.username.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.username.errors %}
+                <div>{{ form.username.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -25,9 +25,9 @@
                 {{ form.password }} *
             </td>
             <td>
-                {% for error in form.password.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.password.errors %}
+                <div>{{ form.password.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -46,9 +46,9 @@
                 {{ form.name }} *
             </td>
             <td>
-                {% for error in form.name.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.name.errors %}
+                <div>{{ form.name.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -59,9 +59,9 @@
                 {{ form.city }}
             </td>
             <td>
-                {% for error in form.city.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.city.errors %}
+                <div>{{ form.city.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -72,9 +72,9 @@
                 {{ form.age }} *
             </td>
             <td>
-                {% for error in form.age.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.age.errors %}
+                <div>{{ form.age.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -82,7 +82,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Luo käyttäjä" />
+                <input type="submit" value="Luo käyttäjä" class="btn btn-success"/>
             </td>
         </tr>
 </form>

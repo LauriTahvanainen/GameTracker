@@ -1,14 +1,13 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<a href="{{ url_for('observation_menu') }}" class="btn btn-outline-primary">Takaisin havaintovalikkoon</a>
 <h2>Kaikki havainnot</h2>
 <a href="#filter" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
-<a href="{{ url_for('observation_list_all') }}" class="btn btn-primary">Näytä kaikki</a>
+<a href="{{ url_for('observation_list_all', page=1) }}" class="btn btn-primary">Näytä kaikki</a>
 {{ error }}
-
 <div id="filter" class="collapse" aria-controls="filter">
-    {% if observations %}
-    <form method="POST" action="{{ url_for('observation_list_all') }}">
+    <form method="POST" action="{{ url_for('observation_list_all', page=1) }}">
         {{ form.hidden_tag() }}
         <table id="filter">
             <tr>
@@ -193,17 +192,46 @@
             </tr>
         </table>
     </form>
-    {% else %}
-    <p>Järjestelmässä ei ole havaintoja joita rajata!</p>
-    <a href="{{ url_for('observation_add') }}" class="btn btn-outline-primary">Siirry tästä lisäämään havaintoja!</a>
-    {% endif %}
 </div>
 
 <div id="listaus" class="container">
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            {% if pagination.has_prev %}
+            <li class="page-item"><a class="page-link"
+                    href="{{ url_for('observation_list_all', page=pagination.prev_num, username=form.username.data, dateObservedLow=form.date_observedLow.data, dateObservedHigh=form.date_observedHigh.data, city=form.city.data, latitudeLow=form.latitudeLow.data, latitudeHigh=form.latitudeHigh.data, longitudeLow=form.longitudeLow.data, longitudeHigh=form.longitudeHigh.data, animal=form.animal.data, weightLow=form.weightLow.data, weightHigh=form.weightHigh.data, sex=form.sex.data, observ_type=form.observ_type.data, equipment=form.equipment.data, info=form.info.data) }}">Edellinen</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Edellinen</a></li>
+            {% endif %}
+
+            {% for page in pagination.iter_pages() %}
+              {% if page %}
+                {% if page != pagination.page %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('observation_list_all', page=page, username=form.username.data, dateObservedLow=form.date_observedLow.data, dateObservedHigh=form.date_observedHigh.data, city=form.city.data, latitudeLow=form.latitudeLow.data, latitudeHigh=form.latitudeHigh.data, longitudeLow=form.longitudeLow.data, longitudeHigh=form.longitudeHigh.data, animal=form.animal.data, weightLow=form.weightLow.data, weightHigh=form.weightHigh.data, sex=form.sex.data, observ_type=form.observ_type.data, equipment=form.equipment.data, info=form.info.data) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="page-item active">
+                  <span class="page-link">
+                    {{ page }}
+                  </span>
+                </li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if pagination.has_next %}
+            <li class="page-item"><a class="page-link"
+                    href="{{ url_for('observation_list_all', page=pagination.next_num, username=form.username.data, dateObservedLow=form.date_observedLow.data, dateObservedHigh=form.date_observedHigh.data, city=form.city.data, latitudeLow=form.latitudeLow.data, latitudeHigh=form.latitudeHigh.data, longitudeLow=form.longitudeLow.data, longitudeHigh=form.longitudeHigh.data, animal=form.animal.data, weightLow=form.weightLow.data, weightHigh=form.weightHigh.data, sex=form.sex.data, observ_type=form.observ_type.data, equipment=form.equipment.data, info=form.info.data) }}">Seuraava</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Seuraava</a></li>
+            {% endif %}
+        </ul>
+    </nav>
     <table id="listaus" class="table table-bordered">
         <thead>
             <tr>
+                {% if current_user.urole == "ADMIN" %}
                 <th>ID</th>
+                {% endif %}
                 <th>Havaitsija</th>
                 <th>Luotu</th>
                 <th>Muokattu</th>
@@ -219,79 +247,79 @@
             </tr>
         </thead>
         <tbody>
-            {% for obs in observations %}
+            {% for obs in pagination.items %}
             <tr>
-                <td>{{ obs.Havaintonumero }}</td>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ obs[0].observation_id }}</td>
+                {% endif %}
                 <td><a
-                        href="{{ url_for('observation_list_by_id', user_id = obs.KayttajaId) }}">{{ obs.Kayttajanimi }}</a>
+                        href="{{ url_for('observation_list_by_id', user_id = obs[0].account_id, page=1) }}">{{ obs[3].username }}</a>
                 </td>
-                <td>{{ obs.Luotu }}</td>
-                <td>{{ obs.Muokattu }}</td>
-                <td>{{ obs.Havaittu }}</td>
-                <td>{{ obs.Kaupunki }}</td>
-                {% if not obs.Leveysaste %}
+                <td>{{ obs[0].date_created }}</td>
+                <td>{{ obs[0].date_modified }}</td>
+                <td>{{ obs[0].date_observed }}</td>
+                <td>{{ obs[0].city }}</td>
+                {% if not obs[0].latitude %}
                 <td>Ei annettu</td>
                 {% else %}
-                <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs.Pituusaste|float) }}&mlon={{ '%0.6f' | format(obs.Leveysaste|float) }}&zoom=12"
-                        target="_blank">{{ '%0.6f' | format(obs.Leveysaste|float) }}</a></td>
+                <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs[0].latitude|float) }}&mlon={{ '%0.6f' | format(obs[0].longitude|float) }}&zoom=12"
+                        target="_blank">{{ '%0.6f' | format(obs[0].latitude|float) }}</a></td>
                 {% endif %}
-                {% if not obs.Pituusaste %}
+                {% if not obs[0].longitude %}
                 <td>Ei annettu</td>
                 {% else %}
-                <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs.Pituusaste|float) }}&mlon={{ '%0.6f' | format(obs.Leveysaste|float) }}&zoom=12"
-                        target="_blank">{{ '%0.6f' | format(obs.Pituusaste|float) }}</a></td>
+                <td><a href="http://www.openstreetmap.org/?mlat={{ '%0.6f' | format(obs[0].latitude|float) }}&mlon={{ '%0.6f' | format(obs[0].longitude|float) }}&zoom=12"
+                        target="_blank">{{ '%0.6f' | format(obs[0].longitude|float) }}</a></td>
                 {% endif %}
-                <td>{{ obs.Elain }}</td>
-                {% if not obs.Paino %}
+                <td>{{ obs[1].name }}</td>
+                {% if not obs[0].weight %}
                 <td>Ei annettu</td>
                 {% else %}
-                <td>{{ '%0.1f' | format(obs.Paino|float) }} Kg</td>
+                <td>{{ '%0.1f' | format(obs[0].weight|float) }} Kg</td>
                 {% endif %}
 
 
-                {% if obs.Sukupuoli == 0 %}
+                {% if obs[0].sex == 0 %}
                 <td>Uros</td>
-                {% elif obs.Sukupuoli == 1 %}
+                {% elif obs[0].sex == 1 %}
                 <td>Naaras</td>
-                {% elif obs.Sukupuoli == 2 %}
+                {% elif obs[0].sex == 2 %}
                 <td>Muu</td>
                 {% else %}
                 <td>Ei tiedossa</td>
                 {% endif %}
 
-                {% if obs.Havaintotapa == 0 %}
+                {% if obs[0].observ_type == 0 %}
                 <td>Saalis</td>
-                {% elif obs.Havaintotapa == 1 %}
+                {% elif obs[0].observ_type == 1 %}
                 <td>Näköhavainto</td>
-                {% elif obs.Havaintotapa == 2 %}
+                {% elif obs[0].observ_type == 2 %}
                 <td>Kiinniotto</td>
                 {% else %}
                 <td>Onnettomuus</td>
                 {% endif %}
-                {% if obs.Valine == 'None' %}
+                {% if obs[2] == 'None' %}
                 <td>{{ Tyhjä }}</td>
                 {% else %}
-                <td>{{ obs.Valine }}</td>
+                <td>{{ obs[2] }}</td>
                 {% endif %}
-                {% if obs.KayttajaId == current_user.account_id or current_user.urole == "ADMIN" %}
+                {% if obs[3].account_id == current_user.account_id or current_user.urole == "ADMIN" %}
                 <td rowspan="2">
                     <div style="line-height: 70px"><a
-                            href="{{ url_for('observation_delete', obs_id=obs.Havaintonumero, last_path=request.path) }}"
+                            href="{{ url_for('observation_delete', obs_id=obs[0].observation_id, last_path=request.path) }}"
                             class="btn btn-primary"
-                            onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista</a></div>
+                            onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista</a>
+                    </div>
                 </td>
                 <td rowspan="2">
                     <div style="line-height: 70px"><a
-                            href="{{ url_for('observation_edit', obs_id=obs.Havaintonumero, last_path=request.path) }}"
+                            href="{{ url_for('observation_edit', obs_id=obs[0].observation_id, last_path=request.path) }}"
                             class="btn btn-primary">Muokkaa</a></div>
                 </td>
-                {% else %}
-                <td rowspan="2"></td>
-                <td rowspan="2"></td>
                 {% endif %}
             </tr>
             <tr>
-                <td colspan="13">{{ obs.Lisatiedot }}</td>
+                <td colspan="12" style="word-wrap: break-word; max-width: 20px;">{{ obs[0].info }}</td>
             </tr>
             {% endfor %}
         </tbody>

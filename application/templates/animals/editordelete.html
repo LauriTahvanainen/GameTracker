@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container">
-        <a href="{{ url_for('animal_list_all') }}" class="btn btn-primary">Takaisin eläinten tarkasteluun</a>
+        <a href="{{ url_for('animal_list_all') }}" class="btn btn-outline-primary">Takaisin eläinten tarkasteluun</a>
     <h2>Eläin</h2>
     <form method="POST" action="{{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }}">
         <table class="table table-bordered table-hover">

@@ -53,7 +53,7 @@ def auth_create():
             db.session().rollback()
             return render_template("auth/createuserform.html", form=CreateUserForm(), error="Käyttäjänimi on jo käytössä!")
         flash('Rekisteröityminen onnistui!')
-        return redirect(url_for("index"))
+        return redirect(url_for("auth_login"))
     return render_template("auth/createuserform.html", form=form)
 
 

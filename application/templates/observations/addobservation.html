@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<a href="{{ url_for('observation_menu') }}" class="btn btn-outline-primary">Takaisin havaintovalikkoon</a>
 {{ error }}
 <a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
     eläin!</a>
@@ -14,9 +15,9 @@
                 {{ form.animal(size=1) }} *
             </td>
             <td>
-                {% for error in form.animal.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if error in form.animal.errors %}
+                <div>{{ form.animal.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -27,9 +28,9 @@
                 {{ form.date_observed }} *
             </td>
             <td>
-                {% for error in form.date_observed.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.date_observed.errors %}
+                <div>{{ form.date_observed.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -40,9 +41,9 @@
                 {{ form.city }} *
             </td>
             <td>
-                {% for error in form.city.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.city.errors %}
+                <div>{{ form.city.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -92,9 +93,9 @@
                 {{ form.sex(size=1) }} *
             </td>
             <td>
-                {% for error in form.sex.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.sex.errors %}
+                <div>{{ form.sex.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -105,9 +106,9 @@
                 {{ form.observ_type(size=1) }} *
             </td>
             <td>
-                {% for error in form.observ_type.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.observ_type.errors %}
+                <div>{{ form.observ_type.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -118,9 +119,9 @@
                 {{ form.equipment }} *
             </td>
             <td>
-                {% for error in form.equipment.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.equipment.errors %}
+                <div>{{ form.equipment.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -131,9 +132,9 @@
                 {{ form.info }}
             </td>
             <td>
-                {% for error in form.info.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.info.errors %}
+                <div>{{ form.info.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -141,7 +142,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Lisää havainto" />
+                <input type="submit" value="Lisää havainto" class="btn btn-success"/>
             </td>
         </tr>
 </form>

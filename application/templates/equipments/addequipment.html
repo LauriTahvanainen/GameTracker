@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<a href="{{ url_for('equipment_menu') }}" class="btn btn-outline-primary">Takaisin välinevalikkoon</a>
 {{ error }}
 <form method="POST" action="{{ url_for('equipment_add') }}">
     <table>
@@ -19,7 +20,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Lisää väline" />
+                <input type="submit" value="Lisää väline" class="btn btn-success"/>
             </td>
         </tr>
 </form>

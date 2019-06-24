@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<a href="{{ url_for('animal_menu') }}" class="btn btn-outline-primary">Takaisin eläinvalikkoon</a>
 {{ error }}
 <p>*-merkillä merkatut kentät ovat pakollisia</p>
 <form method="POST" action="{{ url_for('animal_add') }}">
@@ -13,9 +14,9 @@
                 {{ form.name }} *
             </td>
             <td>
-                {% for error in form.name.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.name.errors %}
+                <div>{{ form.name.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -26,9 +27,9 @@
                 {{ form.lat_name }}
             </td>
             <td>
-                {% for error in form.lat_name.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.lat_name.errors %}
+                <div>{{ form.lat_name.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
@@ -39,14 +40,14 @@
                 {{ form.info }}
             </td>
             <td>
-                {% for error in form.info.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.info.errors %}
+                <div>{{ form.info.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Lisää eläin" />
+                <input type="submit" value="Lisää eläin" class="btn btn-success"/>
             </td>
         </tr>
 </form>

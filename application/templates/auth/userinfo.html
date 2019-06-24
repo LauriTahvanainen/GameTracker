@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-
+<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary">Takaisin käyttäjävalikkoon</a>
 <div class="container">
     <h2>Käyttäjätiedot</h2>
     <table class="table table-bordered">
@@ -25,5 +25,4 @@
         {% endfor %}
     </table>
 </div>
-<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary">Takaisin</a>
 {% endblock %}

@@ -291,8 +291,8 @@
                     {% else %}
                     <td>Onnettomuus</td>
                     {% endif %}
-                    {% if obs[2] == 'None' %}
-                    <td>{{ Tyhjä }}</td>
+                    {% if not obs[2] %}
+                    <td>Poistettu</td>
                     {% else %}
                     <td>{{ obs[2] }}</td>
                     {% endif %}

@@ -36,14 +36,14 @@ def observation_add():
                              form.observ_type.data,
                              form.equipment.data,
                              form.info.data)
-        try:
-            db.session().add(newObs)
-            db.session().commit()
-        except Exception:
+        # try:
+        db.session().add(newObs)
+        db.session().commit()
+        """ except Exception:
             db.session().rollback()
             form = AddNewObservationForm()
             form = fill_choices(form)
-            return render_template("observations/addobservation.html", form=form, error="Tapahtui virhe, havaintoa ei lisätty!")
+            return render_template("observations/addobservation.html", form=form, error="Tapahtui virhe, havaintoa ei lisätty!") """
         flash('Havainto lisätty onnistuneesti!')
         return redirect(url_for('observation_add'))
     return render_template("observations/addobservation.html", form=form)

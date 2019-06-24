@@ -24,7 +24,7 @@ class Observation(db.Model):
     sex = db.Column(db.Integer)
     observ_type = db.Column(db.Integer)
     equipment_id = db.Column(db.Integer, db.ForeignKey(
-        "equipment.equipment_id"), nullable=False)
+        "equipment.equipment_id"))
     info = db.Column(db.String(500))
 
     def __init__(self, account_id, date_observed, city, latitude, longitude, animal_id, weight, sex, observ_type, equipment_id, info):

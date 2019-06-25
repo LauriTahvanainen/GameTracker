@@ -10,9 +10,10 @@
 | Käyttäjä | lisätä uusia eläimiä | lisätä havaintoja joissa on löytämättömiä/harvinaisia/tietokannassa olemattomia eläimiä. | X |
 | Käyttäjä | tarkastella havaintojani | nähdä kokonaiskuvan omista havainnoistani | X |
 | Käyttäjä | tarkastella muiden havaintoja | nähdä kokonaiskuvan kaikista havainnoista | X |
-| Käyttäjä | tarkastella havaintoja erinlaisin suodattimin | tarkastella esimerkiksi yhden lajin havaintoja | X |
-| Käyttäjä | päivittää omia tietojani | päivittää muuttuneita tietojani | - |
+| Käyttäjä | tarkastella havaintoja erilaisin suodattimin | tarkastella esimerkiksi yhden lajin havaintoja | X |
+| Käyttäjä | päivittää omia tietojani | päivittää muuttuneita tietojani | X |
 | Käyttäjä | poistaa oman tilini | irrottautua palvelusta | X |
+| Käyttäjä | nähdä tilastoja havainnoista | saada nopeasti dataa havaintomäärien mittasuhteista | X |
 | Pääkäyttäjä | poistaa tilejä | poistaa tilejä jotka käyttävät palvelua sääntöjenvastaisesti. | X |
 | Pääkäyttäjä | poistaa havaintoja | poistaa palvelusta virheellisiä havaintoja. | X | 
 | Pääkäyttäjä | lisätä uusia välineitä | mahdollistaa uusien välineiden lisäämisen havaintoihin. | X |
@@ -20,8 +21,10 @@
 | Pääkäyttäjä | poistaa välineitä | poistaa virheellisiä välineitä | X |
 | Pääkäyttäjä | poistaa eläimiä | poistaa virheellisiä eläimiä| X |
 | Pääkäyttäjä | muokata eläimiä | korjata virheellisiä eläimiä | X |
+| Pääkäyttäjä | tilastoja sovelluksen käytöstä | näen miten käyttäjät käyttävät sovellusta | X |
 
 ## SQL-Kyselyt
+Joitain yksinkertaisia ja muiden kyselyiden kanssa samanlaisia kyselyitä, kuten yksinkertaisia INSERT, UPDATE ja DELETE kyselyitä, ei käydä tässä läpi.
 
 ### Rekisteröityminen
     INSERT INTO Account VALUES (username, name, password, city, age) VALUES (?, ?, ?, ?, ?)
@@ -38,11 +41,15 @@ Kirjautuessa haetaan käyttäjä-olio tietyllä käyttäjänimellä.
     account.age AS account_age,
     account.urole AS account_urole
     FROM account
-    WHERE account.account_id = ?
+    WHERE account.name = SYÖTETTY_KÄYTTÄJÄNIMI
 
+FlaskLogin suorittaa samaa kyselyä, mutta account_id:llä.
+SQLalchemy suorittaa kaikkien taulujen yhteydessä saman tyyppisen haun kuin yllä, kun kutsutaan _TaulunNimi.query.get(Taulu.id)_
 ### Uuden havainnon lisääminen
     INSERT INTO Observation (account_id, date_created, date_modified, date_observed, city, latitude, longitude, animal_id, weight, sex, observ_type, equipment_id, info)
-    VALUES (Current_Account_id, Current_Timestamp, Current_Timestamp, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (Current_Account_id, Current_Timestamp, Current_Timestamp, havainto_aika, kaupunki, leveysaste, pituusaste, eläin_id, paino, sukupuoli, hvaintotyyppi, väline_id, lisätietoja)
+    
+Muiden tietokohteiden lisääminen tapahtuu samaan tapaan.
     
 ### Havaintojen tarkasteleminen ja rajaaminen
 Havaintojen listaukseen ja rajaukseen käytetään samaa kyselyä, rajatessa kyselyyn vain lisätään filttereitä. Flask-muokkaa myös kyselyä sivutuksen takia. Tässä esitetään kysely ilman sivutuksen aiheuttamia muutoksia
@@ -121,4 +128,69 @@ Rajaus lisää samaan kyselyyn vain filttereitä ohjelmallisesti sen mukaan onko
 ### Havainnon muokkaaminen
 Muokkaus tapahtuu hyvin yksinkertaisella kyselyllä. Esimerkkinä havainnon painon päivittäminen. Päivittäessä date_modified päivittyy automaattisesti.
 
-    UPDATE observation SET date_modified=CURRENT_TIMESTAMP, weight=30 WHERE observation.observation_id = OBSERVAATION_ID
+    UPDATE observation SET date_modified=CURRENT_TIMESTAMP, weight=30 WHERE observation.observation_id = OBSERVATION_ID
+    
+### Käyttäjätietojen päivittäminen
+Tämäkin päivityskysely on varsin yksinkertainen. Muut päivityskyselyt ovat yhtä yksinkertaisia.
+
+    UPDATE account SET date_modified=CURRENT_TIMESTAMP, name='testi', city='testi', age=1983 WHERE account.account_id = current_user.account_id
+    
+
+### Käyttäjätilin poistaminen
+
+    DELETE FROM account WHERE account_id = current_user.account_id
+    
+Samaan tapaan id:n mukaan tapahtuu myös kaikki muu poistaminen, paitsi välineiden poistaminen, joka tehdään ryhmäpoistona nimen mukaan.
+
+### Välineiden poistaminen
+Esimerkkinä kolmen välineen poistaminen
+
+    DELETE FROM equipment WHERE equipment.name IN (Kiikarit, test, Kirves)
+
+
+### Tilastot
+Tilastot sivulla käyttäjälle ja pääkäyttäjälle näytetään erilaisia tilastoja. Monet näistä hauista ovat hyvin samanlaisia, kuten eniten ja vähiten käytettyjen välineiden hakeminen, eikä kaikkia siten käydä läpi.
+
+#### Eniten havaintoja tehneet 10 käyttäjää
+
+    SELECT Account.account_id, Account.username, COUNT(Observation.observation_id) AS count FROM Observation
+    LEFT JOIN Account ON Observation.account_id = Account.account_id
+    GROUP BY Account.account_id
+    ORDER BY count DESC
+    LIMIT 10
+    
+#### 10 nolla havaintoa tehnyttä käyttäjää, tilin luomispäivän mukaan järjestettynä
+
+    SELECT Account.account_id, Account.username, Account.date_created FROM Account
+    LEFT JOIN Observation ON Observation.account_id = Account.account_id
+    GROUP BY Account.account_id
+    HAVING COUNT(Observation.observation_id) = 0
+    ORDER BY Account.date_created ASC
+    LIMIT 10
+    
+#### 10 eniten havaittua eläintä ja eläimen keskimääräinen paino havainnoissa
+
+    SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count,     
+    AVG(Observation.weight) as avg FROM Animal
+    LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)
+    GROUP BY Animal.animal_id
+    ORDER BY count DESC, Animal.name
+    LIMIT 10
+    
+#### 10 metsästetyintä eläintä (Ei löydä eläimiä, joihin ei liity yhtään havaintoa tyyppiä saalis)    
+    
+    SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, 
+    AVG(Observation.weight) as avg FROM Animal"
+    LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)
+    WHERE Observation.observ_type = 0
+    GROUP BY Animal.animal_id
+    ORDER BY count DESC, Animal.name
+    LIMIT 10
+    
+#### 10 eniten käytettyä välinettä
+
+    SELECT Equipment.equipment_id, Equipment.name, COUNT(Observation.observation_id) as count FROM Equipment
+    LEFT JOIN Observation ON (Equiment.equipment_id = Observation.equipment_id)
+    GROUP BY Equipment.equipment_id
+    ORDER BY count DESC, Equipment.name
+    LIMIT 10"

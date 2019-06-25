@@ -3,7 +3,7 @@
 ## Rajoitteet
 - Havaintojen listaaminen on tällä hetkellä rakennettu niin, että käyttäjän poiston yhteydessä on mahdotonta jättää käyttäjän havaintoja tietokantaan. Tämä olisi tarpeellinen toiminnallisuus, jotta dataa ei menetettäisi. Käyttäjä voisi esimerkiksi itse valita, poistetaanko hänen havaintonsakin, vai jätetäänkö ne muiden käyttäjien tarkasteltavaksi.
 - Havaintojen lisääminen on hieman rajoittunut käytettävyyden ja saavutettavuuden kannalta. Päivämäärän ja koordinaattien lisääminen käsin on ymmärrettävästi käyttäjälle paljon raskaampaa kuin, jos hän voisi käyttää päivämäärän- ja ajanvalitsinta, sekä karttaa.
-
+- Eläinten ja käyttäjien tarkatelussa olisi hyvä olla hakukenttä, jotta tietyn eläimen tai käyttäjän hakeminen olisi mahdollisimman nopeaa.
 
 ## Puuttuvat ominaisuudet
 Kokonaisuudesaan suuri osa suunniteltuista toiminnallisuuksista saatiin toteutettua.
@@ -17,3 +17,4 @@ Kokonaisuudesaan suuri osa suunniteltuista toiminnallisuuksista saatiin toteutet
 - Kuvan lisääminen havaintoon.
 - Kommenttien lisääminen havaintoon.
 - Salasanan palauttamistoiminto.
+- Visuaaliset tilastot

@@ -1,5 +1,6 @@
 from application import db
 from sqlalchemy.sql import text
+from sqlalchemy import Index
 from flask_login import current_user
 from application.equipments.models import Equipment
 from application.animals.models import Animal
@@ -11,19 +12,24 @@ class Observation(Base):
     observation_id = db.Column(
         db.Integer, primary_key=True, autoincrement=True)
     account_id = db.Column(db.Integer, db.ForeignKey(
-        'account.account_id'), nullable=False)
-    date_observed = db.Column(db.DateTime, nullable=False)
-    city = db.Column(db.String(144), nullable=False)
+        'account.account_id'), nullable=False, index=True)
+    date_observed = db.Column(db.DateTime, nullable=False, index=True)
+    city = db.Column(db.String(144), nullable=False, index=True)
     latitude = db.Column(db.Numeric)
     longitude = db.Column(db.Numeric)
     animal_id = db.Column(db.Integer, db.ForeignKey(
-        "animal.animal_id"), nullable=False)
+        "animal.animal_id"), nullable=False, index=True)
     weight = db.Column(db.Numeric)
     sex = db.Column(db.Integer)
-    observ_type = db.Column(db.Integer)
+    observ_type = db.Column(db.Integer, index=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey(
-        "equipment.equipment_id", ondelete='SET NULL'))
-    info = db.Column(db.String(500))
+        "equipment.equipment_id", ondelete='SET NULL'), index=True)
+    info = db.Column(db.String(500), index=True)
+
+    Index('obsAndDate', observ_type, date_observed)
+    Index('obsAndAnimal', observ_type, animal_id)
+    Index('cityAndAnimal', city, animal_id)
+    Index('equipAndAnimal', equipment_id, animal_id)
 
     def __init__(self, account_id, date_observed, city, latitude, longitude, animal_id, weight, sex, observ_type, equipment_id, info):
         self.account_id = account_id

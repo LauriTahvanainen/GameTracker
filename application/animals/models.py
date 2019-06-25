@@ -7,7 +7,7 @@ class Animal(Base):
 
     animal_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(144), nullable=False, unique=True)
-    lat_name = db.Column(db.String(144), nullable=False, unique=True)
+    lat_name = db.Column(db.String(144), unique=True)
     info = db.Column(db.String, nullable=False)
 
     observations = db.relationship("Observation", backref='animal', lazy=True)

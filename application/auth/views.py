@@ -21,7 +21,7 @@ def auth_login():
     form = LoginForm(request.form)
 
     user = User.query.filter_by(username=form.username.data).first()
-    if user is None or not check_password_hash(user.password, form.password.data):
+    if  not form.validate() or user is None or not check_password_hash(user.password, form.password.data):
         return render_template("auth/loginform.html", form=form, error="Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!")
 
     login_user(user, remember=True)

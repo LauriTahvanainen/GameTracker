@@ -4,15 +4,20 @@ from datetime import date
 
 
 class LoginForm(FlaskForm):
-    username = StringField("Käyttäjänimi")
-    password = PasswordField("Salasana")
+    username = StringField("Käyttäjänimi", [validators.Regexp('^[a-zA-Z0-9_]*$', message='Käyttäjänimessä on vain latinalaisia kirjaimia, numeroita tai alaviivoja!'),
+                                            validators.Length(
+                                                min=4, max=16, message='Käyttäjänimi on pituudeltaan 4-16 merkkiä!')
+                                            ], render_kw={"placeholder": "Min. 4, maks. 16 merkkiä"})
+    password = PasswordField("Salasana", [
+        validators.Length(min=8, max=30, message='Salasanan on pituudeltaan 8-30 merkkiä!')],
+        render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
 
     class Meta:
         csrf = False
 
 
 class CreateUserForm(FlaskForm):
-    username = StringField("Käyttäjänimi", [validators.Regexp('^[a-zA-Z0-9_]*$', message='Käyttäjänimessä saa olla vain aakkosia, numeroita tai alaviivoja!'),
+    username = StringField("Käyttäjänimi", [validators.Regexp('^[a-zA-Z0-9_]*$', message='Käyttäjänimessä saa olla vain latinalaisia kirjaimia, numeroita tai alaviivoja!'),
                                             validators.Length(
                                                 min=4, max=16, message='Käyttäjänimen on oltava pituudeltaan 4-16 merkkiä!'),
                                             validators.input_required(
@@ -56,6 +61,7 @@ class ChangeUsernameForm(FlaskForm):
 
     class Meta:
         csrf = False
+
 
 class EditUserInfoForm(FlaskForm):
     name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z ÅÖÄåöä]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(

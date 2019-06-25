@@ -11,6 +11,11 @@
       <td>
 	{{ form.username }}
       </td>
+      {% if form.username.errors %}
+      <td>
+	{{ form.username.errors[0] }}
+      </td>
+      {% endif %}
     </tr>
     <tr>
       <td>
@@ -19,6 +24,11 @@
       <td>
 	{{ form.password }}
       </td>
+      {% if form.password.errors %}
+      <td>
+	{{ form.password.errors[0] }}
+      </td>
+      {% endif %}
     </tr>
     <tr>
       <td colspan="2">

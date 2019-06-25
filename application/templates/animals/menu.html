@@ -3,6 +3,6 @@
 {% block body %}
 <div>
     <p><a href="{{ url_for('animal_add') }}">Lisää eläin</a></p>
-    <p><a href="{{ url_for('animal_list_all') }}">Tarkastele eläimiä</a></p>
+    <p><a href="{{ url_for('animal_list_all', page=1) }}">Tarkastele eläimiä</a></p>
 </div>
 {% endblock %}

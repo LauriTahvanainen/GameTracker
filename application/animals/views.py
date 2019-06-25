@@ -32,7 +32,8 @@ def animal_add():
 @app.route("/animals/list", methods=["GET"])
 @login_required()
 def animal_list_all():
-    return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all())
+    page = request.args.get('page', 1, type=int)
+    return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).paginate(page, 10, False))
 
 @app.route("/animals/edit_or_delete/<animal_id>", methods=["GET", "POST"])
 @login_required(role="ADMIN")

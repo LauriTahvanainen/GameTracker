@@ -1,6 +1,7 @@
 from application import db
+from application.models import Base
 
-class Animal(db.Model):
+class Animal(Base):
     
     __tablename__ = 'animal'
 

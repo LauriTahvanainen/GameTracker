@@ -7,22 +7,19 @@
     <table class="table table-bordered">
         {% for user in user_info %}
         <tr>
-            <th>Käyttäjänimi: </th>
-            <td>{{ user.username }}</td>
-        </tr>
-        <tr>
-            <th width="20">Nimi: </th>
+            <th width="20">Nimi </th>
             <td>{{ user.name }}</td>
         </tr>
         <tr>
-            <th>Kaupunki: </th>
+            <th>Kaupunki </th>
             <td>{{ user.city }}</td>
         </tr>
         <tr>
-            <th>Syntymävuosi: </th>
+            <th>Syntymävuosi </th>
             <td>{{ user.age }}</td>
         </tr>
         {% endfor %}
     </table>
 </div>
+<a href="{{ url_for('auth_user_info_edit', account_id=current_user.account_id) }}" class="btn btn-primary">Muokkaa käyttäjätietoja</a>
 {% endblock %}

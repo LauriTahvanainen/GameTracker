@@ -1,6 +1,6 @@
 from application import app, db, login_required
 from application.auth.models import User
-from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm, ChangeUsernameForm
+from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm, ChangeUsernameForm, EditUserInfoForm
 from flask_login import login_user, logout_user, current_user
 from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -107,17 +107,48 @@ def auth_user_info():
     return render_template("auth/userinfo.html", user_info=User.find_current_user_information(current_user.account_id))
 
 
+@app.route("/auth/user_info/edit/<account_id>", methods=["GET", "POST"])
+@login_required()
+def auth_user_info_edit(account_id):
+    if account_id != current_user.get_id():
+        if current_user.urole != "ADMIN":
+            flash("Sinulla ei ole käyttöoikeuksia kyseiseen toimintoon")
+            return redirect(url_for("index"))
+    user = User.query.get(account_id)
+    form = EditUserInfoForm()
+
+    if request.method == "GET":
+        form.name.data = user.name
+        form.city.data = user.city
+        form.age.data = user.age
+        return render_template("auth/edituserinfo.html", form=form, account_id=account_id)
+    form = EditUserInfoForm(request.form)
+    if form.validate():
+        try:
+            user.name = form.name.data
+            user.city = form.city.data
+            user.age = form.age.data
+            db.session().commit()
+        except:
+            db.session().rollback()
+            return render_template("auth/edituserinfo.html", form=form, error="Muokatessa tapahtui virhe! Käyttäjätietoja ei muokattu!")
+        flash("Käyttäjätietoja muokattiin onnistuneesti!")
+        return redirect(url_for("auth_user_info"))
+    return render_template("auth/edituserinfo.html", form=form)
+
+
 @app.route("/auth/list")
 @login_required(role="ADMIN")
 def auth_list():
     return render_template("auth/list.html", users=User.query.all())
+
 
 @app.route("/auth/change_username", methods=["GET", "POST"])
 @login_required()
 def auth_change_username():
     if request.method == "GET":
         return render_template("auth/changeusername.html", form=ChangeUsernameForm())
-    
+
     form = ChangeUsernameForm(request.form)
     if form.username.data == current_user.username:
         return render_template("auth/changeusername.html", form=form, error="Uusi käyttäjänimi on sama kuin nykyinen käyttäjänimi!")
@@ -131,5 +162,3 @@ def auth_change_username():
         flash("Käyttäjänimi vaihdettu onnistuneesti")
         return render_template("auth/menu.html")
     return render_template("auth/changeusername.html", form=form)
-        
-

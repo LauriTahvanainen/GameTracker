@@ -3,37 +3,37 @@
 {% block body %}
 {{ error }}
 <form method="POST" action="{{ url_for('auth_login') }}">
-  <table>
-    <tr>
-      <td>
-	{{ form.username.label }}
-      </td>
-      <td>
-	{{ form.username }}
-      </td>
-      {% if form.username.errors %}
-      <td>
-	{{ form.username.errors[0] }}
-      </td>
-      {% endif %}
-    </tr>
-    <tr>
-      <td>
-	{{ form.password.label }}
-      </td>
-      <td>
-	{{ form.password }}
-      </td>
-      {% if form.password.errors %}
-      <td>
-	{{ form.password.errors[0] }}
-      </td>
-      {% endif %}
-    </tr>
-    <tr>
-      <td colspan="2">
-	<input type="submit" value="Kirjaudu sisään" class="btn btn-outline-primary"/>
-      </td>
-    </tr>
+      <table>
+            <tr>
+                  <td>
+                        {{ form.username.label }}
+                  </td>
+                  <td>
+                        {{ form.username }}
+                  </td>
+                  {% if form.username.errors %}
+                  <td>
+                        {{ form.username.errors[0] }}
+                  </td>
+                  {% endif %}
+            </tr>
+            <tr>
+                  <td>
+                        {{ form.password.label }}
+                  </td>
+                  <td>
+                        {{ form.password }}
+                  </td>
+                  {% if form.password.errors %}
+                  <td>
+                        {{ form.password.errors[0] }}
+                  </td>
+                  {% endif %}
+            </tr>
+            <tr>
+                  <td colspan="2">
+                        <input type="submit" value="Kirjaudu sisään" class="btn btn-outline-primary" />
+                  </td>
+            </tr>
 </form>
 {% endblock %}

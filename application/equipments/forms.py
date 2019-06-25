@@ -11,13 +11,6 @@ class addEquipmentForm(FlaskForm):
     class Meta:
         csrf = False
 
-def form_for_select(fields):
-    def create_form(prefix='', **kwargs):
-        form = BaseForm(fields, prefix='')
-        form.process(**kwargs)
-        return form
-    return create_form
-
 # list and remove view
 class equipmentSelectForm(FlaskForm):
     equip = StringField("equip", render_kw={'readonly': True})

@@ -3,8 +3,9 @@
 {% block body %}
 <div>
     <h2>10 eniten havaintoja tehnyttä käyttäjää</h2>
+    {% if top_users %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -25,13 +26,16 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>Järjestelmässä ei ole havaintoja!</p>
+    {% endif %}
 </div>
 {% if current_user.urole == "ADMIN" %}
 <div>
     <h2>10 vanhinta käyttäjää, joilla ei ole yhtään havaintoa</h2>
     {% if users_no_obs %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -61,7 +65,7 @@
     <h2>10 eniten havaittua eläintä</h2>
     {% if top_animals %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -110,7 +114,7 @@
     <h2>10 vähiten havaittua eläintä</h2>
     {% if bottom_animals %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -159,7 +163,7 @@
     <h2>10 eniten metsästettyä eläintä</h2>
     {% if most_hunted %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -208,7 +212,7 @@
     <h2>10 eniten käytettyä välinettä</h2>
     {% if top_equipments %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -237,7 +241,7 @@
     <h2>10 vähiten käytettyä välinettä</h2>
     {% if bottom_equipments %}
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>

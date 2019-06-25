@@ -81,7 +81,7 @@ def observation_list_by_id(user_id):
     form = ListFiltersForm()
     form = fill_choices(form, user_id)
     # The input of the filter-form is passed as url parameters
-    # for repeated calls of the same filters when changing pages
+    # for repeated calls with the same filters when changing pages
     form = fill_filter_data(form, request.args)
 
     pagination = Observation.list_filtered(form, page, user_id)
@@ -247,7 +247,3 @@ def fill_filter_data(form, args):
     form.equipment.data = args.getlist('equipment')
     form.info.data = args.get('info', type=str)
     return form
-
-
-def toDate(dateString):
-    return datetime.strptime(dateString, '%d-%m-%Y %H:%M').date()

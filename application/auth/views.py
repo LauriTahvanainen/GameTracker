@@ -19,9 +19,10 @@ def auth_login():
         return render_template("auth/loginform.html", form=LoginForm())
 
     form = LoginForm(request.form)
-
+    if not form.validate():
+        return render_template("auth/loginform.html", form=form)
     user = User.query.filter_by(username=form.username.data).first()
-    if  not form.validate() or user is None or not check_password_hash(user.password, form.password.data):
+    if user is None or not check_password_hash(user.password, form.password.data):
         return render_template("auth/loginform.html", form=form, error="Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!")
 
     login_user(user, remember=True)
@@ -91,14 +92,20 @@ def auth_changepw():
         return render_template("auth/changepasswordform.html", form=ChangePasswordForm())
 
     form = ChangePasswordForm(request.form)
-    if form.validate() and check_password_hash(current_user.password, form.oldPassword.data):
-        stmt = text("UPDATE account SET password = :newpw WHERE account_id = :cur_id").params(
-            newpw=generate_password_hash(form.password.data), cur_id=current_user.account_id)
-        db.engine.execute(stmt)
-        db.session().commit()
-        flash('Salasana vaihdettu!')
-        return render_template("auth/changepasswordform.html", form=form)
-    return render_template("auth/changepasswordform.html", form=form, error="Nykyinen salasana oli väärä!")
+    if form.validate():
+        if check_password_hash(current_user.password, form.oldPassword.data):
+            try:
+                stmt = text("UPDATE account SET password = :newpw WHERE account_id = :cur_id").params(
+                newpw=generate_password_hash(form.password.data), cur_id=current_user.account_id)
+                db.engine.execute(stmt)
+                db.session().commit()
+            except:
+                db.session().rollback()
+                return render_template("auth/changepasswordform.html", form=form, error="Virhe salasanan vaihdossa! Salasanaa ei vaihdettu!")
+            flash('Salasana vaihdettu!')
+            return redirect(url_for('auth_menu'))
+        return render_template("auth/changepasswordform.html", form=form, error="Nykyinen salasana oli väärä!")
+    return render_template("auth/changepasswordform.html", form=form)
 
 
 @app.route("/auth/user_info")

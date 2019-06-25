@@ -64,7 +64,7 @@ def animal_edit_or_delete(animal_id):
 @login_required(role="ADMIN")
 def animal_delete(animal_id):
     try:
-        # Could not get cascade working
+        # Could not get cascade working so deleting observations separately
         Animal.query.filter_by(animal_id=animal_id).delete()
         Observation.query.filter_by(animal_id=animal_id).delete()
         db.session().commit()

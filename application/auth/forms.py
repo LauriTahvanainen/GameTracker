@@ -29,7 +29,8 @@ class CreateUserForm(FlaskForm):
         validators.equal_to(
             'confirmPwd', message='Salasanojen on oltava samat!')
     ], render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
-    confirmPwd = PasswordField("Vahvista salasana")
+    confirmPwd = PasswordField("Vahvista salasana",
+        render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
     name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z ÅÖÄåöä]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(
         message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Matti Meikäläinen"})
     city = StringField("Kaupunki", validators=[validators.Regexp(
@@ -42,14 +43,16 @@ class CreateUserForm(FlaskForm):
 
 
 class ChangePasswordForm(FlaskForm):
-    oldPassword = PasswordField("Nykyinen salasana")
+    oldPassword = PasswordField("Nykyinen salasana",
+        render_kw={"placeholder": "Syötä nykyinen salasana"})
     password = PasswordField("Uusi salasana", [
         validators.Length(
             min=8, max=30, message='Salasanan on oltava pituudeltaan 8-30 merkkiä!'),
         validators.equal_to('confirmPassword',
                             message='Salasanojen on oltava samat!')
     ], render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
-    confirmPassword = PasswordField("Vahvista uusi salasana")
+    confirmPassword = PasswordField("Vahvista uusi salasana",
+        render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
 
     class Meta:
         csrf = False

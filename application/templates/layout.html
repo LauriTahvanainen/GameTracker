@@ -5,15 +5,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>GameTracker</title>
-  
+
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
 
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-    <a class="navbar-brand" href="{{ url_for('index') }}">GameTracker</a>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-5 px-2">
+    <a class="navbar-brand btn btn-success btn-sm" href="{{ url_for('index') }}">GameTracker</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
       aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -21,48 +21,58 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         {% if current_user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('observation_menu') }}">Havainnot</a>
+        <li class="nav-item px-2">
+          <a class="nav-link btn btn-outline-success" href="{{ url_for('observation_menu') }}">Havainnot</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('animal_menu') }}">Eläimet</a>
+        <li class="nav-item px-2">
+          <a class="nav-link btn btn-outline-success" href="{{ url_for('animal_menu') }}">Eläimet</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('auth_menu') }}">Käyttäjätili</a>
+        <li class="nav-item px-2">
+          <a class="nav-link btn btn-outline-success" href="{{ url_for('auth_menu') }}">Käyttäjätili</a>
         </li>
-          {% if current_user.get_urole() == 'ADMIN' %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('equipment_menu') }}">Välineet</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('auth_list') }}">Listaa käyttäjät</a>
-          </li>
+        {% if current_user.get_urole() == 'ADMIN' %}
+        <li class="nav-item px-2">
+          <a class="nav-link btn btn-outline-success" href="{{ url_for('equipment_menu') }}">Välineet</a>
+        </li>
+        <li class="nav-item px-2">
+          <a class="nav-link btn btn-outline-success" href="{{ url_for('auth_list') }}">Listaa käyttäjät</a>
+        </li>
+        {% endif %}
+        <li class="nav-item px-2">
+          <a class="nav-link btn btn-outline-success" href="{{ url_for('observation_stats') }}">Tilastoja</a>
+        </li>
+        {% endif %}
+        <span class="navbar-text px-2" style="color: red; font-size: 18px">
+          {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          {% for message in messages %}
+          {{ message }}
+          {% endfor %}
           {% endif %}
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('observation_stats') }}">Tilastoja</a>
-        </li>
-        {% endif %}
+          {% endwith %}
+        </span>
       </ul>
-      <div class="form-inline mt-2 mt-md-0" style="margin-right: 5%">
-
+      <div class="navbar" style="margin-right: 10%">
+        <ul class="navbar-nav mr-auto"></ul>
         {% if current_user.is_authenticated %}
-        <h4 style="margin-right: 5%">Kirjautunut käyttäjänimellä: {{ current_user.username }} </h4>
-        <a href="{{ url_for('auth_logout') }}" class="btn btn-primary">Kirjaudu ulos</a>
+        <span class="navbar-text px-2">
+          Kirjautunut käyttäjänimellä: {{ current_user.username }}
+        </span>
+        <div class="nav-item px-2">
+          <a href="{{ url_for('auth_logout') }}" class="nav-link btn btn-primary">Kirjaudu ulos</a>
+        </div>
         {% else %}
-        <a style="margin-inline-end: 5%" href="{{ url_for('auth_login') }}" class="btn btn-outline-primary">Kirjaudu</a>
-        <a href="{{ url_for('auth_create') }}" class="btn btn-outline-primary">Luo uusi käyttäjä</a>
+        <div class="nav-item px-2">
+          <a href="{{ url_for('auth_login') }}" class="nav-link btn btn-outline-primary">Kirjaudu</a>
+        </div>
+        <div class="nav-item px-2">
+          <a href="{{ url_for('auth_create') }}" class="nav-link btn btn-outline-success">Luo uusi käyttäjä</a>
+        </div>
         {% endif %}
+        </ul>
       </div>
     </div>
   </nav>
-
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  {% for message in messages %}
-  <h4 style="margin-right: 5%" class=modal-dialog role=dialog>{{ message }}</h4>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
 
   <main role="main" class="container">
     {% block body %}

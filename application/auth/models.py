@@ -2,9 +2,10 @@ from application import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
 from flask_login import current_user
+from application.models import Base
 
 
-class User(db.Model):
+class User(Base):
     __tablename__ = "account"
 
     account_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -46,14 +47,14 @@ class User(db.Model):
 
     @staticmethod
     def find_current_user_information(cur_id):
-        stmt = text("SELECT Account.username, Account.name, Account.city, Account.age "
+        stmt = text("SELECT Account.name, Account.city, Account.age "
                     "FROM Account WHERE Account.account_id = :acc_id").params(acc_id=cur_id)
         res = db.engine.execute(stmt)
 
         response = []
         for row in res:
             response.append(
-                {"username": row[0], "name": row[1], "city": row[2], "age": row[3]})
+                {"name": row[0], "city": row[1], "age": row[2]})
         return response
 
     @staticmethod

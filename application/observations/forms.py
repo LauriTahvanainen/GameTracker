@@ -58,7 +58,7 @@ class AddNewObservationForm(FlaskForm):
 
     equipment = SelectField("Väline",  validators=[validators.input_required(
         message="Väline pitää valita!")], coerce=int)
-    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('[\w.?!]+', message="Vain kirjaimet, numerot ja piste ovat sallittuja merkkejä!"), validators.length(
+    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('^[\w.?!]*$', message="Vain kirjaimet, numerot ja piste ovat sallittuja merkkejä!"), validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")], render_kw={"placeholder": "Maksimissaan 500 merkkiä!"})
 
     class Meta:

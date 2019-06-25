@@ -1,0 +1,233 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div>
+    <h2>10 Eniten havaintoja tehnyttä käyttäjää</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Käyttäjänimi</th>
+                <th>Havaintoja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in top_users %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                <td><a href="{{ url_for('observation_list_by_id', user_id = row.id) }}">{{ row.username }}</a></td>
+                <td>{{ row.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% if current_user.urole == "ADMIN" %}
+<div>
+    <h2>10 vanhinta käyttäjää, joilla ei ole yhtään havaintoa</h2>
+    {% if users_no_obs %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Käyttäjänimi</th>
+                <th>Luotu</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in users_no_obs %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                <td><a href="{{ url_for('observation_list_by_id', user_id = row.id) }}">{{ row.username }}</a></td>
+                <td>{{ row.created }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Järjestelmässä ei ole käyttäjiä ilman havaintoja!</p>
+    {% endif %}
+</div>
+{% endif %}
+<div>
+    <h2>10 eniten havaittua eläintä</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Nimi</th>
+                <th>Latinankielinen nimi</th>
+                <th>Havaintoja</th>
+                <th>Keskimääräinen paino</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in top_animals %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                {% if row.info %}
+                <td><a href="{{ row.info }}" target="_blank">{{ row.name }}</a></td>
+                {% else %}
+                  {% if current_user.urole == "ADMIN" %}
+                  <td><a href="{{ url_for('animal_edit_or_delete', animal_id=row.id) }}">{{ row.name }}</a></td>
+                  {% else %}
+                  <td>{{ row.name }}</td>
+                  {% endif %}
+                {% endif %}
+                <td>{{ row.lat_name }}</td>
+                <td>{{ row.count }}</td>
+                {% if not row.avg %}
+                <td>Ei painoa</td>
+                {% else %}
+                <td>{{ '%0.2f' | format(row.avg|float) }} Kg</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2>10 vähiten havaittua eläintä</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Nimi</th>
+                <th>Latinankielinen nimi</th>
+                <th>Havaintoja</th>
+                <th>Keskimääräinen paino</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in bottom_animals %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                {% if row.info %}
+                <td><a href="{{ row.info }}" target="_blank">{{ row.name }}</a></td>
+                {% else %}
+                  {% if current_user.urole == "ADMIN" %}
+                  <td><a href="{{ url_for('animal_edit_or_delete', animal_id=row.id) }}">{{ row.name }}</a></td>
+                  {% else %}
+                  <td>{{ row.name }}</td>
+                  {% endif %}
+                {% endif %}
+                <td>{{ row.lat_name }}</td>
+                <td>{{ row.count }}</td>
+                {% if not row.avg %}
+                <td>Ei painoa</td>
+                {% else %}
+                <td>{{ '%0.2f' | format(row.avg|float) }} Kg</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2>10 eniten metsästettyä eläintä</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Nimi</th>
+                <th>Latinankielinen nimi</th>
+                <th>Havaintoja</th>
+                <th>Keskimääräinen paino</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in most_hunted %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                {% if row.info %}
+                <td><a href="{{ row.info }}" target="_blank">{{ row.name }}</a></td>
+                {% else %}
+                  {% if current_user.urole == "ADMIN" %}
+                  <td><a href="{{ url_for('animal_edit_or_delete', animal_id=row.id) }}">{{ row.name }}</a></td>
+                  {% else %}
+                  <td>{{ row.name }}</td>
+                  {% endif %}
+                {% endif %}
+                <td>{{ row.lat_name }}</td>
+                <td>{{ row.count }}</td>
+                {% if not row.avg %}
+                <td>Ei painoa</td>
+                {% else %}
+                <td>{{ '%0.2f' | format(row.avg|float) }} Kg</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2>10 eniten käytettyä välinettä</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Nimi</th>
+                <th>Kertoja havainnoissa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in top_equipments %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                <td>{{ row.name }}</a></td>
+                <td>{{ row.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div>
+    <h2>10 eniten käytettyä välinettä</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <th>Id</th>
+                {% endif %}
+                <th>Nimi</th>
+                <th>Kertoja havainnoissa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in bottom_equipments %}
+            <tr>
+                {% if current_user.urole == "ADMIN" %}
+                <td>{{ row.id }}</td>
+                {% endif %}
+                <td>{{ row.name }}</a></td>
+                <td>{{ row.count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -62,14 +62,16 @@ def observation_listuser():
     pagination = Observation.list_filtered(form, page, current_user.account_id)
     if request.method == "GET":
         return render_template("observations/listuser.html", form=form, pagination=pagination)
-    
+
     # filtering
     form = ListFiltersForm(request.form)
     form = fill_choices(form, current_user.account_id)
     if form.validate():
-        pagination = Observation.list_filtered(form, page, current_user.account_id)
+        pagination = Observation.list_filtered(
+            form, page, current_user.account_id)
         return render_template("observations/listuser.html", form=form, pagination=pagination)
     return render_template("observations/listuser.html", form=form, pagination=pagination, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+
 
 @app.route("/observations/list/<user_id>", methods=["GET", "POST"])
 @login_required()
@@ -85,14 +87,15 @@ def observation_list_by_id(user_id):
     pagination = Observation.list_filtered(form, page, user_id)
     obs_count = Observation.count_observations_on_user(user_id)
     if request.method == "GET":
-        return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account = account, obs_count=obs_count)
+        return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
     form = ListFiltersForm(request.form)
     form = fill_choices(form, user_id)
     if form.validate():
         pagination = Observation.list_filtered(form, page, user_id)
-        return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account = account, obs_count=obs_count)
-    return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account = account, obs_count=obs_count, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+        return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
+    return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+
 
 @app.route("/observations/list/all", methods=["GET", "POST"])
 @login_required()
@@ -116,6 +119,7 @@ def observation_list_all():
         return render_template("observations/listall.html", form=form, pagination=pagination)
     return render_template("observations/listall.html", form=form, pagination=pagination, error="Virhe rajaussyötteissä! Näytetään kaikki havainnot!")
 
+
 @app.route("/observations/delete/<obs_id>", methods=["POST", "GET"])
 @login_required()
 def observation_delete(obs_id):
@@ -133,6 +137,7 @@ def observation_delete(obs_id):
         return redirect(last_path)
     flash("Sinulla ei ole oikeuksia poistaa kyseistä havaintoa!")
     return redirect(last_path)
+
 
 @app.route("/observations/edit/<obs_id>", methods=["POST", "GET"])
 @login_required()
@@ -154,7 +159,7 @@ def observation_edit(obs_id):
             form.equipment.data = obs.equipment_id
             form.info.data = obs.info
             return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
-        
+
         form = AddNewObservationForm(request.form)
         form = fill_choices(form)
         if form.validate():
@@ -179,16 +184,37 @@ def observation_edit(obs_id):
     flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!")
     return redirect(last_path)
 
+
+@app.route("/observations/stats", methods=["GET"])
+@login_required()
+def observation_stats():
+    return render_template("observations/statistics.html",
+                           top_users=Observation.list_top_users(),
+                           users_no_obs=Observation.list_users_without_observations(),
+                           top_animals=Observation.list_top_animals(),
+                           bottom_animals=Observation.list_bottom_animals(),
+                           top_equipments=Observation.list_top_equipment(),
+                           bottom_equipments=Observation.list_bottom_equipment(),
+                           most_hunted=Observation.list_most_hunted_animals())
+
+
 def fill_choices(form, acc_id=-1):
     if acc_id == -1:
-        form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).order_by(Observation.city.asc()).distinct()]
-        form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
-        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.order_by(Animal.name.asc()).all()]
+        form.city.choices = [(city[0], city[0]) for city in db.session.query(
+            Observation.city).order_by(Observation.city.asc()).distinct()]
+        form.equipment.choices = [(equipment.equipment_id, equipment.name)
+                                  for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
+        form.animal.choices = [(animal.animal_id, animal.name)
+                               for animal in Animal.query.order_by(Animal.name.asc()).all()]
     else:
-        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
-        form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).filter(Observation.account_id == acc_id).order_by(Observation.city.asc()).distinct()]
-        form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
+        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(
+            Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
+        form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).filter(
+            Observation.account_id == acc_id).order_by(Observation.city.asc()).distinct()]
+        form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(
+            Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
     return form
+
 
 def fill_filter_data(form, args):
     form.username.data = args.get('username', type=str)
@@ -197,13 +223,15 @@ def fill_filter_data(form, args):
     if 'dateObservedLow' in args.keys():
         date_observedLow = args['dateObservedLow']
         date_observedLow = date_observedLow[0:16]
-        date_observedLow = datetime.strptime(date_observedLow, '%Y-%m-%d %H:%M')
+        date_observedLow = datetime.strptime(
+            date_observedLow, '%Y-%m-%d %H:%M')
         form.date_observedLow.data = date_observedLow
 
     if 'dateObservedHigh' in args.keys():
         date_observedHigh = args['dateObservedHigh']
         date_observedHigh = date_observedHigh[0:16]
-        date_observedHigh = datetime.strptime(date_observedHigh, '%Y-%m-%d %H:%M')
+        date_observedHigh = datetime.strptime(
+            date_observedHigh, '%Y-%m-%d %H:%M')
         form.date_observedHigh.data = date_observedHigh
 
     form.city.data = args.getlist('city')
@@ -220,5 +248,6 @@ def fill_filter_data(form, args):
     form.info.data = args.get('info', type=str)
     return form
 
-def toDate(dateString): 
+
+def toDate(dateString):
     return datetime.strptime(dateString, '%d-%m-%Y %H:%M').date()

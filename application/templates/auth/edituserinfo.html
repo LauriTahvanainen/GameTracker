@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<a href="{{ url_for('auth_user_info') }}" class="btn btn-outline-primary">Takaisin käyttäjätietojen tarkasteluun</a>
+{{ error }}
+<form method="POST" action="{{ url_for('auth_user_info_edit', account_id=account_id) }}">
+    <table>
+        <tr>
+            <td>
+                {{ form.name.label }}
+            </td>
+            <td>
+                {{ form.name }}
+            </td>
+            <td>
+                {% if form.name.errors %}
+                <div>{{ form.name.errors[0] }}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.city.label }}
+            </td>
+            <td>
+                {{ form.city }}
+            </td>
+            <td>
+                {% if form.city.errors %}
+                <div>{{ form.city.errors[0] }}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.age.label }}
+            </td>
+            <td>
+                {{ form.age }}
+            </td>
+            <td>
+                {% if form.age.errors %}
+                <div>{{ form.age.errors[0] }}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="Vahvista käyttäjätietojen muokkaus" class="btn btn-warning" />
+            </td>
+        </tr>
+</form>
+{% endblock %}

@@ -12,7 +12,7 @@ else:
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///observations.db"
     # Print sql queries
     app.config["SQLALCHEMY_ECHO"] = True
-
+    
 db = SQLAlchemy(app)
 
 # login

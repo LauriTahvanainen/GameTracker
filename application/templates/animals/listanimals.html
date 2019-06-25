@@ -49,8 +49,16 @@
             {% for animal in animals.items %}
             <tr>
                 <td>{{ animal.name }}</td>
+                {% if animal.lat_name %}
                 <td>{{ animal.lat_name }}</td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
+                {% if animal.info %}
                 <td><a href={{ animal.info }} target="_blank">{{ animal.info }}</a></td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
                 {% if current_user.get_urole() == 'ADMIN' %}
                 <td><a href={{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }}
                         class="btn btn-outline-primary">Muokkaa tai poista</a></td>

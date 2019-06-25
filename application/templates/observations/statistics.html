@@ -59,6 +59,7 @@
 {% endif %}
 <div>
     <h2>10 eniten havaittua eläintä</h2>
+    {% if top_animals %}
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -86,7 +87,11 @@
                   <td>{{ row.name }}</td>
                   {% endif %}
                 {% endif %}
+                {% if row.lat_name %}
                 <td>{{ row.lat_name }}</td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
                 <td>{{ row.count }}</td>
                 {% if not row.avg %}
                 <td>Ei painoa</td>
@@ -97,9 +102,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>Järjestelmässä ei ole eläimiä!!</p>
+    {% endif %}
 </div>
 <div>
     <h2>10 vähiten havaittua eläintä</h2>
+    {% if bottom_animals %}
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -127,7 +136,11 @@
                   <td>{{ row.name }}</td>
                   {% endif %}
                 {% endif %}
+                {% if row.lat_name %}
                 <td>{{ row.lat_name }}</td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
                 <td>{{ row.count }}</td>
                 {% if not row.avg %}
                 <td>Ei painoa</td>
@@ -138,9 +151,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>Järjestelmässä ei ole eläimiä!!</p>
+    {% endif %}
 </div>
 <div>
     <h2>10 eniten metsästettyä eläintä</h2>
+    {% if most_hunted %}
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -168,7 +185,11 @@
                   <td>{{ row.name }}</td>
                   {% endif %}
                 {% endif %}
+                {% if row.lat_name %}
                 <td>{{ row.lat_name }}</td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
                 <td>{{ row.count }}</td>
                 {% if not row.avg %}
                 <td>Ei painoa</td>
@@ -179,9 +200,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>Järjestelmässä ei ole eläimiä, tai järjestelmässä ei ole havaintoja tyypillä saalis!</p>
+    {% endif %}
 </div>
 <div>
     <h2>10 eniten käytettyä välinettä</h2>
+    {% if top_equipments %}
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -204,9 +229,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>Järjestelmässä ei ole välineitä!</p>
+    {% endif %}
 </div>
 <div>
     <h2>10 vähiten käytettyä välinettä</h2>
+    {% if bottom_equipments %}
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -229,5 +258,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% else %}
+    <p>Järjestelmässä ei ole välineitä!</p>
+    {% endif %}
 </div>
 {% endblock %}

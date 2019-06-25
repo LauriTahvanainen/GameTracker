@@ -3,40 +3,38 @@
 {% block body %}
 <a href="{{ url_for('animal_menu') }}" class="btn btn-outline-primary">Takaisin eläinvalikkoon</a>
 <nav aria-label="Pagination">
-        <ul class="pagination">
-            {% if animals.has_prev %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('animal_list_all', page=animals.prev_num) }}">Edellinen</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">Edellinen</a></li>
-            {% endif %}
+    <ul class="pagination">
+        {% if animals.has_prev %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('animal_list_all', page=animals.prev_num) }}">Edellinen</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Edellinen</a></li>
+        {% endif %}
 
-            {% for page in animals.iter_pages() %}
+        {% for page in animals.iter_pages() %}
             {% if page %}
-            {% if page != animals.page %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('animal_list_all', page=page) }}">{{ page }}</a>
-            </li>
-            {% else %}
-            <li class="page-item active">
-                <span class="page-link">
-                    {{ page }}
-                </span>
-            </li>
+                {% if page != animals.page %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('animal_list_all', page=page) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="page-item active">
+                    <span class="page-link">
+                        {{ page }}
+                    </span>
+                </li>
+                {% endif %}
             {% endif %}
-            {% endif %}
-            {% endfor %}
+        {% endfor %}
 
-            {% if animals.has_next %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('animal_list_all', page=animals.next_num) }}">Seuraava</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled"><a class="page-link" href="#">Seuraava</a></li>
-            {% endif %}
-        </ul>
-    </nav>
+        {% if animals.has_next %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('animal_list_all', page=animals.next_num) }}">Seuraava</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Seuraava</a></li>
+        {% endif %}
+    </ul>
+</nav>
 <div class="container">
     <h2>Eläimet</h2>
     <table class="table table-bordered">

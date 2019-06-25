@@ -1,6 +1,39 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<nav aria-label="Pagination">
+    <ul class="pagination">
+        {% if users.has_prev %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('auth_list', page=users.prev_num) }}">Edellinen</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Edellinen</a></li>
+        {% endif %}
+
+        {% for page in users.iter_pages() %}
+            {% if page %}
+                {% if page != users.page %}
+                <li class="page-item"><a class="page-link" href="{{ url_for('auth_list', page=page) }}">{{ page }}</a></li>
+                {% else %}
+                <li class="page-item active">
+                    <span class="page-link">
+                        {{ page }}
+                    </span>
+                </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% if users.has_next %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('auth_list', page=users.next_num) }}">Seuraava</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Seuraava</a></li>
+        {% endif %}
+    </ul>
+</nav>
 <div class="container">
     <h2>Käyttäjät</h2>
     <table class="table table-bordered">
@@ -14,7 +47,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for user in users %}
+            {% for user in users.items %}
             {% if user.urole != "ADMIN" %}
             <tr>
                 <td>{{ user.account_id }}</td>

@@ -140,7 +140,8 @@ def auth_user_info_edit(account_id):
 @app.route("/auth/list")
 @login_required(role="ADMIN")
 def auth_list():
-    return render_template("auth/list.html", users=User.query.all())
+    page = request.args.get('page', 1, type=int)
+    return render_template("auth/list.html", users=User.query.order_by(User.account_id.asc()).paginate(page, 20, False))
 
 
 @app.route("/auth/change_username", methods=["GET", "POST"])

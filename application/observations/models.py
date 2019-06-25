@@ -102,9 +102,8 @@ class Observation(Base):
 
     @staticmethod
     def list_top_users():
-        stmt = text("SELECT Account.account_id, Account.username, COUNT(Observation.observation_id) AS count, Equipment.name FROM Observation"
+        stmt = text("SELECT Account.account_id, Account.username, COUNT(Observation.observation_id) AS count FROM Observation"
                     " LEFT JOIN Account ON Observation.account_id = Account.account_id"
-                    " LEFT JOIN Equipment ON Observation.account_id = Equipment.equipment_id"
                     " GROUP BY Account.account_id"
                     " ORDER BY count DESC"
                     " LIMIT 10")

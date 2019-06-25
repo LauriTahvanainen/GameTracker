@@ -2,7 +2,6 @@ from flask import Flask, render_template, flash
 app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
-# Tietokanta eri herokussa ja paikallisella laitteella
 
 import os
 
@@ -11,13 +10,12 @@ if os.environ.get("HEROKU"):
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 else:    
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///observations.db"
-    # Tulosta kaikki SQL-kyselyt
+    # Print sql queries
     app.config["SQLALCHEMY_ECHO"] = True
 
-# db-olio.
 db = SQLAlchemy(app)
 
-# kirjautuminen
+# login
 from application.auth.models import User
 from os import urandom
 app.config["SECRET_KEY"] = urandom(32)
@@ -29,13 +27,13 @@ login_manager.init_app(app)
 login_manager.login_view = "auth_login"
 login_manager.login_message = "Kirjaudu sisään käyttääksesi tätä toiminnallisuutta."
 
-# Palautettava kun auterisointi epäonnistuu
+# returned when authorization fails
 @login_manager.unauthorized_handler
 def unauth_handler():
     flash('Pääkäyttäjän toiminnallisuus!')
     return render_template("index.html")
 
-# autorisoini
+# authorization
 
 from functools import wraps
 
@@ -80,7 +78,6 @@ from application.auth import views
 def load_user(user_id):
     return User.query.get(user_id)
     
-# Luo taulut
 try :
     db.create_all()
 except:

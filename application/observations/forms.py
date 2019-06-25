@@ -39,7 +39,7 @@ class BiggerThan(object):
 class AddNewObservationForm(FlaskForm):
     date_observed = DateTimeField("Havainnon päivämäärä ja aika",  format='%d-%m-%Y %H:%M', validators=[
                                   validators.input_required(message="Päivämäärä ei voi olla tyhjä!")], render_kw={"placeholder": "Muodossa 14-12-2019 22:45"})
-    city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-ZåöäÅÖÄ]*$', message='Kaupungin nimessä on vain kirjaimia!'),
+    city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-ZåöäÅÖÄ ]*$', message='Kaupungin nimessä on vain kirjaimia ja välilyöntejä!'),
                                                validators.input_required(message="Kaupunki ei voi olla tyhjä")])
     latitude = DecimalField("Leveysaste", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], places=6, render_kw={"placeholder": "Esimerkiksi 25.439399"})
@@ -58,7 +58,7 @@ class AddNewObservationForm(FlaskForm):
 
     equipment = SelectField("Väline",  validators=[validators.input_required(
         message="Väline pitää valita!")], coerce=int)
-    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('^[\w.?!]*$', message="Vain kirjaimet, numerot ja piste ovat sallittuja merkkejä!"), validators.length(
+    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('^[\w.?!, ]*$', message="Vain kirjaimet, numerot, piste, huuto- ja kysymysmerkki ovat sallittuja merkkejä!"), validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")], render_kw={"placeholder": "Maksimissaan 500 merkkiä!"})
 
     class Meta:
@@ -70,7 +70,7 @@ class ListFiltersForm(FlaskForm):
                                      format='%d-%m-%Y %H:%M', validators=[stopEmpty, BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
     date_observedHigh = DateTimeField(
         "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[stopEmpty], render_kw={"placeholder": "01-01-2010 12:00"})
-    city = SelectMultipleField("Kaupunki")
+    city = SelectMultipleField("Kaupunki", validators=[validators.optional(strip_whitespace=True), validators.Regexp('^[a-zA-ZåöäÅÖÄ ]*$', message='Kaupungin nimessä on vain kirjaimia ja välilyöntejä!')])
     latitudeLow = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
     latitudeHigh = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
@@ -93,11 +93,11 @@ class ListFiltersForm(FlaskForm):
         0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], coerce=int)
 
     equipment = SelectMultipleField("Väline", coerce=int)
-    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('[\w.?!]+', message="Vain kirjaimet, numerot ja '. ? ! , ' ovat sallittuja merkkejä!"), validators.length(
+    info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('^[\w.?!, ]*$', message="Vain kirjaimet, numerot ja '. ? ! , ' ovat sallittuja merkkejä!"), validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")])
     username = StringField("Käyttäjänimi", [stopEmpty,
                                             validators.Regexp(
-                                                '^[a-zA-Z0-9_]*$', message='Käyttäjänimessä saa olla vain aakkosia, numeroita tai alaviivoja!'),
+                                                '^[a-zA-Z0-9_]*$', message='Käyttäjänimessä saa olla vain latinalaisia kirjaimia, numeroita tai alaviivoja!'),
                                             validators.Length(
                                                 min=4, max=16, message='Käyttäjänimen on oltava pituudeltaan 4-16 merkkiä!')
                                             ], render_kw={"placeholder": "Min. 4, maks. 16 merkkiä"})

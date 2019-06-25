@@ -1,7 +1,6 @@
 {% extends "layout.html" %}
 
 {% block body %}
-{{ error }}
 <a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
     eläin!</a>
 <h2>Muokattavana havainto numero: {{ observation.observation_id }}</h2>

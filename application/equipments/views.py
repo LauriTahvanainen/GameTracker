@@ -1,7 +1,7 @@
 from application import app, db, login_required
 from application.equipments.models import Equipment
 from application.equipments.forms import addEquipmentForm, listEquipmentForm
-from flask_login import current_user, login_user
+from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
 from application.equipments.forms import equipmentSelectForm
 
@@ -56,9 +56,14 @@ def equipment_listandremove():
         flash("Ei poistettavaksi valittuja välineitä!")
         return render_template("equipments/list.html", form=form)
 
-    db.session().query(Equipment).filter(Equipment.name.in_(
+    try:
+        db.session().query(Equipment).filter(Equipment.name.in_(
         selected)).delete(synchronize_session='fetch')
-    db.session().commit()
+        db.session().commit()
+    except:
+        db.session().rollback()
+        flash("Poistettaessa tapahtui virhe! Välineitä ei poistettu!")
+        return redirect(url_for('equipment_listandremove'))
 
     flash("Valitut välineet poistettu onnistuneesti!")
     return redirect(url_for("equipment_listandremove"))

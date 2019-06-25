@@ -45,6 +45,7 @@ class Observation(Base):
         self.equipment_id = equipment_id
         self.info = info
 
+    # can be used for showing results of one user, filtered or all, and results of all users, filtered or all.
     @staticmethod
     def list_filtered(form, page_num, cur_id=-1):
         query = db.session.query(Observation, Animal, Equipment.name, User).outerjoin(Animal).outerjoin(Equipment).outerjoin(

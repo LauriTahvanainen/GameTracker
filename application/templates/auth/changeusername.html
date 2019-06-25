@@ -7,7 +7,7 @@
     <table>
         <tr>
             <td>
-                Nykyinen käyttäjänimi:
+                Nykyinen käyttäjänimi
             </td>
             <td>
                 {{ current_user.username }}
@@ -21,9 +21,9 @@
                 {{ form.username }}
             </td>
             <td>
-                {% for error in form.username.errors %}
-                <div>{{ error }}</div>
-                {% endfor %}
+                {% if form.username.errors %}
+                <div>{{ form.username.errors[0] }}</div>
+                {% endif %}
             </td>
         </tr>
         <tr>

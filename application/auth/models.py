@@ -76,6 +76,6 @@ class User(Base):
             account_id=account_id)
         stmt2 = text("DELETE FROM observation WHERE account_id = :account_id").params(
             account_id=account_id)
-        db.engine.execute(stmt1)
         db.engine.execute(stmt2)
+        db.engine.execute(stmt1)
         db.session().commit()

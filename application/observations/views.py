@@ -128,6 +128,9 @@ def observation_list_all():
 @login_required()
 def observation_delete(obs_id):
     obs = Observation.query.get(obs_id)
+    if obs is None:
+        flash("Kyseistä havaintoa ei ole olemassa!", "error")
+        return redirect(url_for('index'))
     last_path = request.args.get('last_path', None)
     if obs.account_id == current_user.account_id or current_user.urole == "ADMIN":
         try:
@@ -140,6 +143,8 @@ def observation_delete(obs_id):
         flash("Havainto poistettu onnistuneesti!", "info")
         return redirect(last_path)
     flash("Sinulla ei ole oikeuksia poistaa kyseistä havaintoa!", "error")
+    if (last_path is None):
+        return redirect(url_for('index'))
     return redirect(last_path)
 
 

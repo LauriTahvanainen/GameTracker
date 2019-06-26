@@ -30,7 +30,7 @@ login_manager.login_message = "Kirjaudu sisään käyttääksesi tätä toiminna
 # returned when authorization fails
 @login_manager.unauthorized_handler
 def unauth_handler():
-    flash('Pääkäyttäjän toiminnallisuus!')
+    flash('Pääkäyttäjän toiminnallisuus!', "error")
     return render_template("index.html")
 
 # authorization

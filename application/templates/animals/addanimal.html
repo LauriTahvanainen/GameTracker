@@ -1,52 +1,52 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="{{ url_for('animal_menu') }}" class="btn btn-outline-primary">Takaisin eläinvalikkoon</a>
-<p>*-merkillä merkatut kentät ovat pakollisia</p>
+<a href="{{ url_for('animal_menu') }}" class="btn btn-outline-primary btn-lg">Takaisin eläinvalikkoon</a>
+<h4>*-merkillä merkatut kentät ovat pakollisia</h4>
 <form method="POST" action="{{ url_for('animal_add') }}">
-    <table>
+    <table class="table-bordered" style="border: hidden">
         <tr>
-            <td>
+            <td style="border-right: hidden; text-align: center; font-size: 20px">
                 {{ form.name.label }}
             </td>
-            <td>
+            <td style="border-right: hidden">
                 {{ form.name }} *
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.name.errors %}
                 <div>{{ form.name.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="border-right: hidden; text-align: center; font-size: 20px">
                 {{ form.lat_name.label }}
             </td>
-            <td>
+            <td style="border-right: hidden">
                 {{ form.lat_name }}
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.lat_name.errors %}
                 <div>{{ form.lat_name.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="border-right: hidden; text-align: center; font-size: 20px">
                 {{ form.info.label }}
             </td>
-            <td>
+            <td style="border-right: hidden">
                 {{ form.info }}
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.info.errors %}
                 <div>{{ form.info.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="Lisää eläin" class="btn btn-success"/>
+        <tr style="border: hidden">
+            <td colspan="2" style="border: hidden">
+                <input type="submit" value="Lisää eläin" class="btn btn-success btn-lg"/>
             </td>
         </tr>
 </form>

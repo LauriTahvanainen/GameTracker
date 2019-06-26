@@ -5,144 +5,145 @@
 <a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
     eläin!</a>
 <form method="POST" action="{{ url_for('observation_add') }}">
-    <table>
-        <tr>
-            <td>
-                {{ form.animal.label }}
-            </td>
-            <td>
-                {{ form.animal(size=1) }} *
-            </td>
-            <td>
-                {% if error in form.animal.errors %}
-                <div>{{ form.animal.errors[0] }}</div>
-                {% endif %}
+    <table class="table-bordered" style="border: hidden">
+        <h3>*-merkillä merkatut kentät ovat pakollisia</h3>
+        <tbody class="table-bordered" style="border: hidden">
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.animal.label }}
+                </td>
+                <td style="border: hidden; color: white">
+                    {{ form.animal(size=1) }} *
+                </td>
+                <td style="border: hidden">
+                    {% if error in form.animal.errors %}
+                    <div>{{ form.animal.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.date_observed.label }}
+                </td>
+                <td style="border: hidden; color: white">
+                    {{ form.date_observed }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.date_observed.errors %}
+                    <div>{{ form.date_observed.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.city.label }}
+                </td>
+                <td style="border: hidden;color: white">
+                    {{ form.city }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.city.errors %}
+                    <div>{{ form.city.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.latitude.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.latitude }}
+                </td>
+                <td style="border: hidden">
+                    {% if form.latitude.errors %}
+                    <div>{{ form.latitude.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.longitude.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.longitude }}
+                </td>
+                <td style="border: hidden">
+                    {% if form.longitude.errors %}
+                    <div>{{ form.longitude.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.weight.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.weight }}
+                </td>
+                <td style="border: hidden">
+                    {% if form.weight.errors %}
+                    <div>{{ form.weight.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.sex.label }}
+                </td>
+                <td style="border: hidden; color: white">
+                    {{ form.sex(size=1) }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.sex.errors %}
+                    <div>{{ form.sex.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.observ_type.label }}
+                </td>
+                <td style="border: hidden; color: white">
+                    {{ form.observ_type(size=1) }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.observ_type.errors %}
+                    <div>{{ form.observ_type.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.equipment.label }}
+                </td>
+                <td style="border: hidden;color: white">
+                    {{ form.equipment }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.equipment.errors %}
+                    <div>{{ form.equipment.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ form.info.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.info(cols="35", rows="8") }}
+                </td>
+                <td style="border: hidden">
+                    {% if form.info.errors %}
+                    <div>{{ form.info.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+        <tr style="border: hidden" class="table-default">
+            <td colspan="2" style="border: hidden">
+                <input type="submit" value="Lisää havainto" class="btn btn-success btn-lg" />
             </td>
         </tr>
-        <tr>
-            <td>
-                {{ form.date_observed.label }}
-            </td>
-            <td>
-                {{ form.date_observed }} *
-            </td>
-            <td>
-                {% if form.date_observed.errors %}
-                <div>{{ form.date_observed.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.city.label }}
-            </td>
-            <td>
-                {{ form.city }} *
-            </td>
-            <td>
-                {% if form.city.errors %}
-                <div>{{ form.city.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.latitude.label }}
-            </td>
-            <td>
-                {{ form.latitude }}
-            </td>
-            <td>
-                {% if form.latitude.errors %}
-                <div>{{ form.latitude.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.longitude.label }}
-            </td>
-            <td>
-                {{ form.longitude }}
-            </td>
-            <td>
-                {% if form.longitude.errors %}
-                <div>{{ form.longitude.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.weight.label }}
-            </td>
-            <td>
-                {{ form.weight }}
-            </td>
-            <td>
-                {% if form.weight.errors %}
-                <div>{{ form.weight.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.sex.label }}
-            </td>
-            <td>
-                {{ form.sex(size=1) }} *
-            </td>
-            <td>
-                {% if form.sex.errors %}
-                <div>{{ form.sex.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.observ_type.label }}
-            </td>
-            <td>
-                {{ form.observ_type(size=1) }} *
-            </td>
-            <td>
-                {% if form.observ_type.errors %}
-                <div>{{ form.observ_type.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.equipment.label }}
-            </td>
-            <td>
-                {{ form.equipment }} *
-            </td>
-            <td>
-                {% if form.equipment.errors %}
-                <div>{{ form.equipment.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.info.label }}
-            </td>
-            <td>
-                {{ form.info(cols="35", rows="8") }}
-            </td>
-            <td>
-                {% if form.info.errors %}
-                <div>{{ form.info.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>*-merkillä merkatut kentät ovat pakollisia</td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="Lisää havainto" class="btn btn-success"/>
-            </td>
-        </tr>
+    </table>
 </form>
 {% endblock %}

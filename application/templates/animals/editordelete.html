@@ -5,9 +5,9 @@
         <a href="{{ url_for('animal_list_all') }}" class="btn btn-outline-primary">Takaisin eläinten tarkasteluun</a>
     <h2>Eläin</h2>
     <form method="POST" action="{{ url_for('animal_edit_or_delete', animal_id=animal.animal_id) }}">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered">
             <thead>
-                <tr>
+                <tr style="border: hidden">
                     <th>Id</th>
                     <th>Nimi</th>
                     <th>Latinankielinen nimi</th>
@@ -15,25 +15,25 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>{{ animal.animal_id }}</td>
+                <tr style="border: hidden">
+                    <th>{{ animal.animal_id }}</th>
                     <td>{{ form.name }}</td>
                     <td>{{ form.lat_name }}</td>
                     <td>{{ form.info(size='45') }}</td>
                 </tr>
-                <tr>
+                <tr style="border: hidden">
                     <td></td>
-                    <td>
+                    <td style="border: hidden; color: white">
                         {% if form.name.errors %}
                         <div>{{ form.name.errors[0] }}</div>
                         {% endif %}
                     </td>
-                    <td>
+                    <td style="border: hidden; color: white">
                         {% if form.lat_name.errors %}
                         <div>{{ form.lat_name.errors[0] }}</div>
                         {% endif %}
                     </td>
-                    <td>
+                    <td style="border: hidden; color: white">
                         {% if form.info.errors %}
                         <div>{{ form.info.errors[0] }}</div>
                         {% endif %}

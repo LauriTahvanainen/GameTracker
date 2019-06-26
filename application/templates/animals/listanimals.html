@@ -38,14 +38,17 @@
 <div class="container">
     <h2>Eläimet</h2>
     <table class="table table-bordered">
-        <thead>
+        <thead class="thead-light">
             <tr>
                 <th>Nimi</th>
                 <th>Latinankielinen nimi</th>
                 <th>Lisätietoja</th>
+                {% if current_user.get_urole() == "ADMIN" %}
+                <th></th>
+                {% endif %}
             </tr>
         </thead>
-        <tbody>
+        <tbody class="table-dark">
             {% for animal in animals.items %}
             <tr>
                 <td>{{ animal.name }}</td>

@@ -2,10 +2,10 @@
 
 {% block body %}
 <div>
-    <h2>10 eniten havaintoja tehnyttä käyttäjää</h2>
+    <h2 style="color: white;">10 eniten havaintoja tehnyttä käyttäjää</h2>
     {% if top_users %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -32,10 +32,10 @@
 </div>
 {% if current_user.urole == "ADMIN" %}
 <div>
-    <h2>10 vanhinta käyttäjää, joilla ei ole yhtään havaintoa</h2>
+    <h2 style="color: white;">10 vanhinta käyttäjää, joilla ei ole yhtään havaintoa</h2>
     {% if users_no_obs %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -62,10 +62,10 @@
 </div>
 {% endif %}
 <div>
-    <h2>10 eniten havaittua eläintä</h2>
+    <h2 style="color: white;">10 eniten havaittua eläintä</h2>
     {% if top_animals %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -111,10 +111,10 @@
     {% endif %}
 </div>
 <div>
-    <h2>10 vähiten havaittua eläintä</h2>
+    <h2 style="color: white;">10 vähiten havaittua eläintä</h2>
     {% if bottom_animals %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -160,10 +160,10 @@
     {% endif %}
 </div>
 <div>
-    <h2>10 eniten metsästettyä eläintä</h2>
+    <h2 style="color: white;">10 eniten metsästettyä eläintä</h2>
     {% if most_hunted %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -209,10 +209,10 @@
     {% endif %}
 </div>
 <div>
-    <h2>10 eniten käytettyä välinettä</h2>
+    <h2 style="color: white;">10 eniten käytettyä välinettä</h2>
     {% if top_equipments %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>
@@ -238,10 +238,10 @@
     {% endif %}
 </div>
 <div>
-    <h2>10 vähiten käytettyä välinettä</h2>
+    <h2 style="color: white;">10 vähiten käytettyä välinettä</h2>
     {% if bottom_equipments %}
-    <table class="table table-bordered">
-        <thead class="thead-dark">
+    <table class="table table-bordered table-dark">
+        <thead class="thead-light">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
                 <th>Id</th>

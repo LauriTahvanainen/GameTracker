@@ -2,8 +2,8 @@
 
 {% block body %}
 <div>
-    <p><a href="{{ url_for('observation_add') }}" class="btn btn-outline-success btn-lg btn-block">Lisää havainto</a></p>
-    <p><a href="{{ url_for('observation_listuser', page=1) }}" class="btn btn-outline-primary btn-lg btn-block">Tarkastele omia havaintoja</a></p>
-    <p><a href="{{ url_for('observation_list_all', page=1) }}" class="btn btn-outline-primary btn-lg btn-block">Tarkastele kaikkia havaintoja</a></p>
+    <p><a href="{{ url_for('observation_add') }}" class="btn btn-outline-success btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Lisää havainto</a></p>
+    <p><a href="{{ url_for('observation_listuser', page=1) }}" class="btn btn-outline-primary btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Tarkastele omia havaintoja</a></p>
+    <p><a href="{{ url_for('observation_list_all', page=1) }}" class="btn btn-outline-primary btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Tarkastele kaikkia havaintoja</a></p>
 </div>
 {% endblock %}

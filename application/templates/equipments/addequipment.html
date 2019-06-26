@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="{{ url_for('equipment_menu') }}" class="btn btn-outline-primary">Takaisin välinevalikkoon</a>
+<a href="{{ url_for('equipment_menu') }}" class="btn btn-outline-primary btn-lg">Takaisin välinevalikkoon</a>
 <form method="POST" action="{{ url_for('equipment_add') }}">
     <table>
         <tr>
-            <td>
+            <td style="font-size: 20px">
                 {{ form.name.label }}
             </td>
             <td>
@@ -19,7 +19,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Lisää väline" class="btn btn-success"/>
+                <input type="submit" value="Lisää väline" class="btn btn-success btn-lg"/>
             </td>
         </tr>
 </form>

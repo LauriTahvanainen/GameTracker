@@ -1,51 +1,51 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="{{ url_for('auth_user_info') }}" class="btn btn-outline-primary">Takaisin käyttäjätietojen tarkasteluun</a>
+<a href="{{ url_for('auth_user_info') }}" class="btn btn-outline-primary btn-lg">Takaisin käyttäjätietojen tarkasteluun</a>
 <form method="POST" action="{{ url_for('auth_user_info_edit', account_id=account_id) }}">
-    <table>
+    <table class="table-bordered" style="border: hidden">
         <tr>
-            <td>
+            <td style="border-right: hidden; text-align: center; font-size: 20px">
                 {{ form.name.label }}
             </td>
-            <td>
+            <td style="border-right: hidden">
                 {{ form.name }}
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.name.errors %}
                 <div>{{ form.name.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="border-right: hidden; text-align: center; font-size: 20px">
                 {{ form.city.label }}
             </td>
-            <td>
+            <td style="border-right: hidden">
                 {{ form.city }}
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.city.errors %}
                 <div>{{ form.city.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="border-right: hidden; text-align: center; font-size: 20px">
                 {{ form.age.label }}
             </td>
-            <td>
+            <td style="border-right: hidden">
                 {{ form.age }}
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.age.errors %}
                 <div>{{ form.age.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="Vahvista käyttäjätietojen muokkaus" class="btn btn-warning" />
+        <tr style="border: hidden">
+            <td colspan="2" style="border: hidden">
+                <input type="submit" value="Vahvista käyttäjätietojen muokkaus" class="btn btn-warning btn-lg" />
             </td>
         </tr>
 </form>

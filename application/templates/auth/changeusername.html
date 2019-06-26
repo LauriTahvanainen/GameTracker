@@ -1,33 +1,33 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary">Takaisin käyttäjävalikkoon</a>
+<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary btn-lg">Takaisin käyttäjävalikkoon</a>
 <form method="POST" action="{{ url_for('auth_change_username') }}">
-    <table>
+    <table class="table-bordered" style="border: hidden">
         <tr>
-            <td>
-                Nykyinen käyttäjänimi
+            <td style="font-size: 20px; text-align: center; border-right: hidden">
+                Nykyinen käyttäjänimi: 
             </td>
-            <td>
+            <td style="border-right: hidden; font-size: 25px; text-align: center">
                 {{ current_user.username }}
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="font-size: 20px; text-align: center; border-right: hidden">
                 {{ form.username.label }}
             </td>
             <td>
                 {{ form.username }}
             </td>
-            <td>
+            <td style="border: hidden">
                 {% if form.username.errors %}
                 <div>{{ form.username.errors[0] }}</div>
                 {% endif %}
             </td>
         </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="Vaihda käyttäjänimi" class="btn btn-warning"/>
+        <tr style="border: hidden">
+            <td colspan="2" style="border: hidden">
+                <input type="submit" value="Vaihda käyttäjänimi" class="btn btn-warning btn-lg"/>
             </td>
         </tr>
 </form>

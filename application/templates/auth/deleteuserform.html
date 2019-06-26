@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary">Takaisin käyttäjävalikkoon</a>
+<a href="{{ url_for('auth_menu') }}" class="btn btn-outline-primary btn-lg">Takaisin käyttäjävalikkoon</a>
 <form method="POST" action="{{ url_for('auth_delete') }}">
             <td colspan="2">
-                <input class="btn btn-danger" type="submit" value="Poista käyttäjätilisi" onclick="return confirm('Oletko varma, että haluat poistaa käyttäjätilisi? Myös kaikki havaintosi poistetaan järjestelmästä. Jos kyllä, paina OK.')" />
+                <input class="btn btn-danger btn-sm mt-4" type="submit" value="Poista käyttäjätilisi" onclick="return confirm('Oletko varma, että haluat poistaa käyttäjätilisi? Myös kaikki havaintosi poistetaan järjestelmästä. Jos kyllä, paina OK.')" />
             </td>
         </tr>
 </form>

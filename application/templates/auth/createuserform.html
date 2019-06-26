@@ -1,87 +1,87 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<h4>*-merkillä merkatut kentät ovat pakollisia</h4>
 <form method="POST" action="{{ url_for('auth_create') }}">
     <table>
-        <tr>
-            <td>
-                {{ form.username.label }}
-            </td>
-            <td>
-                {{ form.username }} *
-            </td>
-            <td>
-                {% if form.username.errors %}
-                <div>{{ form.username.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.password.label }}
-            </td>
-            <td>
-                {{ form.password }} *
-            </td>
-            <td>
-                {% if form.password.errors %}
-                <div>{{ form.password.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.confirmPwd.label }}
-            </td>
-            <td>
-                {{ form.confirmPwd }} *
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.name.label }}
-            </td>
-            <td>
-                {{ form.name }} *
-            </td>
-            <td>
-                {% if form.name.errors %}
-                <div>{{ form.name.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.city.label }}
-            </td>
-            <td>
-                {{ form.city }}
-            </td>
-            <td>
-                {% if form.city.errors %}
-                <div>{{ form.city.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                {{ form.age.label }}
-            </td>
-            <td>
-                {{ form.age }} *
-            </td>
-            <td>
-                {% if form.age.errors %}
-                <div>{{ form.age.errors[0] }}</div>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>*-merkillä merkatut kentät ovat pakollisia</td>
-        </tr>
+        <tbody class="table-bordered" style="border: hidden">
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    {{ form.username.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.username }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.username.errors %}
+                    <div>{{ form.username.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    {{ form.password.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.password }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.password.errors %}
+                    <div>{{ form.password.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    {{ form.confirmPwd.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.confirmPwd }} *
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    {{ form.name.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.name }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.name.errors %}
+                    <div>{{ form.name.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    {{ form.city.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.city }}
+                </td>
+                <td style="border: hidden">
+                    {% if form.city.errors %}
+                    <div>{{ form.city.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    {{ form.age.label }}
+                </td>
+                <td style="border: hidden">
+                    {{ form.age }} *
+                </td>
+                <td style="border: hidden">
+                    {% if form.age.errors %}
+                    <div>{{ form.age.errors[0] }}</div>
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Luo käyttäjä" class="btn btn-success"/>
+                <input type="submit" value="Luo käyttäjä" class="btn btn-success btn-lg" />
             </td>
         </tr>
 </form>

@@ -9,7 +9,7 @@ Kirjautumiseen siirrytään etusivun oikeasta yläreunasta painamalla `Kirjaudu`
 Uloskirjautuminen tapahtuu painamalla oikeassa yläreunassa sijaitsevaa `Kirjaudu ulos`-nappia.
 
 ## Toiminnot
-Kirjautunut käyttäjä näkee yläpalkissa neljä uutta linkkiä: `Havainnot`, `Eläimet`, `Käyttäjätili` ja `Tilastoja`. Näitä painamalla voi siirtyä kunkin ominaisuuden valikkoon, mistä voi siirtyä yksittäisiin näitä aihealueita koskeviin toimintoihin. `Tilastoja`-näkymässä ei ole alivalikkoa.
+Kirjautunut käyttäjä näkee yläpalkissa neljä uutta linkkiä: `Havainnot`, `Eläimet`, `Käyttäjätili` ja `Tilastoja`. Näitä painamalla voi siirtyä kunkin ominaisuuden valikkoon, mistä voi siirtyä yksittäisiin näitä aihealueita koskeviin toimintoihin. `Tilastoja`-näkymässä ei ole alivalikkoa. Puhelimella, tai jos näyttö on liian pieni, toimintonapit piilotetaan valikkonapin taakse.
 
 ## Havainnot
 Painamalla yläpalkin `Havainnot`, käyttäjä siirtyy havaintojen valikkoon, josta voi siirtyä edelleen havaintojen lisäämiseen painamalla `Lisää havainto`, omien havaintojen tarkastelemiseen painamalla `Tarkastele omia havaintoja`, tai tarkastelemaan kaikkia havaintoja painamalla `Tarkastele kaikkia havaintoja`.

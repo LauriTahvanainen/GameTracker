@@ -129,7 +129,7 @@ def observation_list_all():
 def observation_delete(obs_id):
     obs = Observation.query.get(obs_id)
     if obs is None:
-        flash("Kyseistä havaintoa ei ole olemassa!", "error")
+        flash("Virheellinen osoite!", "error")
         return redirect(url_for('index'))
     last_path = request.args.get('last_path', None)
     if obs.account_id == current_user.account_id or current_user.urole == "ADMIN":
@@ -152,6 +152,9 @@ def observation_delete(obs_id):
 @login_required()
 def observation_edit(obs_id):
     obs = Observation.query.get(obs_id)
+    if obs is None:
+        flash("Virheellinen osoite!", "error")
+        return redirect(url_for('index'))
     last_path = request.args.get('last_path', None)
     if obs.account_id == current_user.account_id or current_user.urole == "ADMIN":
         if request.method == "GET":
@@ -190,6 +193,8 @@ def observation_edit(obs_id):
             flash("Havaintoa muokattu onnistuneesti!", "info")
             return redirect(last_path)
         return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
+    if (last_path is None):
+        return redirect(url_for('index'))
     flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!", "error")
     return redirect(last_path)
 

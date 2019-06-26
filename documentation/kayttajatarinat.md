@@ -17,7 +17,7 @@
 | Pääkäyttäjä | poistaa tilejä | poistaa tilejä jotka käyttävät palvelua sääntöjenvastaisesti. | X |
 | Pääkäyttäjä | poistaa havaintoja | poistaa palvelusta virheellisiä havaintoja. | X | 
 | Pääkäyttäjä | lisätä uusia välineitä | mahdollistaa uusien välineiden lisäämisen havaintoihin. | X |
-| Pääkäyttäjä | muokata välineitä | muokata virheellisiä välineitä | X |
+| Pääkäyttäjä | muokata välineitä | muokata virheellisiä välineitä | - |
 | Pääkäyttäjä | poistaa välineitä | poistaa virheellisiä välineitä | X |
 | Pääkäyttäjä | poistaa eläimiä | poistaa virheellisiä eläimiä| X |
 | Pääkäyttäjä | muokata eläimiä | korjata virheellisiä eläimiä | X |

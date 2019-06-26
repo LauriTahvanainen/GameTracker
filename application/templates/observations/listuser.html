@@ -5,10 +5,8 @@
 <h2>Omat havainnot</h2>
 <a href="#filter" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
 <a href="{{ url_for('observation_listuser') }}" class="btn btn-primary">Näytä kaikki</a>
-{{ error }}
 
 <div id="filter" class="collapse" aria-controls="filter">
-    {% if pagination.items %}
     <form method="POST" action="{{ url_for('observation_listuser', page=1) }}">
         {{ form.hidden_tag() }}
         <table id="filter">
@@ -23,14 +21,14 @@
                     {{ form.date_observedHigh }}
                 </td>
                 <td>
-                    {% for error in form.date_observedLow.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.date_observedLow.errors %}
+                    <div>{{ form.date_observedLow.errors[0] }}</div>
+                    {% endif %}
                 </td>
                 <td>
-                    {% for error in form.date_observedHigh.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.date_observedHigh.errors %}
+                    <div>{{ form.date_observedHigh.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -41,9 +39,9 @@
                     {{ form.city }}
                 </td>
                 <td>
-                    {% for error in form.city.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.city.errors %}
+                    <div>{{ form.city.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -57,14 +55,14 @@
                     {{ form.latitudeHigh }}
                 </td>
                 <td>
-                    {% for error in form.latitudeLow.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.latitudeLow.errors %}
+                    <div>{{ form.latitudeLow.errors[0] }}</div>
+                    {% endif %}
                 </td>
                 <td>
-                    {% for error in form.latitudeHigh.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.latitudeHigh.errors %}
+                    <div>{{ form.latitudeHigh.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -78,14 +76,14 @@
                     {{ form.longitudeHigh }}
                 </td>
                 <td>
-                    {% for error in form.longitudeLow.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.longitudeLow.errors %}
+                    <div>{{ form.longitudeLow.errors[0] }}</div>
+                    {% endif %}
                 </td>
                 <td>
-                    {% for error in form.longitudeHigh.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.longitudeHigh.errors %}
+                    <div>{{ form.longitudeHigh.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -96,9 +94,9 @@
                     {{ form.animal(size=4) }}
                 </td>
                 <td>
-                    {% for error in form.animal.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.animal.errors %}
+                    <div>{{ form.animal.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -112,14 +110,14 @@
                     {{ form.weightHigh }}
                 </td>
                 <td>
-                    {% for error in form.weightLow.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.weightLow.errors %}
+                    <div>{{ form.weightLow.errors[0] }}</div>
+                    {% endif %}
                 </td>
                 <td>
-                    {% for error in form.weightHigh.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.weightHigh.errors %}
+                    <div>{{ form.weightHigh.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -130,9 +128,9 @@
                     {{ form.sex(size=4) }}
                 </td>
                 <td>
-                    {% for error in form.sex.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.sex.errors %}
+                    <div>{{ form.sex.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -143,9 +141,9 @@
                     {{ form.observ_type(size=3) }}
                 </td>
                 <td>
-                    {% for error in form.observ_type.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.observ_type.errors %}
+                    <div>{{ form.observ_type.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -156,9 +154,9 @@
                     {{ form.equipment(size=4) }}
                 </td>
                 <td>
-                    {% for error in form.equipment.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.equipment.errors %}
+                    <div>{{ form.equipment.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -169,9 +167,9 @@
                     {{ form.info }}
                 </td>
                 <td>
-                    {% for error in form.info.errors %}
-                    <div>{{ error }}</div>
-                    {% endfor %}
+                    {% if form.info.errors %}
+                    <div>{{ form.info.errors[0] }}</div>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -181,10 +179,6 @@
             </tr>
         </table>
     </form>
-    {% else %}
-    <p>Sinulla ei ole havaintoja joita rajata!</p>
-    <a href="{{ url_for('observation_add') }}" class="btn btn-outline-primary">Siirry tästä lisäämään havaintoja!</a>
-    {% endif %}
 </div>
 
 <div id="listaus" class="container">
@@ -223,7 +217,7 @@
             {% endif %}
         </ul>
     </nav>
-    <table id="listaus" class="table table-bordered">
+    <table id="listaus" class="table table-bordered table-responsive-xl">
         <thead class="thead-dark">
             <tr>
                 {% if current_user.urole == "ADMIN" %}
@@ -240,6 +234,8 @@
                 <th>Väline</th>
                 <th>Luotu</th>
                 <th>Muokattu</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -301,21 +297,21 @@
                 <td>{{ obs[0].date_created }}</td>
                 <td>{{ obs[0].date_modified }}</td>
                 {% if obs[3].account_id == current_user.account_id or current_user.urole == "ADMIN" %}
-                <td rowspan="2">
+                <td rowspan="2" class="table-dark">
                     <div style="line-height: 70px"><a
                             href="{{ url_for('observation_delete', obs_id=obs[0].observation_id, last_path=request.path) }}"
                             class="btn btn-danger"
                             onclick="return confirm('Haluatko varmasti poistaa havainnon PYSYVÄSTI? Jos kyllä, paina OK.')">Poista</a>
                     </div>
                 </td>
-                <td rowspan="2">
+                <td rowspan="2" class="table-dark">
                     <div style="line-height: 70px"><a
                             href="{{ url_for('observation_edit', obs_id=obs[0].observation_id, last_path=request.path) }}"
                             class="btn btn-outline-warning">Muokkaa</a></div>
                 </td>
                 {% endif %}
             </tr>
-            <tr>
+            <tr class="table-success">
                 {% if current_user.urole == "ADMIN" %}
                 <td colspan="12" style="word-wrap: break-word; max-width: 20px;">{{ obs[0].info }}</td>
                 {% else %}
@@ -325,5 +321,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not pagination.items %}
+    <p>Ei havaintoja!</p>
+    <a href="{{ url_for('observation_add') }}" class="btn btn-outline-primary">Siirry tästä lisäämään uusia havaintoja!</a>
+    {% endif %}
 </div>
 {% endblock %}

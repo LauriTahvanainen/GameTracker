@@ -24,19 +24,19 @@
                 <tr>
                     <td></td>
                     <td>
-                        {% for error in form.name.errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
+                        {% if form.name.errors %}
+                        <div>{{ form.name.errors[0] }}</div>
+                        {% endif %}
                     </td>
                     <td>
-                        {% for error in form.lat_name.errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
+                        {% if form.lat_name.errors %}
+                        <div>{{ form.lat_name.errors[0] }}</div>
+                        {% endif %}
                     </td>
                     <td>
-                        {% for error in form.info.errors %}
-                        <div>{{ error }}</div>
-                        {% endfor %}
+                        {% if form.info.errors %}
+                        <div>{{ form.info.errors[0] }}</div>
+                        {% endif %}
                     </td>
                 </tr>
             </tbody>

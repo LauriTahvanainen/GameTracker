@@ -23,10 +23,11 @@ def auth_login():
         return render_template("auth/loginform.html", form=form)
     user = User.query.filter_by(username=form.username.data).first()
     if user is None or not check_password_hash(user.password, form.password.data):
-        return render_template("auth/loginform.html", form=form, error="Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!")
+        flash("Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!", "error")
+        return render_template("auth/loginform.html", form=form)
 
     login_user(user, remember=True)
-    flash('Kirjautuminen onnistui!')
+    flash('Kirjautuminen onnistui!', "info")
     return redirect(url_for("index"))
 
 
@@ -52,8 +53,9 @@ def auth_create():
             db.session().commit()
         except Exception:
             db.session().rollback()
-            return render_template("auth/createuserform.html", form=CreateUserForm(), error="Käyttäjänimi on jo käytössä!")
-        flash('Rekisteröityminen onnistui!')
+            flash("Käyttäjänimi on jo käytössä!", "error")
+            return render_template("auth/createuserform.html", form=CreateUserForm())
+        flash('Rekisteröityminen onnistui!', "info")
         return redirect(url_for("auth_login"))
     return render_template("auth/createuserform.html", form=form)
 
@@ -68,8 +70,10 @@ def auth_delete():
         User.delete_account(current_user.account_id)
         logout_user()
     except:
-        return render_template("auth/deleteuserform.html", error="Virhe poistettaessa käyttäjää!, käyttäjää ei poistettu!")
-    flash("Käyttäjä poistettu")
+        db.session().rollback()
+        flash("Virhe poistettaessa käyttäjää!, käyttäjää ei poistettu!", "error")
+        return redirect(url_for("index"))
+    flash("Käyttäjä poistettu", "info")
     return redirect(url_for("index"))
 
 
@@ -78,10 +82,10 @@ def auth_delete():
 def auth_delete_account(account_id):
     try:
         User.delete_account(account_id)
-        flash("Käyttäjä poistettu onnistuneesti!")
+        flash("Käyttäjä poistettu onnistuneesti!", "info")
         return redirect(url_for("index"))
     except:
-        flash("Poistaminen epäonnistui!")
+        flash("Poistaminen epäonnistui!", "error")
         return redirect(url_for("index"))
 
 
@@ -101,10 +105,12 @@ def auth_changepw():
                 db.session().commit()
             except:
                 db.session().rollback()
-                return render_template("auth/changepasswordform.html", form=form, error="Virhe salasanan vaihdossa! Salasanaa ei vaihdettu!")
-            flash('Salasana vaihdettu!')
+                flash("Virhe salasanan vaihdossa! Salasanaa ei vaihdettu!", "error")
+                return render_template("auth/changepasswordform.html", form=form)
+            flash('Salasana vaihdettu!', "info")
             return redirect(url_for('auth_menu'))
-        return render_template("auth/changepasswordform.html", form=form, error="Nykyinen salasana oli väärä!")
+        flash("Nykyinen salasana oli väärä!", "error")
+        return render_template("auth/changepasswordform.html", form=form)
     return render_template("auth/changepasswordform.html", form=form)
 
 
@@ -119,7 +125,7 @@ def auth_user_info():
 def auth_user_info_edit(account_id):
     if account_id != current_user.get_id():
         if current_user.urole != "ADMIN":
-            flash("Sinulla ei ole käyttöoikeuksia kyseiseen toimintoon")
+            flash("Sinulla ei ole käyttöoikeuksia kyseiseen toimintoon", "error")
             return redirect(url_for("index"))
     user = User.query.get(account_id)
     form = EditUserInfoForm()
@@ -138,8 +144,9 @@ def auth_user_info_edit(account_id):
             db.session().commit()
         except:
             db.session().rollback()
-            return render_template("auth/edituserinfo.html", form=form, error="Muokatessa tapahtui virhe! Käyttäjätietoja ei muokattu!")
-        flash("Käyttäjätietoja muokattiin onnistuneesti!")
+            flash("Muokatessa tapahtui virhe! Käyttäjätietoja ei muokattu!", "error")
+            return render_template("auth/edituserinfo.html", form=form)
+        flash("Käyttäjätietoja muokattiin onnistuneesti!", "info")
         return redirect(url_for("auth_user_info"))
     return render_template("auth/edituserinfo.html", form=form)
 
@@ -159,14 +166,16 @@ def auth_change_username():
 
     form = ChangeUsernameForm(request.form)
     if form.username.data == current_user.username:
-        return render_template("auth/changeusername.html", form=form, error="Uusi käyttäjänimi on sama kuin nykyinen käyttäjänimi!")
+        flash("Uusi käyttäjänimi on sama kuin nykyinen käyttäjänimi!", "error")
+        return render_template("auth/changeusername.html", form=form)
     if form.validate():
         try:
             current_user.username = form.username.data
             db.session().commit()
         except:
             db.session().rollback()
-            return render_template("auth/changeusername.html", form=form, error="Käyttäjänimi on varattu!")
-        flash("Käyttäjänimi vaihdettu onnistuneesti")
+            flash("Käyttäjänimi on varattu!", "error")
+            return render_template("auth/changeusername.html", form=form)
+        flash("Käyttäjänimi vaihdettu onnistuneesti", "info")
         return render_template("auth/menu.html")
     return render_template("auth/changeusername.html", form=form)

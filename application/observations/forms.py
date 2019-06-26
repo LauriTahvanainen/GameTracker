@@ -1,15 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators, DateTimeField, DecimalField, SelectField, TextAreaField, SelectMultipleField, ValidationError
 from wtforms.validators import StopValidation
+
 # Compares the value in the given field to the validating field and raises an validationError if the given fields value is bigger than this fields value
-
-
-def stopEmpty(form, field):
-    if not field.data or field.data == '':
-        field.errors[:] = []
-        raise StopValidation()
-
-
 class BiggerThan(object):
     def __init__(self, fieldname, message=None):
         self.fieldname = fieldname
@@ -67,10 +60,10 @@ class AddNewObservationForm(FlaskForm):
 
 class ListFiltersForm(FlaskForm):
     date_observedLow = DateTimeField("Havainnon päivämäärän ja ajan ala- ja yläraja",
-                                     format='%d-%m-%Y %H:%M', validators=[stopEmpty, BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
+                                     format='%d-%m-%Y %H:%M', validators=[validators.optional(strip_whitespace=True), BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
     date_observedHigh = DateTimeField(
-        "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[stopEmpty], render_kw={"placeholder": "01-01-2010 12:00"})
-    city = SelectMultipleField("Kaupunki", validators=[validators.optional(strip_whitespace=True), validators.Regexp('^[a-zA-ZåöäÅÖÄ ]*$', message='Kaupungin nimessä on vain kirjaimia ja välilyöntejä!')])
+        "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[validators.optional(strip_whitespace=True)], render_kw={"placeholder": "01-01-2010 12:00"})
+    city = SelectMultipleField("Kaupunki")
     latitudeLow = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
     latitudeHigh = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
@@ -95,7 +88,7 @@ class ListFiltersForm(FlaskForm):
     equipment = SelectMultipleField("Väline", coerce=int)
     info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('^[\w.?!, ]*$', message="Vain kirjaimet, numerot ja '. ? ! , ' ovat sallittuja merkkejä!"), validators.length(
         max=500, message="Teksti on liian pitkä. Maksimissaan 500 merkkiä!")])
-    username = StringField("Käyttäjänimi", [stopEmpty,
+    username = StringField("Käyttäjänimi", [validators.optional(strip_whitespace=True),
                                             validators.Regexp(
                                                 '^[a-zA-Z0-9_]*$', message='Käyttäjänimessä saa olla vain latinalaisia kirjaimia, numeroita tai alaviivoja!'),
                                             validators.Length(

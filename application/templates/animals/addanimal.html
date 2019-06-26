@@ -2,7 +2,6 @@
 
 {% block body %}
 <a href="{{ url_for('animal_menu') }}" class="btn btn-outline-primary">Takaisin eläinvalikkoon</a>
-{{ error }}
 <p>*-merkillä merkatut kentät ovat pakollisia</p>
 <form method="POST" action="{{ url_for('animal_add') }}">
     <table>

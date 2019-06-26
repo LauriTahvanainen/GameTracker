@@ -2,7 +2,6 @@
 
 {% block body %}
 <a href="{{ url_for('observation_menu') }}" class="btn btn-outline-primary">Takaisin havaintovalikkoon</a>
-{{ error }}
 <a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
     eläin!</a>
 <form method="POST" action="{{ url_for('observation_add') }}">

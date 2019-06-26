@@ -27,8 +27,9 @@ def equipment_add():
             db.session().commit()
         except Exception:
             db.session().rollback()
-            return render_template("equipments/addequipment.html", form=addEquipmentForm(), error="Varuste on jo järjestelmässä!")
-        flash('Varuste lisätty onnistuneesti!')
+            flash("Varuste on jo järjestelmässä!", "error")
+            return render_template("equipments/addequipment.html", form=addEquipmentForm())
+        flash('Varuste lisätty onnistuneesti!', "info")
         return redirect(url_for("equipment_add"))
     return render_template("equipments/addequipment.html", form=form)
 
@@ -53,7 +54,7 @@ def equipment_listandremove():
         if entry.data['selected'] == True:
             selected.append(entry.data['equip'])
     if len(selected) == 0:
-        flash("Ei poistettavaksi valittuja välineitä!")
+        flash("Ei poistettavaksi valittuja välineitä!", "warning")
         return render_template("equipments/list.html", form=form)
 
     try:
@@ -62,8 +63,8 @@ def equipment_listandremove():
         db.session().commit()
     except:
         db.session().rollback()
-        flash("Poistettaessa tapahtui virhe! Välineitä ei poistettu!")
+        flash("Poistettaessa tapahtui virhe! Välineitä ei poistettu!", "error")
         return redirect(url_for('equipment_listandremove'))
 
-    flash("Valitut välineet poistettu onnistuneesti!")
+    flash("Valitut välineet poistettu onnistuneesti!", "info")
     return redirect(url_for("equipment_listandremove"))

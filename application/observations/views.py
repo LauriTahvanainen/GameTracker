@@ -43,8 +43,9 @@ def observation_add():
             db.session().rollback()
             form = AddNewObservationForm()
             form = fill_choices(form)
-            return render_template("observations/addobservation.html", form=form, error="Tapahtui virhe, havaintoa ei lisätty!")
-        flash('Havainto lisätty onnistuneesti!')
+            flash("Tapahtui virhe, havaintoa ei lisätty!", "error")
+            return render_template("observations/addobservation.html", form=form)
+        flash('Havainto lisätty onnistuneesti!', "info")
         return redirect(url_for('observation_add'))
     return render_template("observations/addobservation.html", form=form)
 
@@ -70,7 +71,8 @@ def observation_listuser():
         pagination = Observation.list_filtered(
             form, page, current_user.account_id)
         return render_template("observations/listuser.html", form=form, pagination=pagination)
-    return render_template("observations/listuser.html", form=form, pagination=pagination, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+    flash("Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!", "warning")
+    return render_template("observations/listuser.html", form=form, pagination=pagination)
 
 
 @app.route("/observations/list/<user_id>", methods=["GET", "POST"])
@@ -94,7 +96,8 @@ def observation_list_by_id(user_id):
     if form.validate():
         pagination = Observation.list_filtered(form, page, user_id)
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
-    return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count, error="Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!")
+    flash("Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!", "warning")
+    return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
 
 @app.route("/observations/list/all", methods=["GET", "POST"])
@@ -117,7 +120,8 @@ def observation_list_all():
     if form.validate():
         pagination = Observation.list_filtered(form, page)
         return render_template("observations/listall.html", form=form, pagination=pagination)
-    return render_template("observations/listall.html", form=form, pagination=pagination, error="Virhe rajaussyötteissä! Näytetään kaikki havainnot!")
+    flash("Virhe rajaussyötteissä! Näytetään kaikki havainnot!", "warning")
+    return render_template("observations/listall.html", form=form, pagination=pagination)
 
 
 @app.route("/observations/delete/<obs_id>", methods=["POST", "GET"])
@@ -131,11 +135,11 @@ def observation_delete(obs_id):
             db.session().commit()
         except:
             db.session().rollback()
-            flash("Poistettaessa tapahtui virhe! Havaintoa ei poistettu")
+            flash("Poistettaessa tapahtui virhe! Havaintoa ei poistettu", "error")
             return redirect(last_path)
-        flash("Havainto poistettu onnistuneesti!")
+        flash("Havainto poistettu onnistuneesti!", "info")
         return redirect(last_path)
-    flash("Sinulla ei ole oikeuksia poistaa kyseistä havaintoa!")
+    flash("Sinulla ei ole oikeuksia poistaa kyseistä havaintoa!", "error")
     return redirect(last_path)
 
 
@@ -176,12 +180,12 @@ def observation_edit(obs_id):
                 obs.info = form.info.data
                 db.session().commit()
             except:
-                flash("Muokatessa tapahtui virhe! Havaintoa ei muokattu")
+                flash("Muokatessa tapahtui virhe! Havaintoa ei muokattu", "error")
                 return redirect(last_path)
-            flash("Havaintoa muokattu onnistuneesti!")
+            flash("Havaintoa muokattu onnistuneesti!", "info")
             return redirect(last_path)
         return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
-    flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!")
+    flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!", "error")
     return redirect(last_path)
 
 

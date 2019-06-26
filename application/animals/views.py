@@ -24,8 +24,9 @@ def animal_add():
             db.session().commit()
         except Exception:
             db.session().rollback()
-            return render_template("animals/addanimal.html", form=addNewAnimalForm(), error = "Eläin on jo järjestelmässä!")
-        flash('Eläin lisätty onnistuneesti!')
+            flash("Eläin on jo järjestelmässä!", "error")
+            return render_template("animals/addanimal.html", form=addNewAnimalForm())
+        flash('Eläin lisätty onnistuneesti!', "info")
         return redirect(url_for("animal_add"))
     return render_template("animals/addanimal.html", form=form)
 
@@ -55,8 +56,9 @@ def animal_edit_or_delete(animal_id):
             animal.info = form.info.data
             db.session().commit()
         except:
-            return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all(), error="Muokatessa tapahtui virhe! Eläintä ei muokattu!")
-        flash("Eläintä muokattu onnistuneesti!")
+            flash("Muokatessa tapahtui virhe! Eläintä ei muokattu!", "error")
+            return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all())
+        flash("Eläintä muokattu onnistuneesti!", "info")
         return redirect(url_for("animal_list_all"))
     return render_template("animals/editordelete.html", animal=animal, form=form)
     
@@ -69,8 +71,9 @@ def animal_delete(animal_id):
         Observation.query.filter_by(animal_id=animal_id).delete()
         db.session().commit()
     except:
-        return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all(), error="Poistettaessa tapahtui virhe! Eläintä ei poistettu!")
-    flash("Eläin poistettu onnistuneesti")
+        flash("Poistettaessa tapahtui virhe! Eläintä ei poistettu!", "error")
+        return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all())
+    flash("Eläin poistettu onnistuneesti", "info")
     return redirect(url_for("animal_list_all"))
 
 

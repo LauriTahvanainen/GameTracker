@@ -2,7 +2,6 @@
 
 {% block body %}
 <a href="{{ url_for('auth_user_info') }}" class="btn btn-outline-primary">Takaisin käyttäjätietojen tarkasteluun</a>
-{{ error }}
 <form method="POST" action="{{ url_for('auth_user_info_edit', account_id=account_id) }}">
     <table>
         <tr>

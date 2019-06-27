@@ -24,7 +24,7 @@ def animal_add():
             db.session().commit()
         except Exception:
             db.session().rollback()
-            flash("Eläin on jo järjestelmässä!", "error")
+            flash("Eläimen nimi tai latinankielinen nimi on jo järjestelmässä!", "error")
             return render_template("animals/addanimal.html", form=addNewAnimalForm())
         flash('Eläin lisätty onnistuneesti!', "info")
         return redirect(url_for("animal_add"))
@@ -40,6 +40,9 @@ def animal_list_all():
 @login_required(role="ADMIN")
 def animal_edit_or_delete(animal_id):
     animal = Animal.query.get(animal_id)
+    if animal is None:
+        flash("Virheellinen osoite!", "error")
+        return redirect(url_for("index"))
     if request.method == "GET":
         form = addNewAnimalForm()
         form.name.data = animal.name
@@ -56,8 +59,9 @@ def animal_edit_or_delete(animal_id):
             animal.info = form.info.data
             db.session().commit()
         except:
-            flash("Muokatessa tapahtui virhe! Eläintä ei muokattu!", "error")
-            return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all())
+            db.session().rollback()
+            flash("Eläimen nimi tai latinankielinen nimi on jo järjestelmässä! Eläintä ei muokattu!", "error")
+            return render_template("animals/editordelete.html", animal=animal, form=form)
         flash("Eläintä muokattu onnistuneesti!", "info")
         return redirect(url_for("animal_list_all"))
     return render_template("animals/editordelete.html", animal=animal, form=form)

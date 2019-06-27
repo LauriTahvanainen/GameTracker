@@ -80,6 +80,9 @@ def observation_listuser():
 def observation_list_by_id(user_id):
     page = request.args.get('page', 1, type=int)
     account = User.query.get(user_id)
+    if account is None:
+        flash("Virheellinen osoite!", "error")
+        return redirect(url_for("index"))
     form = ListFiltersForm()
     form = fill_choices(form, user_id)
     # The input of the filter-form is passed as url parameters

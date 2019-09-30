@@ -22,7 +22,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.date_observed.label }}
                 </td>
                 <td style="border: hidden; color: white">
@@ -35,7 +35,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.city.label }}
                 </td>
                 <td style="border: hidden;color: white">
@@ -48,7 +48,15 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td colspan="2" style="border: hidden">
+                    <div id="addMap" style="height: 300px; width: 500px"></div>
+                </td>
+                <td style="border: hidden">
+                    <button type="button" class="btn btn-warning" onclick=emptyCoordinateSelection()>Nollaa koordinaatit</button>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.latitude.label }}
                 </td>
                 <td style="border: hidden">
@@ -61,7 +69,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.longitude.label }}
                 </td>
                 <td style="border: hidden">
@@ -74,7 +82,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.weight.label }}
                 </td>
                 <td style="border: hidden">
@@ -87,7 +95,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.sex.label }}
                 </td>
                 <td style="border: hidden; color: white">
@@ -100,7 +108,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.observ_type.label }}
                 </td>
                 <td style="border: hidden; color: white">
@@ -113,7 +121,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.equipment.label }}
                 </td>
                 <td style="border: hidden;color: white">
@@ -126,7 +134,7 @@
                 </td>
             </tr>
             <tr>
-                <td  style="background-color: rgba(255, 255, 255, 0.5)">
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.info.label }}
                 </td>
                 <td style="border: hidden">
@@ -146,4 +154,8 @@
         </tr>
     </table>
 </form>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
 {% endblock %}

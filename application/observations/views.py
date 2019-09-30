@@ -26,7 +26,6 @@ def observation_add():
 
     form = AddNewObservationForm(request.form)
     form = fill_choices(form)
-
     if form.validate():
         newObs = Observation(current_user.account_id,
                              form.date_observed.data,
@@ -55,7 +54,7 @@ def observation_add():
 def observation_listuser():
     page = request.args.get('page', 1, type=int)
     form = ListFiltersForm()
-    form = fill_choices(form, current_user.account_id)
+    form = fill_choices_with_cities(form, current_user.account_id)
     # The input of the filter-form is passed as url parameters
     # for repeated calls of the same filters when changing pages
     form = fill_filter_data(form, request.args)
@@ -66,7 +65,7 @@ def observation_listuser():
 
     # filtering
     form = ListFiltersForm(request.form)
-    form = fill_choices(form, current_user.account_id)
+    form = fill_choices_with_cities(form, current_user.account_id)
     if form.validate():
         pagination = Observation.list_filtered(
             form, page, current_user.account_id)
@@ -84,7 +83,7 @@ def observation_list_by_id(user_id):
         flash("Virheellinen osoite!", "error")
         return redirect(url_for("index"))
     form = ListFiltersForm()
-    form = fill_choices(form, user_id)
+    form = fill_choices_with_cities(form, user_id)
     # The input of the filter-form is passed as url parameters
     # for repeated calls with the same filters when changing pages
     form = fill_filter_data(form, request.args)
@@ -95,7 +94,7 @@ def observation_list_by_id(user_id):
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
     form = ListFiltersForm(request.form)
-    form = fill_choices(form, user_id)
+    form = fill_choices_with_cities(form, user_id)
     if form.validate():
         pagination = Observation.list_filtered(form, page, user_id)
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
@@ -109,7 +108,7 @@ def observation_list_all():
     page = request.args.get('page', 1, type=int)
 
     form = ListFiltersForm()
-    form = fill_choices(form)
+    form = fill_choices_with_cities(form)
     # The input of the filter-form is passed as url parameters
     # for repeated calls of the same filters when changing pages
     form = fill_filter_data(form, request.args)
@@ -119,7 +118,7 @@ def observation_list_all():
         return render_template("observations/listall.html", form=form, pagination=pagination)
 
     form = ListFiltersForm(request.form)
-    form = fill_choices(form)
+    form = fill_choices_with_cities(form)
     if form.validate():
         pagination = Observation.list_filtered(form, page)
         return render_template("observations/listall.html", form=form, pagination=pagination)
@@ -162,7 +161,7 @@ def observation_edit(obs_id):
     if obs.account_id == current_user.account_id or current_user.urole == "ADMIN":
         if request.method == "GET":
             form = AddNewObservationForm()
-            form = fill_choices(form)
+            form = fill_choices_with_cities(form)
             form.animal.data = obs.animal_id
             form.date_observed.data = obs.date_observed
             form.city.data = obs.city
@@ -176,7 +175,7 @@ def observation_edit(obs_id):
             return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
 
         form = AddNewObservationForm(request.form)
-        form = fill_choices(form)
+        form = fill_choices_with_cities(form)
         if form.validate():
             try:
                 obs.animal_id = form.animal.data
@@ -217,20 +216,34 @@ def observation_stats():
 
 def fill_choices(form, acc_id=-1):
     if acc_id == -1:
-        form.city.choices = [(city[0], city[0]) for city in db.session.query(
-            Observation.city).order_by(Observation.city.asc()).distinct()]
         form.equipment.choices = [(equipment.equipment_id, equipment.name)
                                   for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
         form.animal.choices = [(animal.animal_id, animal.name)
                                for animal in Animal.query.order_by(Animal.name.asc()).all()]
     else:
-        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(
-            Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
-        form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).filter(
-            Observation.account_id == acc_id).order_by(Observation.city.asc()).distinct()]
         form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(
             Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
+        form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(
+            Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
     return form
+
+
+def fill_choices_with_cities(form, acc_id=-1):
+    if acc_id == -1:
+        form.city.choices = [(city[0], city[0]) for city in db.session.query(
+            Observation.city).order_by(Observation.city.asc()).distinct()]
+        # form.equipment.choices = [(equipment.equipment_id, equipment.name)
+        #                           for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
+        # form.animal.choices = [(animal.animal_id, animal.name)
+        #                        for animal in Animal.query.order_by(Animal.name.asc()).all()]
+    else:
+        form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).filter(
+            Observation.account_id == acc_id).order_by(Observation.city.asc()).distinct()]
+        # form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(
+        #     Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
+        # form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(
+        #     Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
+    return fill_choices(form, acc_id)
 
 
 def fill_filter_data(form, args):

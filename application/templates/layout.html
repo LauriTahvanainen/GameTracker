@@ -8,10 +8,15 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='Leaflet.draw-1.0.4/dist/leaflet.draw-src.css') }}" />
 </head>
 
-<body background="{{ url_for('static', filename='background.jpg') }}" style="background-attachment: fixed; background-position-x: 90%; background-position-y: 50%; background-size: 110%; background-repeat: no-repeat; background-size: cover">
-    
+<body background="{{ url_for('static', filename='img/background.jpg') }}"
+  style="background-attachment: fixed; background-position-x: 90%; background-position-y: 50%; background-size: 110%; background-repeat: no-repeat; background-size: cover">
+
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <a class="navbar-brand btn btn-success btn-sm" href="{{ url_for('index') }}">GameTracker</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -77,23 +82,23 @@
         <div class="col-md-7 col-md-offset-1">
           {% for category, message in messages %}
           {% if category == 'error' %}
-            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-              <span style="font-size: 18px">
-                {{ message }}
-              </span>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+          <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            <span style="font-size: 18px">
+              {{ message }}
+            </span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           {% elif category == 'info' %}
-            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-              <span style="font-size: 18px">
-                {{ message }}
-              </span>
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+          <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            <span style="font-size: 18px">
+              {{ message }}
+            </span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           {% elif category == 'warning' %}
           <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
             <span style="font-size: 18px">
@@ -124,6 +129,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
     integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
     crossorigin="anonymous"></script>
+
 </body>
 
 </html>

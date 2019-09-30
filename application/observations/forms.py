@@ -2,6 +2,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, validators, DateTimeField, DecimalField, SelectField, TextAreaField, SelectMultipleField, ValidationError
 from wtforms.validators import StopValidation
 
+def build_cities_tuple_list():
+    with open("application/static/cities/kunnat.txt") as cities:
+        choices = []
+        for city in cities:
+            choices.append((city.strip(), city.strip()))
+    return choices
+
+
 # Compares the value in the given field to the validating field and raises an validationError if the given fields value is bigger than this fields value
 class BiggerThan(object):
     def __init__(self, fieldname, message=None):
@@ -32,8 +40,8 @@ class BiggerThan(object):
 class AddNewObservationForm(FlaskForm):
     date_observed = DateTimeField("Havainnon päivämäärä ja aika",  format='%d-%m-%Y %H:%M', validators=[
                                   validators.input_required(message="Päivämäärä ei voi olla tyhjä!")], render_kw={"placeholder": "Muodossa 14-12-2019 22:45"})
-    city = StringField("Kaupunki", validators=[validators.Regexp('^[a-zA-ZåöäÅÖÄ ]*$', message='Kaupungin nimessä on vain kirjaimia ja välilyöntejä!'),
-                                               validators.input_required(message="Kaupunki ei voi olla tyhjä")])
+    city = SelectField("Kunta", choices=build_cities_tuple_list(), validators=[
+                      validators.input_required(message="Kunta pitää valita!")], coerce=str)
     latitude = DecimalField("Leveysaste", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], places=6, render_kw={"placeholder": "Esimerkiksi 25.439399"})
     longitude = DecimalField("Pituusaste", validators=[validators.optional(strip_whitespace=True), validators.number_range(
@@ -63,7 +71,7 @@ class ListFiltersForm(FlaskForm):
                                      format='%d-%m-%Y %H:%M', validators=[validators.optional(strip_whitespace=True), BiggerThan('date_observedHigh')], render_kw={"placeholder": "12-03-2005 12:00"})
     date_observedHigh = DateTimeField(
         "Havainnon päivämäärän ja ajan ala- ja yläraja",  format='%d-%m-%Y %H:%M', validators=[validators.optional(strip_whitespace=True)], render_kw={"placeholder": "01-01-2010 12:00"})
-    city = SelectMultipleField("Kaupunki")
+    city = SelectMultipleField("Kunta")
     latitudeLow = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
     latitudeHigh = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(

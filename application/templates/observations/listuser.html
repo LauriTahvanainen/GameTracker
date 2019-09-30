@@ -9,6 +9,7 @@
 <div id="filter" class="collapse" aria-controls="filter">
     <form method="POST" action="{{ url_for('observation_listuser', page=1) }}">
         {{ form.hidden_tag() }}
+        {% if pagination.items %}
         <table id="filter">
             <tbody class="table-bordered" style="border: hidden">
                 <tr>
@@ -33,7 +34,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.city.label }}
                     </td>
                     <td style="border: hidden">
@@ -67,7 +68,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.longitudeLow.label }}
                     </td>
                     <td style="border: hidden">
@@ -88,7 +89,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.animal.label }}
                     </td>
                     <td style="border: hidden">
@@ -101,7 +102,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.weightLow.label }}
                     </td>
                     <td style="border: hidden">
@@ -122,7 +123,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.sex.label }}
                     </td>
                     <td style="border: hidden">
@@ -135,7 +136,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.observ_type.label }}
                     </td>
                     <td style="border: hidden">
@@ -148,7 +149,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.equipment.label }}
                     </td>
                     <td style="border: hidden">
@@ -161,7 +162,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td  style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
                         {{ form.info.label }}
                     </td>
                     <td style="border: hidden">
@@ -176,10 +177,14 @@
             </tbody>
             <tr>
                 <td colspan="2">
-                    <input type="submit" value="Hae" class="btn btn-info"/>
+                    <input type="submit" value="Hae" class="btn btn-info" />
                 </td>
             </tr>
         </table>
+        {% else %}
+        <p style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">Ei havaintoja joita
+            rajata!</p>
+        {% endif %}
     </form>
 </div>
 
@@ -227,7 +232,7 @@
                 {% endif %}
                 <th>Eläin</th>
                 <th>Havaittu</th>
-                <th>Kaupunki</th>
+                <th>Kunta</th>
                 <th>Leveysaste</th>
                 <th>Pituusaste</th>
                 <th>Paino</th>

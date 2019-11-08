@@ -7,6 +7,7 @@ from application.observations.forms import AddNewObservationForm, ListFiltersFor
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
 from datetime import datetime
+from flask import jsonify
 
 
 @app.route("/observations/menu", methods=["GET"])
@@ -52,6 +53,11 @@ def observation_add():
 @app.route("/observations/listuser", methods=["GET", "POST"])
 @login_required()
 def observation_listuser():
+    # The ajax request that fills the map on a page with observations also uses this function.
+    # The same function is used bećause the data in the filter form is necessary, and because the function can be tailored for the ajax request
+    # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajaax request, when the parameter page is 0.
+    # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
+    # In case of the ajax request, the fetched observations are jsonified and returned.
     page = request.args.get('page', 1, type=int)
     form = ListFiltersForm()
     form = fill_choices_with_cities(form, current_user.account_id)
@@ -59,17 +65,32 @@ def observation_listuser():
     # for repeated calls of the same filters when changing pages
     form = fill_filter_data(form, request.args)
 
-    pagination = Observation.list_filtered(form, page, current_user.account_id)
+    if page == 0:
+        observations = Observation.list_filtered(
+            form, 0, current_user.account_id)
+        marker_data = jsonify(serialize(observations.all()))
+    else:
+        pagination = Observation.list_filtered(
+            form, page, current_user.account_id)
     if request.method == "GET":
+        if page == 0:
+            return marker_data
         return render_template("observations/listuser.html", form=form, pagination=pagination)
 
     # filtering
     form = ListFiltersForm(request.form)
     form = fill_choices_with_cities(form, current_user.account_id)
     if form.validate():
+        if page == 0:
+            observations = Observation.list_filtered(
+                form, 0, current_user.account_id)
+            marker_data = jsonify(serialize(observations.all()))
+            return marker_data
         pagination = Observation.list_filtered(
             form, page, current_user.account_id)
         return render_template("observations/listuser.html", form=form, pagination=pagination)
+    if page == 0:
+        return marker_data
     flash("Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!", "warning")
     return render_template("observations/listuser.html", form=form, pagination=pagination)
 
@@ -77,6 +98,11 @@ def observation_listuser():
 @app.route("/observations/list/<user_id>", methods=["GET", "POST"])
 @login_required()
 def observation_list_by_id(user_id):
+    # The ajax request that fills the map on a page with observations also uses this function.
+    # The same function is used bećause the data in the filter form is necessary, and because the function can be tailored for the ajax request
+    # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajaax request, when the parameter page is 0.
+    # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
+    # In case of the ajax request, the fetched observations are jsonified and returned.
     page = request.args.get('page', 1, type=int)
     account = User.query.get(user_id)
     if account is None:
@@ -88,16 +114,29 @@ def observation_list_by_id(user_id):
     # for repeated calls with the same filters when changing pages
     form = fill_filter_data(form, request.args)
 
-    pagination = Observation.list_filtered(form, page, user_id)
-    obs_count = Observation.count_observations_on_user(user_id)
+    if page == 0:
+        observations = Observation.list_filtered(form, 0, user_id)
+        marker_data = jsonify(serialize(observations.all()))
+    else:
+        pagination = Observation.list_filtered(form, page, user_id)
+        obs_count = Observation.count_observations_on_user(user_id)
     if request.method == "GET":
+        if page == 0:
+            return marker_data
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
     form = ListFiltersForm(request.form)
     form = fill_choices_with_cities(form, user_id)
     if form.validate():
+        if page == 0:
+            observations = Observation.list_filtered(
+                form, 0, user_id)
+            marker_data = jsonify(serialize(observations.all()))
+            return marker_data
         pagination = Observation.list_filtered(form, page, user_id)
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
+    if page == 0:
+        return marker_data
     flash("Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!", "warning")
     return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
@@ -105,6 +144,11 @@ def observation_list_by_id(user_id):
 @app.route("/observations/list/all", methods=["GET", "POST"])
 @login_required()
 def observation_list_all():
+    # The ajax request that fills the map on a page with observations also uses this function.
+    # The same function is used bećause the data in the filter form is necessary, and because the function can be tailored for the ajax request
+    # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajaax request, when the parameter page is 0.
+    # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
+    # In case of the ajax request, the fetched observations are jsonified and returned.
     page = request.args.get('page', 1, type=int)
 
     form = ListFiltersForm()
@@ -113,15 +157,28 @@ def observation_list_all():
     # for repeated calls of the same filters when changing pages
     form = fill_filter_data(form, request.args)
 
-    pagination = Observation.list_filtered(form, page)
+    if page == 0:
+        observations = Observation.list_filtered(form, 0)
+        marker_data = jsonify(serialize(observations.all()))
+    else:
+        pagination = Observation.list_filtered(form, page)
     if request.method == "GET":
+        if page == 0:
+            return marker_data
         return render_template("observations/listall.html", form=form, pagination=pagination)
 
     form = ListFiltersForm(request.form)
     form = fill_choices_with_cities(form)
     if form.validate():
+        if page == 0:
+            observations = Observation.list_filtered(
+                form, 0)
+            marker_data = jsonify(serialize(observations.all()))
+            return marker_data
         pagination = Observation.list_filtered(form, page)
         return render_template("observations/listall.html", form=form, pagination=pagination)
+    if page == 0:
+        return marker_data
     flash("Virhe rajaussyötteissä! Näytetään kaikki havainnot!", "warning")
     return render_template("observations/listall.html", form=form, pagination=pagination)
 
@@ -232,17 +289,9 @@ def fill_choices_with_cities(form, acc_id=-1):
     if acc_id == -1:
         form.city.choices = [(city[0], city[0]) for city in db.session.query(
             Observation.city).order_by(Observation.city.asc()).distinct()]
-        # form.equipment.choices = [(equipment.equipment_id, equipment.name)
-        #                           for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
-        # form.animal.choices = [(animal.animal_id, animal.name)
-        #                        for animal in Animal.query.order_by(Animal.name.asc()).all()]
     else:
         form.city.choices = [(city[0], city[0]) for city in db.session.query(Observation.city).filter(
             Observation.account_id == acc_id).order_by(Observation.city.asc()).distinct()]
-        # form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(
-        #     Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
-        # form.animal.choices = [(animal.animal_id, animal.name) for animal in Animal.query.outerjoin(
-        #     Observation).filter(Observation.account_id == acc_id).order_by(Animal.name.asc()).distinct()]
     return fill_choices(form, acc_id)
 
 
@@ -277,3 +326,66 @@ def fill_filter_data(form, args):
     form.equipment.data = args.getlist('equipment')
     form.info.data = args.get('info', type=str)
     return form
+
+
+def serialize(observations):
+    # (<Observation 93>, <Animal 3>, 'test', <User 1>)
+    array = []
+    for observation in observations:
+        array.append({
+            'observation': {
+                'observation_id': observation[0].observation_id,
+                'date_observed': observation[0].date_observed.strftime("%a %d-%m-%Y %H:%M"),
+                'city': observation[0].city,
+                'latitude': str(observation[0].latitude),
+                'longitude': str(observation[0].longitude),
+                'weight': parseWeight(observation[0].weight),
+                "sex": parseSex(observation[0].sex),
+                'observ_type': parseObsType(observation[0].observ_type),
+                'info': parseInfo(observation[0].info)
+            },
+            'animal': {
+                'animal_id': observation[1].animal_id,
+                'name': observation[1].name,
+                'lat_name': observation[1].lat_name,
+                'info': observation[1].info
+            },
+            'equipment': observation[2],
+            'observer': observation[3].username,
+            'observer_id': observation[3].account_id
+        })
+    return array
+
+
+def parseObsType(value):
+    if value == 0:
+        return "Saalis"
+    elif value == "1":
+        return "Näköhavainto"
+    elif value == "2":
+        return "Kiinniotto"
+    return "Onnettomuus"
+
+
+def parseWeight(value):
+    if not value:
+        return "Ei annettu!"
+    else:
+        return "{0:.3f}".format(value) + " Kg"
+
+
+def parseInfo(value):
+    if not value:
+        return "Ei annettu!"
+    else:
+        return value
+
+
+def parseSex(value):
+    if value == 0:
+        return "Uros"
+    elif value == 1:
+        return "Naaras"
+    elif value == 2:
+        return "Muu"
+    return "Ei tiedossa!"

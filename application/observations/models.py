@@ -92,6 +92,8 @@ class Observation(Base):
         if form.info.data != '' and form.info.data is not None:
             query = query.filter(Observation.info == form.info.data)
 
+        if page_num == 0:
+            return query.order_by(Observation.date_observed.desc())
         return query.order_by(Observation.date_observed.desc()).paginate(page_num, 10, False)
 
     @staticmethod

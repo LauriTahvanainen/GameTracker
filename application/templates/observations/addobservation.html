@@ -49,10 +49,10 @@
             </tr>
             <tr>
                 <td colspan="2" style="border: hidden">
-                    <div id="addMap" style="height: 300px; width: 500px"></div>
+                    <div id="addMap" style="height: 400px; width: 800px"></div>
                 </td>
                 <td style="border: hidden">
-                    <button type="button" class="btn btn-warning" onclick=emptyCoordinateSelection()>Nollaa koordinaatit</button>
+                    <button id="emptyCoords" style="width: 200px;" type="button" class="btn btn-warning" onclick=emptyCoordinateSelection()>Nollaa koordinaatit</button>
                 </td>
             </tr>
             <tr>
@@ -158,4 +158,5 @@
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script>sendObsRequest()</script>
 {% endblock %}

@@ -43,9 +43,11 @@
 <h3 style="color: white">Käyttäjän havainnot</h3>
 <a href="#filter" class="btn btn-primary" data-toggle="collapse" aria-controls="rajaus">Rajaa näytettäviä havaintoja</a>
 <a href="{{ url_for('observation_list_by_id', user_id = account.account_id) }}" class="btn btn-primary">Näytä kaikki</a>
+<a href='#showMap' class="btn btn-primary" data-toggle="collapse" aria-controls="showMap">Näytä havainnot kartalla</a>
+
 
 <div id="filter" class="collapse" aria-controls="filter">
-    <form method="POST" action="{{ url_for('observation_list_by_id', user_id = account.account_id, page=1) }}">
+    <form id="filterForm" method="POST" action="{{ url_for('observation_list_by_id', user_id = account.account_id, page=1) }}">
         {{ form.hidden_tag() }}
         <table id="filter">
             <tbody class="table-bordered" style="border: hidden">
@@ -221,6 +223,10 @@
     </form>
 </div>
 
+<div id="showMap" class='collapse' aria-controls="showMap" >
+    <div id='filterMap' style="height: 400px; width: 800px"></div>
+</div>
+
 <div id="listaus" class="container">
     <nav aria-label="Pagination">
         <ul class="pagination">
@@ -363,4 +369,9 @@
     <p>Ei havaintoja!</p>
     {% endif %}
 </div>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+<script src="{{ url_for('static', filename='js/filterMap.js') }}"></script>
+<script>sendObsRequest("{{account.account_id}}")</script>
 {% endblock %}

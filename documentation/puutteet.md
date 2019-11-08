@@ -3,7 +3,7 @@
 ## Rajoitteet
 - Havaintojen listaaminen on tällä hetkellä rakennettu niin, että käyttäjän poiston yhteydessä on mahdotonta jättää käyttäjän havaintoja tietokantaan. Tämä olisi tarpeellinen toiminnallisuus, jotta dataa ei menetettäisi. Käyttäjä voisi esimerkiksi itse valita, poistetaanko hänen havaintonsakin, vai jätetäänkö ne muiden käyttäjien tarkasteltavaksi.
 - Havaintojen lisääminen on hieman rajoittunut käytettävyyden ja saavutettavuuden kannalta. Päivämäärän ja koordinaattien lisääminen käsin on ymmärrettävästi käyttäjälle paljon raskaampaa kuin, jos hän voisi käyttää päivämäärän- ja ajanvalitsinta, sekä karttaa.
-- Eläinten ja käyttäjien tarkatelussa olisi hyvä olla hakukenttä, jotta tietyn eläimen tai käyttäjän hakeminen olisi mahdollisimman nopeaa.
+- Eläinten ja käyttäjien tarkastelussa olisi hyvä olla hakukenttä, jotta tietyn eläimen tai käyttäjän hakeminen olisi mahdollisimman nopeaa.
 - Välineitä ei voi muokata, vaan vain poistaa. Jos järjestelmässä on paljon havaintoja, mahdollisesti kaikilla välineillä, niin välineen poistamisesta saattaa koitua ongelma, jos uusien välineiden lisäämistä ei tee tarkasti. Saattaa nimittäin käydä niin, että väline poistetaan, jolloin sen omaavat havainnot muuttavat väline arvon NULL-arvoksi, mutta jos lisätään huolimattomasti uusi, eri niminen, väline, niin tämä uusi väline saattaa saada saman id:n kuin aikaisemmin poistettu väline. Näin ollen havainnot joissa oli poistettu väline, saattavat saada aivan uuden, tarkoittamattoman välineen liitetyksi havaintoon.
 
 ## Puuttuvat ominaisuudet
@@ -15,7 +15,6 @@ Kokonaisuudesaan suuri osa suunniteltuista toiminnallisuuksista saatiin toteutet
 - Välineen muokkaaminen.
 
 ## Jatkokehitysideoita
-- Havainnollistamisen kannalta sovellukseen olisi erittäin hyvä upottaa kartta. Kartan avulla havaintojen tarkastelusta saataisiin visuualisempaa, ja karttaa voitaisiin myös käyttää havainnon lisäämisessä. Käytettävyyden kannalta havainnon koordinaattien lisääminen kartalta on paljon mielekkäämpää, kuin syöttää suoraan havainnon koordinaatit numeerisessa muodossa.
 - Kartassa voisi jokaisella eläimellä olla oma merkkinsä.
 - Kuvan lisääminen havaintoon.
 - Kommenttien lisääminen havaintoon.

@@ -74,7 +74,7 @@ function sendObsRequest(userId) {
                         }
                         if (userId >= -1) {
                             observationArray.push(L.marker([observations[i].observation.latitude, observations[i].observation.longitude])
-                                .bindPopup("<h4>" + observations[i].animal.name + "</h4>"
+                                .bindPopup("<h4><a target='_blank' href='" + observations[i].animal.info + "'>" + observations[i].animal.name + "<a></h4>"
                                     + "<h5> " + observations[i].observation.observ_type + "</h5>"
                                     + "<br>Päivämäärä: " + observations[i].observation.date_observed.substring(0, 14)
                                     + "<br>Kellonaika: " + observations[i].observation.date_observed.substring(15, 20)
@@ -85,9 +85,9 @@ function sendObsRequest(userId) {
                                     + "<br>Lisätietoja: " + observations[i].observation.info.substring(0, 20) + infoCutDots, { autoPan: false }));
                         } else if (userId == -2) {
                             observationArray.push(L.marker([observations[i].observation.latitude, observations[i].observation.longitude])
-                                .bindPopup("<h4>" + observations[i].animal.name + "</h4>"
+                                .bindPopup("<h4><a target='_blank' href='" + observations[i].animal.info + "'>" + observations[i].animal.name + "<a></h4>"
                                     + "<h5> " + observations[i].observation.observ_type + "</h5>"
-                                    + "<h5> Käyttäjä: " + observations[i].observer + "</h5>"
+                                    + "<h5>Käyttäjä: <a href='/observations/list/" + observations[i].observer_id + "'>" + observations[i].observer + "</a></h5>"
                                     + "<br>Päivämäärä: " + observations[i].observation.date_observed.substring(0, 14)
                                     + "<br>Kellonaika: " + observations[i].observation.date_observed.substring(15, 20)
                                     + "<br>Kunta: " + observations[i].observation.city

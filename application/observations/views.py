@@ -348,7 +348,7 @@ def serialize(observations):
                 'animal_id': observation[1].animal_id,
                 'name': observation[1].name,
                 'lat_name': observation[1].lat_name,
-                'info': observation[1].info
+                'info': parseAnimalInfo(observation[1].info, observation[1].animal_id)
             },
             'equipment': observation[2],
             'observer': observation[3].username,
@@ -389,3 +389,8 @@ def parseSex(value):
     elif value == 2:
         return "Muu"
     return "Ei tiedossa!"
+
+def parseAnimalInfo(value, id):
+    if value == None or value == "":
+        return "/animals/edit_or_delete/" + str(id)
+    return value

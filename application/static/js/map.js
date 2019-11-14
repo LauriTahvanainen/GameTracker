@@ -75,7 +75,7 @@ function sendObsRequest() {
                             infoCutDots = "";
                         }
                         observationArray.push(L.marker([observations[i].observation.latitude, observations[i].observation.longitude])
-                            .bindPopup("<h4>" + observations[i].animal.name + "</h4>"
+                            .bindPopup("<h4><a target='_blank' href='" + observations[i].animal.info + "'>" + observations[i].animal.name + "<a></h4>"
                                 + "<h5> " + observations[i].observation.observ_type + "</h5>"
                                 + "<br>Päivämäärä: " + observations[i].observation.date_observed.substring(0, 14)
                                 + "<br>Kellonaika: " + observations[i].observation.date_observed.substring(15, 20)

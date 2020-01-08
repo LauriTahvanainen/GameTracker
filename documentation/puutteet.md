@@ -13,6 +13,7 @@ Kokonaisuudesaan suuri osa suunniteltuista toiminnallisuuksista saatiin toteutet
 - Käyttäjän, eläimen ja näiden poistamisien myötä havaintojen poistamisessa ei saatu toimimaan tietokannan automaattista 'cascade'/ON DELETE poistoa, vaan poistaminen tehdään erikseen.
 - Uutta havaintoa ei voi lisätä, jos järjestelmässä ei ole eläimiä tai välineitä. Käytettävyyden kannalta havainnonlisäämisnäkymään olisi hyvä lisätä nappi, josta pääsee siirtymään lisäämään eläimiä (ja havaintoja pääkäyttäjän kohdalla), jos näitä ei järjestelmässä ole.
 - Välineen muokkaaminen.
+-Olemassa olevien eläinten muokkauksien ehdottaminen ja ehdotuksista äänestäminen.
 
 ## Jatkokehitysideoita
 - Kartassa voisi jokaisella eläimellä olla oma merkkinsä.

@@ -73,6 +73,9 @@ from application.equipments import views
 from application.auth import models
 from application.auth import views
 
+from application.votes import models
+from application.votes import views
+
 
 @login_manager.user_loader
 def load_user(user_id):

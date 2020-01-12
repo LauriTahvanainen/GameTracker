@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+<a href="{{ url_for('animal_menu') }}" class="btn btn-outline-primary">Takaisin eläinvalikkoon</a>
+<nav aria-label="Pagination">
+    <ul class="pagination">
+        {% if animals.has_prev %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('animal_list_suggested', page=animals.prev_num) }}">Edellinen</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Edellinen</a></li>
+        {% endif %}
+
+        {% for page in animals.iter_pages() %}
+        {% if page %}
+        {% if page != animals.page %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('animal_list_suggested', page=page) }}">{{ page }}</a></li>
+        {% else %}
+        <li class="page-item active">
+            <span class="page-link">
+                {{ page }}
+            </span>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+
+        {% if animals.has_next %}
+        <li class="page-item"><a class="page-link"
+                href="{{ url_for('animal_list_suggested', page=animals.next_num) }}">Seuraava</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#">Seuraava</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<div class="container">
+    <h2>Eläimet</h2>
+    <table id="SuggestionTable" class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Nimi</th>
+                <th>Latinankielinen nimi</th>
+                <th>Lisätietoja</th>
+                <th>Ääniä</th>
+                <th>Äänestä</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="table-dark">
+            {% for animal in animals.items %}
+            <tr>
+                <td>{{ animal.name }}</td>
+                {% if animal.lat_name %}
+                <td>{{ animal.lat_name }}</td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
+                {% if animal.info %}
+                <td><a href={{ animal.info }} target="_blank">{{ animal.info }}</a></td>
+                {% else %}
+                <td>Ei annettu</td>
+                {% endif %}
+                <td id="sug{{ animal.animal_id }}votes">{{ animal.votes_num}}</td>
+                <td>
+                    <button id="sugUpButton{{ animal.animal_id }}" onclick=upVote("{{ animal.animal_id }}")
+                        class="btn upvote"></button>
+                    <button id="sugDownButton{{ animal.animal_id }}" onclick=downVote("{{ animal.animal_id }}")
+                        class="btn downvote"></button>
+                </td>
+                <td>
+                    {% if current_user.get_urole() == 'ADMIN' or current_user.account_id == animal.account_id %}
+                    <a href={{ url_for('animal_edit_suggestion', suggestion_id=animal.animal_id) }}
+                        class="btn btn-outline-primary">Muokkaa tai poista</a>
+                    <a href="{{ url_for('animal_delete_suggestion', suggestion_id=animal.animal_id) }}"
+                        class="btn btn-outline-danger"
+                        onclick="return confirm('Haluatko varmasti poistaa ehdotetun eläimen? Jos kyllä, paina OK.')">Poista ehdotus</a>
+                    {% endif %}
+                    {% if current_user.get_urole() == 'ADMIN'%}
+                    <a href="{{ url_for('animal_accept_suggestion', suggestion_id=animal.animal_id) }}" class="btn btn-outline-success">Hyväksy ehdotus</a>
+                    {% endif %}
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="{{ url_for('static', filename='js/voting.js') }}"></script>
+<script>fetchOriginalVotes();</script>
+{% endblock %}

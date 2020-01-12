@@ -3,7 +3,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
 from flask_login import current_user
 from application.models import Base
-
+import random
+import string
 
 class User(Base):
     __tablename__ = "account"
@@ -12,12 +13,19 @@ class User(Base):
     username = db.Column(db.String(16), nullable=False, unique=True)
     name = db.Column(db.String(144))
     password = db.Column(db.String, nullable=False)
+    salt = db.Column(db.String(6), nullable=False)
     city = db.Column(db.String(144))
     age = db.Column(db.Integer)
     urole = db.Column(db.String(10))
+    suggestions_accepted = db.Column(db.Integer, default=0)
+    suggestions_deleted = db.Column(db.Integer, default=0)
 
     observations = db.relationship(
         "Observation", backref='account', lazy=True)
+    added_animals = db.relationship(
+        "Animal", backref='account', lazy=True)
+    votes = db.relationship(
+        "Vote", backref='account', lazy=True)
 
     def __init__(self, username, name, password, city, age, urole):
         self.username = username
@@ -28,7 +36,8 @@ class User(Base):
         self.urole = urole
 
     def set_password(self, password):
-        self.password = generate_password_hash(password)
+        self.salt = User.generate_salt()
+        self.password = generate_password_hash(password + self.salt)
 
     def is_active(self):
         return True
@@ -79,3 +88,13 @@ class User(Base):
         db.engine.execute(stmt2)
         db.engine.execute(stmt1)
         db.session().commit()
+
+    @staticmethod
+    def generate_salt():
+        char_set = string.ascii_letters + string.digits
+        salt = set()
+        while not (len(salt) > 5):
+            salt.add(char_set[random.randint(0,61)])
+        salt = list(salt)
+        salt = "".join(salt)
+        return salt

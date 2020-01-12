@@ -22,7 +22,7 @@ def auth_login():
     if not form.validate():
         return render_template("auth/loginform.html", form=form)
     user = User.query.filter_by(username=form.username.data).first()
-    if user is None or not check_password_hash(user.password, form.password.data):
+    if user is None or not check_password_hash(user.password, form.password.data + user.salt):
         flash("Annettua käyttäjää ei ole olemassa, tai salasana oli väärä!", "error")
         return render_template("auth/loginform.html", form=form)
 
@@ -97,10 +97,11 @@ def auth_changepw():
 
     form = ChangePasswordForm(request.form)
     if form.validate():
-        if check_password_hash(current_user.password, form.oldPassword.data):
+        if check_password_hash(current_user.password, form.oldPassword.data + current_user.salt):
             try:
-                stmt = text("UPDATE account SET password = :newpw WHERE account_id = :cur_id").params(
-                newpw=generate_password_hash(form.password.data), cur_id=current_user.account_id)
+                salt = User.generate_salt()
+                stmt = text("UPDATE account SET password = :newpw, salt = :slt WHERE account_id = :cur_id").params(
+                newpw=generate_password_hash(form.password.data + salt), slt=salt, cur_id=current_user.account_id)
                 db.engine.execute(stmt)
                 db.session().commit()
             except:

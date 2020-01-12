@@ -18,7 +18,7 @@ class Observation(Base):
     latitude = db.Column(db.Numeric)
     longitude = db.Column(db.Numeric)
     animal_id = db.Column(db.Integer, db.ForeignKey(
-        "animal.animal_id"), nullable=False, index=True)
+        "animal.animal_id", ondelete='CASCADE'), nullable=False, index=True)
     weight = db.Column(db.Numeric)
     sex = db.Column(db.Integer)
     observ_type = db.Column(db.Integer, index=True)
@@ -48,8 +48,8 @@ class Observation(Base):
     # can be used for showing results of one user, filtered or all, and results of all users, filtered or all.
     @staticmethod
     def list_filtered(form, page_num, cur_id=-1):
-        query = db.session.query(Observation, Animal, Equipment.name, User).outerjoin(Animal).outerjoin(Equipment).outerjoin(
-            User).group_by(Observation.observation_id, Animal.animal_id, Equipment.equipment_id, User.account_id)
+        query = db.session.query(Observation, Animal, Equipment.name, User).outerjoin(Animal,Observation.animal_id == Animal.animal_id).outerjoin(Equipment,Observation.equipment_id == Equipment.equipment_id).outerjoin(
+            User,User.account_id == Observation.account_id).group_by(Observation.observation_id, Animal.animal_id, Equipment.equipment_id, User.account_id)
 
         # Filters
         if cur_id != -1:

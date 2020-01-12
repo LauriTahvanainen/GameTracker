@@ -100,7 +100,7 @@ def observation_listuser():
 def observation_list_by_id(user_id):
     # The ajax request that fills the map on a page with observations also uses this function.
     # The same function is used bećause the data in the filter form is necessary, and because the function can be tailored for the ajax request
-    # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajaax request, when the parameter page is 0.
+    # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajax request, when the parameter page is 0.
     # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
     # In case of the ajax request, the fetched observations are jsonified and returned.
     page = request.args.get('page', 1, type=int)

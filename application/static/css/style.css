@@ -1,0 +1,15 @@
+.upvote {
+    background: url("../img/upvote.png") no-repeat; background-size: 100% 100%;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 2px solid rgb(200, 247, 156);
+}
+.downvote {
+    background: url("../img/downvote.png") no-repeat; background-size: 100% 100%;
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 2px solid rgb(250, 129, 129);
+}
+

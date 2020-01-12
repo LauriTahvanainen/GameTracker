@@ -2,7 +2,12 @@
 
 {% block body %}
 <div>
+    {% if current_user.urole == "ADMIN" %}
     <p><a href="{{ url_for('animal_add') }}" class="btn btn-outline-success btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Lisää eläin</a></p>
+    {% else %}
+    <p><a href="{{ url_for('animal_suggest') }}" class="btn btn-outline-success btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Ehdota eläintä</a></p>
+    {% endif %}
+    <p><a href="{{ url_for('animal_list_suggested') }}" class="btn btn-outline-primary btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Tarkastele ehdotettuja eläimiä</a></p>
     <p><a href="{{ url_for('animal_list_all', page=1) }}" class="btn btn-outline-primary btn-lg btn-block" style="background-color:rgba(255, 255, 255, 0.35)">Tarkastele eläimiä</a></p>
 </div>
 {% endblock %}

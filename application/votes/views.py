@@ -21,8 +21,8 @@ def vote():
         # Check that the request only contains changes for 0 to 500 votes.
         if ((len(todelete) + len(downvotes) + len(upvotes) > 0) and (len(todelete) + len(downvotes) + len(upvotes) <= amount_of_suggestions)):
             # Check for resending of same request and for nonexisting suggestion ids.
-            downvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == 0).all()
-            upvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == 1).all()
+            downvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == False).all()
+            upvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == True).all()
             if len(upvote_ids) > 0:
                 upvote_ids = set(unpack_votes_to_array(upvote_ids))
             if len(downvote_ids) > 0:

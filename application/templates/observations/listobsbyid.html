@@ -37,6 +37,14 @@
                 <th class="table-dark" style="width: 5px; text-align: center">Havaintoja</th>
                 <td>{{ obs_count }}</td>
             </tr>
+            <tr>
+                <th class="table-dark" style="width: 5px; text-align: center">Ehdotettuja eläimiä hyväksytty</th>
+                <td>{{ account.suggestions_accepted }}</td>
+            </tr>
+            <tr>
+                <th class="table-dark" style="width: 5px; text-align: center">Ehdotettuja eläimiä hylätty</th>
+                <td>{{ account.suggestions_deleted }}</td>
+            </tr>
         </tbody>
     </table>
 </div>

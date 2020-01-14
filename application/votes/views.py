@@ -17,7 +17,7 @@ def vote():
         downvotes = json.loads(str(request.json["downvotes"]))
         upvotes = json.loads(str(request.json["upvotes"]))
 
-        amount_of_suggestions = Animal.query.filter(Animal.suggestion_flag == 1).count()
+        amount_of_suggestions = Animal.query.filter(Animal.suggestion_flag == True).count()
         # Check that the request only contains changes for 0 to 500 votes.
         if ((len(todelete) + len(downvotes) + len(upvotes) > 0) and (len(todelete) + len(downvotes) + len(upvotes) <= amount_of_suggestions)):
             # Check for resending of same request and for nonexisting suggestion ids.

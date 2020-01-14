@@ -20,6 +20,19 @@ def vote():
         amount_of_suggestions = Animal.query.filter(Animal.suggestion_flag == 1).count()
         # Check that the request only contains changes for 0 to 500 votes.
         if ((len(todelete) + len(downvotes) + len(upvotes) > 0) and (len(todelete) + len(downvotes) + len(upvotes) <= amount_of_suggestions)):
+            # Check for resending of same request and for nonexisting suggestion ids.
+            downvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == 0).all()
+            upvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == 1).all()
+            if len(upvote_ids) > 0:
+                upvote_ids = set(unpack_votes_to_array(upvote_ids))
+            if len(downvote_ids) > 0:
+                downvote_ids = set(unpack_votes_to_array(downvote_ids))
+            downvotes_set = set(downvotes)
+            upvotes_set = set(upvotes)
+            d_res = downvotes_set.difference(downvote_ids)
+            u_res = upvotes_set.difference(upvote_ids)
+            if len(d_res) != len(downvotes) or len(u_res) != len(upvotes):
+                return jsonify({"Result": "DataError, nice try."})
 
             acc_id = current_user.account_id
             # Handle votes that are deleted, meaning that the user retracts their vote
@@ -58,7 +71,7 @@ def handle_to_delete(to_delete, current_user_id):
     accepted = 0
     for suggestion_id in to_delete:
         vote = Vote.query.filter(Vote.animal_id == suggestion_id, Vote.account_id == current_user_id).first()
-        # For some reason this loop loops again so this check handles that
+        # Handle nonexistent votes
         if vote is None:
             break
 
@@ -171,4 +184,10 @@ def serialize(votes):
         array.append({"vote": {
             "suggestion_id": vote.animal_id,
             "value": vote.value}})
+    return array
+
+def unpack_votes_to_array(votes):
+    array = []
+    for vote in votes:
+        array.append(vote[0])
     return array

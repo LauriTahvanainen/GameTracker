@@ -211,6 +211,7 @@ def observation_delete(obs_id):
 @login_required()
 def observation_edit(obs_id):
     obs = Observation.query.get(obs_id)
+    obs_username = User.query.get(obs.account_id).username
     if obs is None:
         flash("Virheellinen osoite!", "error")
         return redirect(url_for('index'))
@@ -218,7 +219,7 @@ def observation_edit(obs_id):
     if obs.account_id == current_user.account_id or current_user.urole == "ADMIN":
         if request.method == "GET":
             form = AddNewObservationForm()
-            form = fill_choices_with_cities(form)
+            form = fill_choices(form)
             form.animal.data = obs.animal_id
             form.date_observed.data = obs.date_observed
             form.city.data = obs.city
@@ -229,7 +230,7 @@ def observation_edit(obs_id):
             form.observ_type.data = obs.observ_type
             form.equipment.data = obs.equipment_id
             form.info.data = obs.info
-            return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
+            return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path, obs_username=obs_username)
 
         form = AddNewObservationForm(request.form)
         form = fill_choices_with_cities(form)
@@ -251,7 +252,7 @@ def observation_edit(obs_id):
                 return redirect(last_path)
             flash("Havaintoa muokattu onnistuneesti!", "info")
             return redirect(last_path)
-        return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path)
+        return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path, obs_account_name=obs_account_name)
     if (last_path is None):
         return redirect(url_for('index'))
     flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!", "error")

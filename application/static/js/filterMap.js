@@ -8,7 +8,7 @@ map = new L.Map('filterMap');
 // create the tile layer with correct attribution
 var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 var osmAttrib = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-var osm = new L.TileLayer(osmUrl, { minZoom: 6, maxZoom: 20, attribution: osmAttrib });
+var osm = new L.TileLayer(osmUrl, { minZoom: 2, maxZoom: 20, attribution: osmAttrib });
 
 // draw the map
 map.setView([60.192, 24.945], 12);

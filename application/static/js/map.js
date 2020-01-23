@@ -3,13 +3,15 @@ var ajaxRequest;
 var plotlist;
 var plotlayers = [];
 var marker = L.marker([60, 60]);
+var reset_lat;
+var reset_long;
 
 map = new L.Map('addMap');
 
 // create the tile layer with correct attribution
 var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 var osmAttrib = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
-var osm = new L.TileLayer(osmUrl, { minZoom: 6, maxZoom: 20, attribution: osmAttrib });
+var osm = new L.TileLayer(osmUrl, { minZoom: 2, maxZoom: 20, attribution: osmAttrib });
 
 // draw the map
 map.setView([60.192, 24.945], 12);
@@ -56,47 +58,116 @@ function emptyCoordinateSelection() {
     document.getElementById("longitude").value = "";
 }
 
+function revertCoordinates() {
+    document.getElementById("latitude").value = reset_lat.toFixed(6);
+    document.getElementById("longitude").value = reset_long.toFixed(6);
+    marker.setLatLng([reset_lat, reset_long])
+}
+
 map.on('click', onMapClick);
 
 // TODO cache the results, so they can just be switched on and off
 function sendObsRequest() {
     var xhttp = new XMLHttpRequest();
+    var path = window.location.pathname;
+    var obs_id = path.split("/").pop();
+    console.log(obs_id);
     xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === XMLHttpRequest.DONE) {
-            if (xhttp.status === 200) {
-                var observations = JSON.parse(xhttp.response);
-                var observationArray = [];
-                for (i = 0; i < observations.length; i++) {
-                    var infoCutDots = "";
-                    if (observations[i].observation.latitude != "None" && observations[i].observation.longitude != "None") {
-                        if (observations[i].observation.info != "Ei annettu!" && observations[i].observation.info.length > 20) {
-                            infoCutDots = "...";
-                        } else {
-                            infoCutDots = "";
-                        }
-                        observationArray.push(L.marker([observations[i].observation.latitude, observations[i].observation.longitude])
-                            .bindPopup("<h4><a target='_blank' href='" + observations[i].animal.info + "'>" + observations[i].animal.name + "<a></h4>"
-                                + "<h5> " + observations[i].observation.observ_type + "</h5>"
-                                + "<br>Päivämäärä: " + observations[i].observation.date_observed.substring(0, 14)
-                                + "<br>Kellonaika: " + observations[i].observation.date_observed.substring(15, 20)
-                                + "<br>Kunta: " + observations[i].observation.city
-                                + "<br>Paino: " + observations[i].observation.weight
-                                + "<br>Sukupuoli: " + observations[i].observation.sex
-                                + "<br>Väline: " + observations[i].equipment
-                                + "<br>Lisätietoja: " + observations[i].observation.info.substring(0, 20) + infoCutDots, { autoPan: false }));
+        if (obs_id == 'add') {
+            fetchObservationsOnAdd(this);
+        } else {
+            fetchObservationsOnEdit(this, obs_id);
+        }
+    }
+    if (obs_id == 'add') {
+        xhttp.open("GET", "/observations/listuser?page=0", true);
+    } else {
+        var user_id = document.getElementById("acc_id").innerHTML
+        console.log(user_id)
+        xhttp.open("GET", "/observations/list/" + user_id + "?page=0", true);
+    }
+    xhttp.send();
+};
+
+function fetchObservationsOnAdd(xhttp) {
+    if (xhttp.readyState === XMLHttpRequest.DONE) {
+        if (xhttp.status === 200) {
+            var observations = JSON.parse(xhttp.response);
+            var observationArray = [];
+            for (i = 0; i < observations.length; i++) {
+                observation = observations[i]
+                var infoCutDots = "";
+                if (observation.observation.latitude != "None" && observation.observation.longitude != "None") {
+                    if (observation.observation.info != "Ei annettu!" && observation.observation.info.length > 20) {
+                        infoCutDots = "...";
+                    } else {
+                        infoCutDots = "";
+                    }
+                    observationArray.push(L.marker([observation.observation.latitude, observation.observation.longitude])
+                        .bindPopup("<h4><a target='_blank' href='" + observation.animal.info + "'>" + observation.animal.name + "<a></h4>"
+                            + "<h5> " + observation.observation.observ_type + "</h5>"
+                            + "<br>Päivämäärä: " + observation.observation.date_observed.substring(0, 14)
+                            + "<br>Kellonaika: " + observation.observation.date_observed.substring(15, 20)
+                            + "<br>Kunta: " + observation.observation.city
+                            + "<br>Paino: " + observation.observation.weight
+                            + "<br>Sukupuoli: " + observation.observation.sex
+                            + "<br>Väline: " + observation.equipment
+                            + "<br>Lisätietoja: " + observation.observation.info.substring(0, 20) + infoCutDots, { autoPan: false }));
+                }
+            }
+            observationLayer = L.layerGroup(observationArray);
+            observationOverlay = {
+                "Näytä muut omat havainnot": observationLayer
+            };
+            layersControl = L.control.layers(null, observationOverlay, {"collapsed":false});
+            layersControl.addTo(map);
+        } else {
+            alert('An error happened while fetching data for mapping the observations!');
+        }
+    }
+};
+
+function fetchObservationsOnEdit(xhttp, add_or_edit_value) {
+    if (xhttp.readyState === XMLHttpRequest.DONE) {
+        if (xhttp.status === 200) {
+            var observations = JSON.parse(xhttp.response);
+            var observationArray = [];
+            for (i = 0; i < observations.length; i++) {
+                var infoCutDots = "";
+                var observation = observations[i]
+                if (observation.observation.latitude != "None" && observation.observation.longitude != "None") {
+                    if (observation.observation.info != "Ei annettu!" && observation.observation.info.length > 20) {
+                        infoCutDots = "...";
+                    } else {
+                        infoCutDots = "";
+                    }
+                    if ( observation.observation.observation_id == add_or_edit_value) {
+                        reset_lat = parseFloat(observation.observation.latitude )
+                        reset_long = parseFloat(observation.observation.longitude)
+                        marker.setLatLng([observation.observation.latitude, observation.observation.longitude])
+                        map.addLayer(marker)
+                    } else {
+                        observationArray.push(L.marker([observation.observation.latitude, observation.observation.longitude])
+                            .bindPopup("<h4><a target='_blank' href='" + observation.animal.info + "'>" + observation.animal.name + "<a></h4>"
+                                + "<h5> " + observation.observation.observ_type + "</h5>"
+                                + "<br>Päivämäärä: " + observation.observation.date_observed.substring(0, 14)
+                                + "<br>Kellonaika: " + observation.observation.date_observed.substring(15, 20)
+                                + "<br>Kunta: " + observation.observation.city
+                                + "<br>Paino: " + observation.observation.weight
+                                + "<br>Sukupuoli: " + observation.observation.sex
+                                + "<br>Väline: " + observation.equipment
+                                + "<br>Lisätietoja: " + observation.observation.info.substring(0, 20) + infoCutDots, { autoPan: false }));
                     }
                 }
-                observationLayer = L.layerGroup(observationArray);
-                observationOverlay = {
-                    "Näytä omat havainnot": observationLayer
-                };
-                layersControl = L.control.layers(null, observationOverlay, {"collapsed":false});
-                layersControl.addTo(map);
-            } else {
-                alert('An error happened while fetching data for mapping the observations!');
             }
+            observationLayer = L.layerGroup(observationArray);
+            observationOverlay = {
+                "Näytä käyttäjän muut havainnot": observationLayer
+            };
+            layersControl = L.control.layers(null, observationOverlay, {"collapsed":false});
+            layersControl.addTo(map);
+        } else {
+            alert('An error happened while fetching data for mapping the observations!');
         }
-    };
-    xhttp.open("POST", "/observations/listuser?page=0", true);
-    xhttp.send();
+    }
 };

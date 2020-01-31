@@ -61,7 +61,8 @@ function emptyCoordinateSelection() {
 function revertCoordinates() {
     document.getElementById("latitude").value = reset_lat.toFixed(6);
     document.getElementById("longitude").value = reset_long.toFixed(6);
-    marker.setLatLng([reset_lat, reset_long])
+    map.setView([reset_lat, reset_long], 12);
+    marker.setLatLng([reset_lat, reset_long]);
 }
 
 map.on('click', onMapClick);
@@ -71,7 +72,6 @@ function sendObsRequest() {
     var xhttp = new XMLHttpRequest();
     var path = window.location.pathname;
     var obs_id = path.split("/").pop();
-    console.log(obs_id);
     xhttp.onreadystatechange = function() {
         if (obs_id == 'add') {
             fetchObservationsOnAdd(this);
@@ -83,7 +83,6 @@ function sendObsRequest() {
         xhttp.open("GET", "/observations/listuser?page=0", true);
     } else {
         var user_id = document.getElementById("acc_id").innerHTML
-        console.log(user_id)
         xhttp.open("GET", "/observations/list/" + user_id + "?page=0", true);
     }
     xhttp.send();
@@ -127,7 +126,7 @@ function fetchObservationsOnAdd(xhttp) {
     }
 };
 
-function fetchObservationsOnEdit(xhttp, add_or_edit_value) {
+function fetchObservationsOnEdit(xhttp, obs_to_edit_id) {
     if (xhttp.readyState === XMLHttpRequest.DONE) {
         if (xhttp.status === 200) {
             var observations = JSON.parse(xhttp.response);
@@ -141,11 +140,12 @@ function fetchObservationsOnEdit(xhttp, add_or_edit_value) {
                     } else {
                         infoCutDots = "";
                     }
-                    if ( observation.observation.observation_id == add_or_edit_value) {
-                        reset_lat = parseFloat(observation.observation.latitude )
-                        reset_long = parseFloat(observation.observation.longitude)
-                        marker.setLatLng([observation.observation.latitude, observation.observation.longitude])
-                        map.addLayer(marker)
+                    if ( observation.observation.observation_id == obs_to_edit_id) {
+                        map.setView([observation.observation.latitude, observation.observation.longitude], 12);
+                        reset_lat = parseFloat(observation.observation.latitude );
+                        reset_long = parseFloat(observation.observation.longitude);
+                        marker.setLatLng([observation.observation.latitude, observation.observation.longitude]);
+                        map.addLayer(marker);
                     } else {
                         observationArray.push(L.marker([observation.observation.latitude, observation.observation.longitude])
                             .bindPopup("<h4><a target='_blank' href='" + observation.animal.info + "'>" + observation.animal.name + "<a></h4>"

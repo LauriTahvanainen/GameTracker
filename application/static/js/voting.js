@@ -68,7 +68,6 @@ function postToServer(method, source, data) {
         if (xhttp.readyState === XMLHttpRequest.DONE) {
             if (xhttp.status === 200) {
                 var response = JSON.parse(xhttp.response)
-                console.log("Viesti saatu" , response)
             } else {
                 alert('There are was an error in saving the votes!');
             }

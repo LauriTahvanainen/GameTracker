@@ -6,7 +6,7 @@ from application.auth.models import User
 from application.observations.forms import AddNewObservationForm, ListFiltersForm
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
-from datetime import datetime
+from datetime import datetime, time
 from flask import jsonify
 
 
@@ -15,7 +15,7 @@ from flask import jsonify
 def observation_menu():
     return render_template("observations/menu.html")
 
-
+# TODO certain types of equipment should not be possible to select to an observation with a specific type.
 @app.route("/observations/add", methods=["GET", "POST"])
 @login_required()
 def observation_add():
@@ -29,7 +29,7 @@ def observation_add():
     form = fill_choices(form)
     if form.validate():
         newObs = Observation(current_user.account_id,
-                             form.date_observed.data,
+                             parseDate(form.date_observed.data, form.hour.data, form.minute.data),
                              form.city.data, form.latitude.data,
                              form.longitude.data, form.animal.data,
                              form.weight.data, form.sex.data,
@@ -206,7 +206,8 @@ def observation_delete(obs_id):
         return redirect(url_for('index'))
     return redirect(last_path)
 
-
+## TODO Check if the observation has not changed, so that the database will not be under too much stress
+## TODO Datetime observed can not be edited to be too much further in time.
 @app.route("/observations/edit/<obs_id>", methods=["POST", "GET"])
 @login_required()
 def observation_edit(obs_id):
@@ -221,7 +222,9 @@ def observation_edit(obs_id):
             form = AddNewObservationForm()
             form = fill_choices(form)
             form.animal.data = obs.animal_id
-            form.date_observed.data = obs.date_observed
+            form.date_observed.data = obs.date_observed.date()
+            form.hour.data = obs.date_observed.hour
+            form.minute.data = obs.date_observed.minute
             form.city.data = obs.city
             form.latitude.data = obs.latitude
             form.longitude.data = obs.longitude
@@ -237,7 +240,7 @@ def observation_edit(obs_id):
         if form.validate():
             try:
                 obs.animal_id = form.animal.data
-                obs.date_observed = form.date_observed.data
+                obs.date_observed = parseDate(form.date_observed.data, form.hour.data, form.minute.data)
                 obs.city = form.city.data
                 obs.latitude = form.latitude.data
                 obs.longitude = form.longitude.data
@@ -252,7 +255,7 @@ def observation_edit(obs_id):
                 return redirect(last_path)
             flash("Havaintoa muokattu onnistuneesti!", "info")
             return redirect(last_path)
-        return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path, obs_account_name=obs_account_name)
+        return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path,  obs_username=obs_username)
     if (last_path is None):
         return redirect(url_for('index'))
     flash("Sinulla ei ole oikeuksia muokata kyseistä havaintoa!", "error")
@@ -395,3 +398,6 @@ def parseAnimalInfo(value, id):
     if value == None or value == "":
         return "/animals/edit_or_delete/" + str(id)
     return value
+
+def parseDate(date, hour, minute):
+    return datetime.combine(date, time(hour,minute))

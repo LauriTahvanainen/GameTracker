@@ -26,7 +26,7 @@
                     {{ form.date_observed.label }}
                 </td>
                 <td style="border: hidden; color: white">
-                    {{ form.date_observed }} *
+                    {{ form.date_observed(class='datepicker') }} *
                 </td>
                 <td style="border: hidden">
                     {% if form.date_observed.errors %}
@@ -34,6 +34,22 @@
                     {% endif %}
                 </td>
             </tr>
+            <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ 'Kellonaika' }}
+                </td>
+                <td style="border: hidden; color: white">
+                    {{ form.hour }}
+                    {{ form.minute }} *
+                </td> 
+                {% if form.hour.errors or form.minute.errors %}
+                <td style="border: hidden">
+                    <div>{{ form.hour.errors[0] }}</div>
+                    <div>{{ form.minute.errors[0] }}</div>
+                </td>
+                {% endif %}
+            </tr>
+
             <tr>
                 <td style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.city.label }}
@@ -158,5 +174,9 @@
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
-<script>sendObsRequest()</script>
+<script src="{{ url_for('static', filename='js/dates.js') }}"></script>
+<script>
+    sendObsRequest();
+    defaultDate();
+</script>
 {% endblock %}

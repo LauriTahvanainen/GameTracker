@@ -40,6 +40,21 @@
                 </td>
             </tr>
             <tr>
+                <td style="background-color: rgba(255, 255, 255, 0.5)">
+                    {{ 'Kellonaika' }}
+                </td>
+                <td style="border: hidden; color: white">
+                    {{ form.hour }}
+                    {{ form.minute }} *
+                </td> 
+                {% if form.hour.errors or form.minute.errors %}
+                <td style="border: hidden">
+                    <div>{{ form.hour.errors[0] }}</div>
+                    <div>{{ form.minute.errors[0] }}</div>
+                </td>
+                {% endif %}
+            </tr>
+            <tr>
                 <td  style="background-color: rgba(255, 255, 255, 0.5)">
                     {{ form.city.label }}
                 </td>
@@ -166,10 +181,9 @@
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
-<!-- Problem with getting the parameters tro the function -->
+<script src="{{ url_for('static', filename='js/dates.js') }}"></script>
 <script>
-var acc_id = '{{ observation.account_id }}';
-var obs_id = '{{ observation.observation_id }}'
+    sendObsRequest();
+    maxDateToday();
 </script>
-<script>sendObsRequest()</script>
 {% endblock %}

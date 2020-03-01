@@ -6,6 +6,7 @@ from application.equipments.models import Equipment
 from application.animals.models import Animal
 from application.auth.models import User
 from application.models import Base
+from datetime import datetime, time
 
 
 class Observation(Base):
@@ -13,7 +14,9 @@ class Observation(Base):
         db.Integer, primary_key=True, autoincrement=True)
     account_id = db.Column(db.Integer, db.ForeignKey(
         'account.account_id'), nullable=False, index=True)
-    date_observed = db.Column(db.DateTime, nullable=False, index=True)
+    datetime_observed = db.Column(db.DateTime, nullable=False, index=True)
+    date_observed = db.Column(db.Date, nullable=False, index=True)
+    time_observed = db.Column(db.Time, nullable=False, index=True)
     city = db.Column(db.String(144), nullable=False, index=True)
     latitude = db.Column(db.Numeric)
     longitude = db.Column(db.Numeric)
@@ -31,9 +34,11 @@ class Observation(Base):
     Index('cityAndAnimal', city, animal_id)
     Index('equipAndAnimal', equipment_id, animal_id)
 
-    def __init__(self, account_id, date_observed, city, latitude, longitude, animal_id, weight, sex, observ_type, equipment_id, info):
+    def __init__(self, account_id, date_observed, time_observed, datetime_observed, city, latitude, longitude, animal_id, weight, sex, observ_type, equipment_id, info):
         self.account_id = account_id
         self.date_observed = date_observed
+        self.time_observed = time_observed
+        self.datetime_observed = datetime_observed
         self.city = city
         self.latitude = latitude
         self.longitude = longitude
@@ -56,12 +61,7 @@ class Observation(Base):
             query = query.filter(Observation.account_id == cur_id)
         if form.username.data is not None and form.username.data != "":
             query = query.filter(User.username == form.username.data)
-        if form.date_observedLow.data is not None:
-            query = query.filter(Observation.date_observed >=
-                                 form.date_observedLow.data)
-        if form.date_observedHigh.data is not None:
-            query = query.filter(Observation.date_observed <=
-                                 form.date_observedHigh.data)
+        query = filterDates(query, form)
         if form.city.data:
             query = query.filter(Observation.city.in_(form.city.data))
         if form.latitudeLow.data is not None:
@@ -93,8 +93,8 @@ class Observation(Base):
             query = query.filter(Observation.info == form.info.data)
 
         if page_num == 0:
-            return query.order_by(Observation.date_observed.desc())
-        return query.order_by(Observation.date_observed.desc()).paginate(page_num, 10, False)
+            return query.order_by(Observation.datetime_observed.desc())
+        return query.order_by(Observation.datetime_observed.desc()).paginate(page_num, 10, False)
 
     @staticmethod
     def count_observations_on_user(account_id):
@@ -136,6 +136,7 @@ class Observation(Base):
     def list_top_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
+                    " WHERE Animal.suggestion_flag == '0'"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count DESC, Animal.name"
                     " LIMIT 10")
@@ -150,6 +151,7 @@ class Observation(Base):
     def list_bottom_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
+                    " WHERE Animal.suggestion_flag == '0'"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count ASC, Animal.name"
                     " LIMIT 10")
@@ -200,3 +202,51 @@ class Observation(Base):
             response.append(
                 {"id": row[0], "name": row[1], "lat_name": row[2], "info": row[3], "count": row[4], "avg":row[5]})
         return response
+
+def filterDates(query, form):
+    date_observedLow = form.date_observedLow.data
+    date_observedHigh = form.date_observedHigh.data
+    hourLow1 = form_time_value_to_int(form.hourLow1.data)
+    hourLow2 = form_time_value_to_int(form.hourLow2.data)
+    minuteLow1 = form_time_value_to_int(form.minuteLow1.data)
+    minuteLow2 = form_time_value_to_int(form.minuteLow2.data)
+    hourHigh1 = form_time_value_to_int(form.hourHigh1.data)
+    hourHigh2 = form_time_value_to_int(form.hourHigh2.data)
+    minuteHigh1 = form_time_value_to_int(form.minuteHigh1.data)
+    minuteHigh2 = form_time_value_to_int(form.minuteHigh2.data)
+
+    if date_observedLow is not None:
+        if hourLow1 != -1 and minuteLow1 != -1:
+            dateFilter = datetime.combine(date_observedLow, time(hourLow1, minuteLow1))
+        elif hourLow1 != -1:
+            dateFilter = datetime.combine(date_observedLow, time(hourLow1, 0))
+        else:
+            dateFilter = datetime.combine(date_observedLow, time(0,0))
+        query = query.filter(Observation.datetime_observed >= dateFilter)
+    if date_observedHigh is not None:
+        if hourHigh1 != -1 and minuteHigh1 != -1:
+            dateFilter = datetime.combine(date_observedHigh, time(hourHigh1, minuteHigh1))
+        elif hourHigh1 != -1:
+             dateFilter = datetime.combine(date_observedHigh, time(hourHigh1, 0))
+        else:
+            dateFilter = datetime.combine(date_observedHigh, time(0,0))
+        query = query.filter(Observation.datetime_observed <= dateFilter)
+    if hourLow2 != -1 and hourLow2 is not None:
+        if minuteLow2 == -1:
+            timeFilter = time(hourLow2, 0)
+        else:
+            timeFilter = time(hourLow2, minuteLow2)
+        query = query.filter(Observation.time_observed >= timeFilter)
+    if hourHigh2 != -1 and hourHigh2 is not None:
+        if minuteHigh2 == -1:
+            timeFilter = time(hourHigh2, 0)
+        else:
+            timeFilter = time(hourHigh2, minuteHigh2)
+        query = query.filter(Observation.time_observed <= timeFilter)
+    return query
+
+def form_time_value_to_int(value):
+    try:
+        return int(value)
+    except:
+        return -1

@@ -105,8 +105,8 @@ function fetchObservationsOnAdd(xhttp) {
                     observationArray.push(L.marker([observation.observation.latitude, observation.observation.longitude])
                         .bindPopup("<h4><a target='_blank' href='" + observation.animal.info + "'>" + observation.animal.name + "<a></h4>"
                             + "<h5> " + observation.observation.observ_type + "</h5>"
-                            + "<br>Päivämäärä: " + observation.observation.date_observed.substring(0, 14)
-                            + "<br>Kellonaika: " + observation.observation.date_observed.substring(15, 20)
+                            + "<br>Päivämäärä: " + observation.observation.date_observed
+                            + "<br>Kellonaika: " + observation.observation.time_observed
                             + "<br>Kunta: " + observation.observation.city
                             + "<br>Paino: " + observation.observation.weight
                             + "<br>Sukupuoli: " + observation.observation.sex
@@ -150,8 +150,8 @@ function fetchObservationsOnEdit(xhttp, obs_to_edit_id) {
                         observationArray.push(L.marker([observation.observation.latitude, observation.observation.longitude])
                             .bindPopup("<h4><a target='_blank' href='" + observation.animal.info + "'>" + observation.animal.name + "<a></h4>"
                                 + "<h5> " + observation.observation.observ_type + "</h5>"
-                                + "<br>Päivämäärä: " + observation.observation.date_observed.substring(0, 14)
-                                + "<br>Kellonaika: " + observation.observation.date_observed.substring(15, 20)
+                                + "<br>Päivämäärä: " + observation.observation.date_observed
+                                + "<br>Kellonaika: " + observation.observation.time_observed
                                 + "<br>Kunta: " + observation.observation.city
                                 + "<br>Paino: " + observation.observation.weight
                                 + "<br>Sukupuoli: " + observation.observation.sex

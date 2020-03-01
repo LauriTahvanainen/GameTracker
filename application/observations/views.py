@@ -6,8 +6,9 @@ from application.auth.models import User
 from application.observations.forms import AddNewObservationForm, ListFiltersForm
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
-from datetime import datetime, time
+from datetime import date, time, datetime
 from flask import jsonify
+import traceback
 
 
 @app.route("/observations/menu", methods=["GET"])
@@ -16,6 +17,7 @@ def observation_menu():
     return render_template("observations/menu.html")
 
 # TODO certain types of equipment should not be possible to select to an observation with a specific type.
+# TODO Check if animal is a suggestion.
 @app.route("/observations/add", methods=["GET", "POST"])
 @login_required()
 def observation_add():
@@ -28,8 +30,12 @@ def observation_add():
     form = AddNewObservationForm(request.form)
     form = fill_choices(form)
     if form.validate():
+        date_observed = form.date_observed.data
+        time_observed = time(form.hour.data, form.minute.data)
+        datetime_observed = datetime.combine(date_observed, time_observed)
         newObs = Observation(current_user.account_id,
-                             parseDate(form.date_observed.data, form.hour.data, form.minute.data),
+                             date_observed, time_observed,
+                             datetime_observed,
                              form.city.data, form.latitude.data,
                              form.longitude.data, form.animal.data,
                              form.weight.data, form.sex.data,
@@ -49,7 +55,7 @@ def observation_add():
         return redirect(url_for('observation_add'))
     return render_template("observations/addobservation.html", form=form)
 
-
+#TODO Fetch all observation information for the table and the map with one request to the database.
 @app.route("/observations/listuser", methods=["GET", "POST"])
 @login_required()
 def observation_listuser():
@@ -58,23 +64,24 @@ def observation_listuser():
     # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajax request, when the parameter page is 0.
     # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
     # In case of the ajax request, the fetched observations are jsonified and returned.
-    page = request.args.get('page', 1, type=int)
-    form = ListFiltersForm()
-    form = fill_choices_with_cities(form, current_user.account_id)
-    # The input of the filter-form is passed as url parameters
-    # for repeated calls of the same filters when changing pages
-    form = fill_filter_data(form, request.args)
 
-    if page == 0:
-        observations = Observation.list_filtered(
-            form, 0, current_user.account_id)
-        marker_data = jsonify(serialize(observations.all()))
-    else:
-        pagination = Observation.list_filtered(
-            form, page, current_user.account_id)
+    # The changing of pages with filters is now done with a post request. 
+    # A pagenumber button sends a new post request to the server with the current filter form.
+    page = request.args.get('page', 1, type=int)
+
     if request.method == "GET":
+        form = ListFiltersForm()
+        form = fill_choices_with_cities(form, current_user.account_id)
         if page == 0:
+            form = ListFiltersForm(request.form)
+            form = fill_choices_with_cities(form, current_user.account_id)
+            observations = Observation.list_filtered(
+                form, 0, current_user.account_id)
+            marker_data = jsonify(serialize(observations.all()))
             return marker_data
+        else:
+            pagination = Observation.list_filtered(
+                form, page, current_user.account_id)
         return render_template("observations/listuser.html", form=form, pagination=pagination)
 
     # filtering
@@ -89,8 +96,6 @@ def observation_listuser():
         pagination = Observation.list_filtered(
             form, page, current_user.account_id)
         return render_template("observations/listuser.html", form=form, pagination=pagination)
-    if page == 0:
-        return marker_data
     flash("Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!", "warning")
     return render_template("observations/listuser.html", form=form, pagination=pagination)
 
@@ -103,26 +108,24 @@ def observation_list_by_id(user_id):
     # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajax request, when the parameter page is 0.
     # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
     # In case of the ajax request, the fetched observations are jsonified and returned.
+
+    # The changing of pages with filters is now done with a post request. 
+    # A pagenumber button sends a new post request to the server with the current filter form.
     page = request.args.get('page', 1, type=int)
     account = User.query.get(user_id)
     if account is None:
         flash("Virheellinen osoite!", "error")
         return redirect(url_for("index"))
-    form = ListFiltersForm()
-    form = fill_choices_with_cities(form, user_id)
-    # The input of the filter-form is passed as url parameters
-    # for repeated calls with the same filters when changing pages
-    form = fill_filter_data(form, request.args)
-
-    if page == 0:
-        observations = Observation.list_filtered(form, 0, user_id)
-        marker_data = jsonify(serialize(observations.all()))
-    else:
-        pagination = Observation.list_filtered(form, page, user_id)
-        obs_count = Observation.count_observations_on_user(user_id)
+    obs_count = Observation.count_observations_on_user(user_id)
     if request.method == "GET":
+        form = ListFiltersForm()
+        form = fill_choices_with_cities(form, user_id)
         if page == 0:
+            observations = Observation.list_filtered(form, 0, user_id)
+            marker_data = jsonify(serialize(observations.all()))
             return marker_data
+        else:
+            pagination = Observation.list_filtered(form, page, user_id)
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
     form = ListFiltersForm(request.form)
@@ -135,8 +138,6 @@ def observation_list_by_id(user_id):
             return marker_data
         pagination = Observation.list_filtered(form, page, user_id)
         return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
-    if page == 0:
-        return marker_data
     flash("Virhe rajaussyötteissä! Näytetään kaikki käyttäjän havainnot!", "warning")
     return render_template("observations/listobsbyid.html", form=form, pagination=pagination, account=account, obs_count=obs_count)
 
@@ -149,22 +150,20 @@ def observation_list_all():
     # with a simple parameter. The page parameter is used as the parameter. The function knows that the request is an ajax request, when the parameter page is 0.
     # The observations fetched in case of the ajax request are fetched by exactly the same function, that the normal request use: "Observation.list_filtered(form, page, user_id)"
     # In case of the ajax request, the fetched observations are jsonified and returned.
+
+    # The changing of pages with filters is now done with a post request. 
+    # A pagenumber button sends a new post request to the server with the current filter form.
     page = request.args.get('page', 1, type=int)
 
-    form = ListFiltersForm()
-    form = fill_choices_with_cities(form)
-    # The input of the filter-form is passed as url parameters
-    # for repeated calls of the same filters when changing pages
-    form = fill_filter_data(form, request.args)
-
-    if page == 0:
-        observations = Observation.list_filtered(form, 0)
-        marker_data = jsonify(serialize(observations.all()))
-    else:
-        pagination = Observation.list_filtered(form, page)
     if request.method == "GET":
+        form = ListFiltersForm()
+        form = fill_choices_with_cities(form)
         if page == 0:
+            observations = Observation.list_filtered(form, 0)
+            marker_data = jsonify(serialize(observations.all()))
             return marker_data
+        else:
+            pagination = Observation.list_filtered(form, page)
         return render_template("observations/listall.html", form=form, pagination=pagination)
 
     form = ListFiltersForm(request.form)
@@ -177,8 +176,6 @@ def observation_list_all():
             return marker_data
         pagination = Observation.list_filtered(form, page)
         return render_template("observations/listall.html", form=form, pagination=pagination)
-    if page == 0:
-        return marker_data
     flash("Virhe rajaussyötteissä! Näytetään kaikki havainnot!", "warning")
     return render_template("observations/listall.html", form=form, pagination=pagination)
 
@@ -206,8 +203,8 @@ def observation_delete(obs_id):
         return redirect(url_for('index'))
     return redirect(last_path)
 
-## TODO Check if the observation has not changed, so that the database will not be under too much stress
-## TODO Datetime observed can not be edited to be too much further in time.
+# TODO Check if the observation has not changed, so that the database will not be under too much stress
+# TODO Datetime observed can not be edited to be too much further in time.
 @app.route("/observations/edit/<obs_id>", methods=["POST", "GET"])
 @login_required()
 def observation_edit(obs_id):
@@ -222,9 +219,9 @@ def observation_edit(obs_id):
             form = AddNewObservationForm()
             form = fill_choices(form)
             form.animal.data = obs.animal_id
-            form.date_observed.data = obs.date_observed.date()
-            form.hour.data = obs.date_observed.hour
-            form.minute.data = obs.date_observed.minute
+            form.date_observed.data = obs.date_observed
+            form.hour.data = obs.time_observed.hour
+            form.minute.data = obs.time_observed.minute
             form.city.data = obs.city
             form.latitude.data = obs.latitude
             form.longitude.data = obs.longitude
@@ -236,11 +233,16 @@ def observation_edit(obs_id):
             return render_template("observations/editobservation.html", form=form, observation=obs, last_path=last_path, obs_username=obs_username)
 
         form = AddNewObservationForm(request.form)
-        form = fill_choices_with_cities(form)
+        form = fill_choices(form)
         if form.validate():
+            date_observed = form.date_observed.data
+            time_observed = time(form.hour.data, form.minute.data)
+            datetime_observed = datetime.combine(date_observed, time_observed)
             try:
                 obs.animal_id = form.animal.data
-                obs.date_observed = parseDate(form.date_observed.data, form.hour.data, form.minute.data)
+                obs.date_observed = date_observed
+                obs.time_observed = time_observed
+                obs.date_observed = datetime_observed
                 obs.city = form.city.data
                 obs.latitude = form.latitude.data
                 obs.longitude = form.longitude.data
@@ -250,7 +252,7 @@ def observation_edit(obs_id):
                 obs.equipment_id = form.equipment.data
                 obs.info = form.info.data
                 db.session().commit()
-            except:
+            except Exception:
                 flash("Muokatessa tapahtui virhe! Havaintoa ei muokattu", "error")
                 return redirect(last_path)
             flash("Havaintoa muokattu onnistuneesti!", "info")
@@ -280,7 +282,7 @@ def fill_choices(form, acc_id=-1):
         form.equipment.choices = [(equipment.equipment_id, equipment.name)
                                   for equipment in Equipment.query.order_by(Equipment.name.asc()).all()]
         form.animal.choices = [(animal.animal_id, animal.name)
-                               for animal in Animal.query.order_by(Animal.name.asc()).all()]
+                               for animal in Animal.query.filter(Animal.suggestion_flag == False).order_by(Animal.name.asc()).all()]
     else:
         form.equipment.choices = [(equipment.equipment_id, equipment.name) for equipment in Equipment.query.outerjoin(
             Observation).filter(Observation.account_id == acc_id).order_by(Equipment.name.asc()).distinct()]
@@ -299,39 +301,6 @@ def fill_choices_with_cities(form, acc_id=-1):
     return fill_choices(form, acc_id)
 
 
-def fill_filter_data(form, args):
-    form.username.data = args.get('username', type=str)
-    # datetimes are not passed in the right format as a parameter,
-    # so they have to be formatted first
-    if 'dateObservedLow' in args.keys():
-        date_observedLow = args['dateObservedLow']
-        date_observedLow = date_observedLow[0:16]
-        date_observedLow = datetime.strptime(
-            date_observedLow, '%Y-%m-%d %H:%M')
-        form.date_observedLow.data = date_observedLow
-
-    if 'dateObservedHigh' in args.keys():
-        date_observedHigh = args['dateObservedHigh']
-        date_observedHigh = date_observedHigh[0:16]
-        date_observedHigh = datetime.strptime(
-            date_observedHigh, '%Y-%m-%d %H:%M')
-        form.date_observedHigh.data = date_observedHigh
-
-    form.city.data = args.getlist('city')
-    form.latitudeLow.data = args.get('latitudeLow', type=float)
-    form.latitudeHigh.data = args.get('latitudeHigh', type=float)
-    form.longitudeLow.data = args.get('longitudeLow', type=float)
-    form.longitudeHigh.data = args.get('longitudeHigh', type=float)
-    form.animal.data = args.getlist('animal')
-    form.weightLow.data = args.get('weightLow', type=float)
-    form.weightHigh.data = args.get('weightHigh', type=float)
-    form.sex.data = args.getlist('sex')
-    form.observ_type.data = args.getlist('observ_type')
-    form.equipment.data = args.getlist('equipment')
-    form.info.data = args.get('info', type=str)
-    return form
-
-
 def serialize(observations):
     # (<Observation 93>, <Animal 3>, 'test', <User 1>)
     array = []
@@ -339,7 +308,8 @@ def serialize(observations):
         array.append({
             'observation': {
                 'observation_id': observation[0].observation_id,
-                'date_observed': observation[0].date_observed.strftime("%a %d-%m-%Y %H:%M"),
+                'date_observed': observation[0].date_observed.strftime("%d-%m-%Y"),
+                'time_observed': observation[0].time_observed.strftime("%M:%S"),
                 'city': observation[0].city,
                 'latitude': str(observation[0].latitude),
                 'longitude': str(observation[0].longitude),
@@ -394,10 +364,47 @@ def parseSex(value):
         return "Muu"
     return "Ei tiedossa!"
 
+
 def parseAnimalInfo(value, id):
     if value == None or value == "":
         return "/animals/edit_or_delete/" + str(id)
     return value
 
-def parseDate(date, hour, minute):
-    return datetime.combine(date, time(hour,minute))
+
+# For filling the filter form with values given by the url. Was used with pagination but now page switch with filters is handled by post requests.
+# def fill_filter_data(form, args):
+#     form.username.data = args.get('username', type=str)
+#     # datetimes are not passed in the right format as a parameter,
+#     # so they have to be formatted first
+#     if 'dateObservedLow' in args.keys():
+#         date_observedLow = args['dateObservedLow']
+#         date_observedLow = datetime.strptime(
+#             date_observedLow, '%Y-%m-%d').date()
+#         form.date_observedLow.data = date_observedLow
+
+#     if 'dateObservedHigh' in args.keys():
+#         date_observedHigh = args['dateObservedHigh']
+#         date_observedHigh = datetime.strptime(
+#             date_observedHigh, '%Y-%m-%d').date()
+#         form.date_observedHigh.data = date_observedHigh
+#     form.hourHigh1.data = args.get('hourHigh1')
+#     form.hourHigh2.data = args.get('hourHigh2')
+#     form.hourLow1.data = args.get('hourLow1')
+#     form.hourLow2.data = args.get('hourLow2')
+#     form.minuteLow1.data = args.get('minuteLow1')
+#     form.minuteLow2.data = args.get('minuteLow2')
+#     form.minuteHigh1.data = args.get('minuteHigh1')
+#     form.minuteHigh2.data = args.get('minuteHigh2')
+#     form.city.data = args.getlist('city')
+#     form.latitudeLow.data = args.get('latitudeLow', type=float)
+#     form.latitudeHigh.data = args.get('latitudeHigh', type=float)
+#     form.longitudeLow.data = args.get('longitudeLow', type=float)
+#     form.longitudeHigh.data = args.get('longitudeHigh', type=float)
+#     form.animal.data = args.getlist('animal')
+#     form.weightLow.data = args.get('weightLow', type=float)
+#     form.weightHigh.data = args.get('weightHigh', type=float)
+#     form.sex.data = args.getlist('sex')
+#     form.observ_type.data = args.getlist('observ_type')
+#     form.equipment.data = args.getlist('equipment')
+#     form.info.data = args.get('info', type=str)
+#     return form

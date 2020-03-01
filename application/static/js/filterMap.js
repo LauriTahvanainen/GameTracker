@@ -76,8 +76,8 @@ function sendObsRequest(userId) {
                             observationArray.push(L.marker([observations[i].observation.latitude, observations[i].observation.longitude])
                                 .bindPopup("<h4><a target='_blank' href='" + observations[i].animal.info + "'>" + observations[i].animal.name + "<a></h4>"
                                     + "<h5> " + observations[i].observation.observ_type + "</h5>"
-                                    + "<br>Päivämäärä: " + observations[i].observation.date_observed.substring(0, 14)
-                                    + "<br>Kellonaika: " + observations[i].observation.date_observed.substring(15, 20)
+                                    + "<br>Päivämäärä: " + observations[i].observation.date_observed
+                                    + "<br>Kellonaika: " + observations[i].observation.time_observed
                                     + "<br>Kunta: " + observations[i].observation.city
                                     + "<br>Paino: " + observations[i].observation.weight
                                     + "<br>Sukupuoli: " + observations[i].observation.sex
@@ -88,8 +88,8 @@ function sendObsRequest(userId) {
                                 .bindPopup("<h4><a target='_blank' href='" + observations[i].animal.info + "'>" + observations[i].animal.name + "<a></h4>"
                                     + "<h5> " + observations[i].observation.observ_type + "</h5>"
                                     + "<h5>Käyttäjä: <a href='/observations/list/" + observations[i].observer_id + "'>" + observations[i].observer + "</a></h5>"
-                                    + "<br>Päivämäärä: " + observations[i].observation.date_observed.substring(0, 14)
-                                    + "<br>Kellonaika: " + observations[i].observation.date_observed.substring(15, 20)
+                                    + "<br>Päivämäärä: " + observations[i].observation.date_observed
+                                    + "<br>Kellonaika: " + observations[i].observation.time_observed
                                     + "<br>Kunta: " + observations[i].observation.city
                                     + "<br>Paino: " + observations[i].observation.weight
                                     + "<br>Sukupuoli: " + observations[i].observation.sex
@@ -105,12 +105,13 @@ function sendObsRequest(userId) {
             }
         }
     };
+    // Adding timestamp to the end to disable caching of results
     if (userId == -1) {
-        xhttp.open("POST", "/observations/listuser?page=0", true);
+        xhttp.open("POST", "/observations/listuser?page=0&" + (new Date().getTime()), true);
     } else if (userId == -2) {
-        xhttp.open("POST", "/observations/list/all?page=0", true);
+        xhttp.open("POST", "/observations/list/all?page=0&" + (new Date().getTime()), true);
     } else {
-        xhttp.open("POST", "/observations/list/"+ userId +"?page=0", true);
+        xhttp.open("POST", "/observations/list/"+ userId +"?page=0&" + (new Date().getTime()), true);
     }
     xhttp.send(FD);
 };

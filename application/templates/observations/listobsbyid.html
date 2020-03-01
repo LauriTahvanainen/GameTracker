@@ -55,7 +55,7 @@
 
 
 <div id="filter" class="collapse" aria-controls="filter">
-    <form id="filterForm" method="POST" action="{{ url_for('observation_list_by_id', user_id = account.account_id, page=1) }}">
+    <form id="filterForm" name=filterForm method="POST" onsubmit="OnSubmitFilters({{ account.account_id }});" action="{{ url_for('observation_list_by_id', user_id = account.account_id, page=1) }}">
         {{ form.hidden_tag() }}
         <table id="filter">
             <tbody class="table-bordered" style="border: hidden">
@@ -64,10 +64,14 @@
                         {{ form.date_observedLow.label }}
                     </td>
                     <td style="border: hidden">
-                        {{ form.date_observedLow }} -
+                        {{ form.date_observedLow }}
+                        {{ form.hourLow1 }}
+                        {{ form.minuteLow1 }}---
                     </td>
                     <td style="border: hidden">
                         {{ form.date_observedHigh }}
+                        {{ form.hourHigh1 }}
+                        {{ form.minuteHigh1 }}
                     </td>
                     <td style="border: hidden">
                         {% if form.date_observedLow.errors %}
@@ -78,6 +82,17 @@
                         {% if form.date_observedHigh.errors %}
                         <div>{{ form.date_observedHigh.errors[0] }}</div>
                         {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
+                        Havainnon Kellonaika
+                    </td>
+                    <td style="border: hidden">
+                        {{ form.hourLow2 }}
+                        {{ form.minuteLow2 }}---
+                        {{ form.hourHigh2 }}
+                        {{ form.minuteHigh2 }}
                     </td>
                 </tr>
                 <tr>
@@ -224,7 +239,7 @@
             </tbody>
             <tr>
                 <td colspan="2">
-                    <input type="submit" value="Hae"  class="btn btn-info"/>
+                    <input type="submit" value="Hae"  class="btn btn-info" onclick="onPageButtonClick(1);"/>
                 </td>
             </tr>
         </table>
@@ -239,8 +254,7 @@
     <nav aria-label="Pagination">
         <ul class="pagination">
             {% if pagination.has_prev %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('observation_list_by_id', user_id=account.account_id, page=pagination.prev_num, username=form.username.data, dateObservedLow=form.date_observedLow.data, dateObservedHigh=form.date_observedHigh.data, city=form.city.data, latitudeLow=form.latitudeLow.data, latitudeHigh=form.latitudeHigh.data, longitudeLow=form.longitudeLow.data, longitudeHigh=form.longitudeHigh.data, animal=form.animal.data, weightLow=form.weightLow.data, weightHigh=form.weightHigh.data, sex=form.sex.data, observ_type=form.observ_type.data, equipment=form.equipment.data, info=form.info.data) }}">Edellinen</a>
+            <li class="page-item"><button type="submit" form="filterForm" value="Hae" class="page-link"  onclick="onPageButtonClick({{ pagination.prev_num }});">Edellinen</button>
             </li>
             {% else %}
             <li class="page-item disabled"><a class="page-link" href="#">Edellinen</a></li>
@@ -249,8 +263,7 @@
             {% for page in pagination.iter_pages() %}
             {% if page %}
             {% if page != pagination.page %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('observation_list_by_id', user_id=account.account_id, page=page, username=form.username.data, dateObservedLow=form.date_observedLow.data, dateObservedHigh=form.date_observedHigh.data, city=form.city.data, latitudeLow=form.latitudeLow.data, latitudeHigh=form.latitudeHigh.data, longitudeLow=form.longitudeLow.data, longitudeHigh=form.longitudeHigh.data, animal=form.animal.data, weightLow=form.weightLow.data, weightHigh=form.weightHigh.data, sex=form.sex.data, observ_type=form.observ_type.data, equipment=form.equipment.data, info=form.info.data) }}">{{ page }}</a>
+            <li class="page-item"><button type="submit" form="filterForm" value="Hae" class="page-link" onclick="onPageButtonClick({{ page }});">{{ page }}</button>
             </li>
             {% else %}
             <li class="page-item active">
@@ -263,8 +276,7 @@
             {% endfor %}
 
             {% if pagination.has_next %}
-            <li class="page-item"><a class="page-link"
-                    href="{{ url_for('observation_list_by_id', user_id=account.account_id, page=pagination.next_num, username=form.username.data, dateObservedLow=form.date_observedLow.data, dateObservedHigh=form.date_observedHigh.data, city=form.city.data, latitudeLow=form.latitudeLow.data, latitudeHigh=form.latitudeHigh.data, longitudeLow=form.longitudeLow.data, longitudeHigh=form.longitudeHigh.data, animal=form.animal.data, weightLow=form.weightLow.data, weightHigh=form.weightHigh.data, sex=form.sex.data, observ_type=form.observ_type.data, equipment=form.equipment.data, info=form.info.data) }}">Seuraava</a>
+            <li class="page-item"><button type="submit" form="filterForm" value="Hae" class="page-link"  onclick="onPageButtonClick({{ pagination.next_num }});">Seuraava</button>
             </li>
             {% else %}
             <li class="page-item disabled"><a class="page-link" href="#">Seuraava</a></li>
@@ -381,5 +393,6 @@
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/filterMap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filterRequests.js') }}"></script>
 <script>sendObsRequest("{{account.account_id}}")</script>
 {% endblock %}

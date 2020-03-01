@@ -26,7 +26,7 @@
                     {{ form.date_observed.label }}
                 </td>
                 <td style="border: hidden; color: white">
-                    {{ form.date_observed(class='datepicker') }} *
+                    {{ form.date_observed() }} *
                 </td>
                 <td style="border: hidden">
                     {% if form.date_observed.errors %}
@@ -174,9 +174,7 @@
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dates.js') }}"></script>
 <script>
     sendObsRequest();
-    defaultDate();
 </script>
 {% endblock %}

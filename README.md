@@ -26,6 +26,8 @@ Käyttäjien täytyy rekisteröityä sivulle.
 
 [Heroku](https://gmtrackr.herokuapp.com/)
 
+[Task List](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tasklist.md)
+
 [Tietokantarakenne](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tietokantarakenne.md)
 
 [Käyttäjätarinat](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/kayttajatarinat.md)

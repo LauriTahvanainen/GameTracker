@@ -356,11 +356,11 @@ def parseInfo(value):
 
 
 def parseSex(value):
-    if value == 0:
+    if value == 1:
         return "Uros"
-    elif value == 1:
-        return "Naaras"
     elif value == 2:
+        return "Naaras"
+    elif value == 3:
         return "Muu"
     return "Ei tiedossa!"
 

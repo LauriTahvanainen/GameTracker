@@ -308,11 +308,11 @@
                 {% endif %}
 
 
-                {% if obs[0].sex == 0 %}
+                {% if obs[0].sex == 1 %}
                 <td class="table-light">Uros</td>
-                {% elif obs[0].sex == 1 %}
-                <td class="table-light">Naaras</td>
                 {% elif obs[0].sex == 2 %}
+                <td class="table-light">Naaras</td>
+                {% elif obs[0].sex == 3 %}
                 <td class="table-light">Muu</td>
                 {% else %}
                 <td class="table-light">Ei tiedossa</td>

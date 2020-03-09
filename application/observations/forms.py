@@ -75,7 +75,7 @@ class AddNewObservationForm(FlaskForm):
 
     weight = DecimalField("Paino", [validators.optional(strip_whitespace=True), validators.number_range(
         min=0, message="Paino ei voi olla negatiivinen!")], places=3, render_kw={"placeholder": "Kilogrammoina"})
-    sex = SelectField("Sukupuoli", choices=[(0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], validators=[
+    sex = SelectField("Sukupuoli", choices=[(0, "Ei tiedossa"),(1, "Uros"), (2, "Naaras"), (3, "Muu")], validators=[
                       validators.input_required(message="Sukupuoli pitää valita!")], coerce=int)
     observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], validators=[
                               validators.input_required(message="Havaintotapa pitää valita!")], coerce=int)

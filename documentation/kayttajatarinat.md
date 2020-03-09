@@ -17,11 +17,15 @@
 | Pääkäyttäjä | poistaa tilejä | poistaa tilejä jotka käyttävät palvelua sääntöjenvastaisesti. | X |
 | Pääkäyttäjä | poistaa havaintoja | poistaa palvelusta virheellisiä havaintoja. | X | 
 | Pääkäyttäjä | lisätä uusia välineitä | mahdollistaa uusien välineiden lisäämisen havaintoihin. | X |
-| Pääkäyttäjä | muokata välineitä | muokata virheellisiä välineitä | - |
 | Pääkäyttäjä | poistaa välineitä | poistaa virheellisiä välineitä | X |
 | Pääkäyttäjä | poistaa eläimiä | poistaa virheellisiä eläimiä| X |
 | Pääkäyttäjä | muokata eläimiä | korjata virheellisiä eläimiä | X |
 | Pääkäyttäjä | tilastoja sovelluksen käytöstä | näen miten käyttäjät käyttävät sovellusta | X |
+| KESKEN |
+| Pääkäyttäjä | muokata välineitä | muokata virheellisiä välineitä | - |
+| Käyttäjä | rajata näytettäviä havaintoja kartalta | tarkastella tietyn alueen havaintoja helposti | - |
+| Käyttäjä | saada havaintooni automaattisesti havaintopaikan sään havaintoajalla | syöttää havaintoja helpommin | - |
+
 
 ## SQL-Kyselyt
 Joitain yksinkertaisia ja muiden kyselyiden kanssa samanlaisia kyselyitä, kuten yksinkertaisia INSERT, UPDATE ja DELETE kyselyitä, ei käydä tässä läpi.

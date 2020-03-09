@@ -61,26 +61,26 @@ class Observation(Base):
             query = query.filter(Observation.account_id == cur_id)
         if form.username.data is not None and form.username.data != "":
             query = query.filter(User.username == form.username.data)
-        query = filterDates(query, form)
+        query = filter_dates(query, form)
         if form.city.data:
             query = query.filter(Observation.city.in_(form.city.data))
-        if form.latitudeLow.data is not None:
-            query = query.filter(Observation.latitude >= form.latitudeLow.data)
-        if form.latitudeHigh.data is not None:
+        if form.latitude_low.data is not None:
+            query = query.filter(Observation.latitude >= form.latitude_low.data)
+        if form.latitude_high.data is not None:
             query = query.filter(Observation.latitude <=
-                                 form.latitudeHigh.data)
-        if form.longitudeLow.data is not None:
+                                 form.latitude_high.data)
+        if form.longitude_low.data is not None:
             query = query.filter(Observation.longitude >=
-                                 form.longitudeLow.data)
-        if form.longitudeHigh.data is not None:
+                                 form.longitude_low.data)
+        if form.longitude_high.data is not None:
             query = query.filter(Observation.longitude <=
-                                 form.longitudeHigh.data)
+                                 form.longitude_high.data)
         if form.animal.data:
             query = query.filter(Animal.animal_id.in_(form.animal.data))
-        if form.weightLow.data is not None:
-            query = query.filter(Observation.weight >= form.weightLow.data)
-        if form.weightHigh.data is not None:
-            query = query.filter(Observation.weight >= form.weightHigh.data)
+        if form.weight_low.data is not None:
+            query = query.filter(Observation.weight >= form.weight_low.data)
+        if form.weight_high.data is not None:
+            query = query.filter(Observation.weight <= form.weight_high.data)
         if form.sex.data:
             query = query.filter(Observation.sex.in_(form.sex.data))
         if form.observ_type.data:
@@ -203,45 +203,45 @@ class Observation(Base):
                 {"id": row[0], "name": row[1], "lat_name": row[2], "info": row[3], "count": row[4], "avg":row[5]})
         return response
 
-def filterDates(query, form):
-    date_observedLow = form.date_observedLow.data
-    date_observedHigh = form.date_observedHigh.data
-    hourLow1 = form_time_value_to_int(form.hourLow1.data)
-    hourLow2 = form_time_value_to_int(form.hourLow2.data)
-    minuteLow1 = form_time_value_to_int(form.minuteLow1.data)
-    minuteLow2 = form_time_value_to_int(form.minuteLow2.data)
-    hourHigh1 = form_time_value_to_int(form.hourHigh1.data)
-    hourHigh2 = form_time_value_to_int(form.hourHigh2.data)
-    minuteHigh1 = form_time_value_to_int(form.minuteHigh1.data)
-    minuteHigh2 = form_time_value_to_int(form.minuteHigh2.data)
+def filter_dates(query, form):
+    date_observed_low = form.date_observed_low.data
+    date_observed_high = form.date_observed_high.data
+    hour_low1 = form_time_value_to_int(form.hour_low1.data)
+    hour_low2 = form_time_value_to_int(form.hour_low2.data)
+    minute_low1 = form_time_value_to_int(form.minute_low1.data)
+    minute_low2 = form_time_value_to_int(form.minute_low2.data)
+    hour_high1 = form_time_value_to_int(form.hour_high1.data)
+    hour_high2 = form_time_value_to_int(form.hour_high2.data)
+    minute_high1 = form_time_value_to_int(form.minute_high1.data)
+    minute_high2 = form_time_value_to_int(form.minute_high2.data)
 
-    if date_observedLow is not None:
-        if hourLow1 != -1 and minuteLow1 != -1:
-            dateFilter = datetime.combine(date_observedLow, time(hourLow1, minuteLow1))
-        elif hourLow1 != -1:
-            dateFilter = datetime.combine(date_observedLow, time(hourLow1, 0))
+    if date_observed_low is not None:
+        if hour_low1 != -1 and minute_low1 != -1:
+            dateFilter = datetime.combine(date_observed_low, time(hour_low1, minute_low1))
+        elif hour_low1 != -1:
+            dateFilter = datetime.combine(date_observed_low, time(hour_low1, 0))
         else:
-            dateFilter = datetime.combine(date_observedLow, time(0,0))
+            dateFilter = datetime.combine(date_observed_low, time(0,0))
         query = query.filter(Observation.datetime_observed >= dateFilter)
-    if date_observedHigh is not None:
-        if hourHigh1 != -1 and minuteHigh1 != -1:
-            dateFilter = datetime.combine(date_observedHigh, time(hourHigh1, minuteHigh1))
-        elif hourHigh1 != -1:
-             dateFilter = datetime.combine(date_observedHigh, time(hourHigh1, 0))
+    if date_observed_high is not None:
+        if hour_high1 != -1 and minute_high1 != -1:
+            dateFilter = datetime.combine(date_observed_high, time(hour_high1, minute_high1))
+        elif hour_high1 != -1:
+             dateFilter = datetime.combine(date_observed_high, time(hour_high1, 0))
         else:
-            dateFilter = datetime.combine(date_observedHigh, time(0,0))
+            dateFilter = datetime.combine(date_observed_high, time(0,0))
         query = query.filter(Observation.datetime_observed <= dateFilter)
-    if hourLow2 != -1 and hourLow2 is not None:
-        if minuteLow2 == -1:
-            timeFilter = time(hourLow2, 0)
+    if hour_low2 != -1 and hour_low2 is not None:
+        if minute_low2 == -1:
+            timeFilter = time(hour_low2, 0)
         else:
-            timeFilter = time(hourLow2, minuteLow2)
+            timeFilter = time(hour_low2, minute_low2)
         query = query.filter(Observation.time_observed >= timeFilter)
-    if hourHigh2 != -1 and hourHigh2 is not None:
-        if minuteHigh2 == -1:
-            timeFilter = time(hourHigh2, 0)
+    if hour_high2 != -1 and hour_high2 is not None:
+        if minute_high2 == -1:
+            timeFilter = time(hour_high2, 0)
         else:
-            timeFilter = time(hourHigh2, minuteHigh2)
+            timeFilter = time(hour_high2, minute_high2)
         query = query.filter(Observation.time_observed <= timeFilter)
     return query
 

@@ -13,13 +13,13 @@ def vote():
     try:
         accepted_suggestions = 0
         deleted_suggestions = 0
-        todelete = json.loads(str(request.json["todelete"]))
+        to_delete = json.loads(str(request.json["to_delete"]))
         downvotes = json.loads(str(request.json["downvotes"]))
         upvotes = json.loads(str(request.json["upvotes"]))
 
         amount_of_suggestions = Animal.query.filter(Animal.suggestion_flag == True).count()
         # Check that the request only contains changes for 0 to 500 votes.
-        if ((len(todelete) + len(downvotes) + len(upvotes) > 0) and (len(todelete) + len(downvotes) + len(upvotes) <= amount_of_suggestions)):
+        if ((len(to_delete) + len(downvotes) + len(upvotes) > 0) and (len(to_delete) + len(downvotes) + len(upvotes) <= amount_of_suggestions)):
             # Check for resending of same request and for nonexisting suggestion ids.
             downvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == False).all()
             upvote_ids = db.session.query(Vote.animal_id).filter(Vote.account_id == current_user.account_id, Vote.value == True).all()
@@ -36,7 +36,7 @@ def vote():
 
             acc_id = current_user.account_id
             # Handle votes that are deleted, meaning that the user retracts their vote
-            deleted, accepted = handle_to_delete(todelete, acc_id)
+            deleted, accepted = handle_to_delete(to_delete, acc_id)
             accepted_suggestions = accepted + accepted_suggestions
             deleted_suggestions = deleted + deleted_suggestions
             # Handle downvotes

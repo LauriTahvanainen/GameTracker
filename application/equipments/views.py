@@ -1,9 +1,9 @@
 from application import app, db, login_required
 from application.equipments.models import Equipment
-from application.equipments.forms import addEquipmentForm, listEquipmentForm
+from application.equipments.forms import AddEquipmentForm, ListEquipmentForm
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
-from application.equipments.forms import equipmentSelectForm
+from application.equipments.forms import EquipmentSelectForm
 
 
 @app.route("/equipments/menu", methods=["GET"])
@@ -16,19 +16,19 @@ def equipment_menu():
 @login_required(role="ADMIN")
 def equipment_add():
     if request.method == "GET":
-        return render_template("equipments/addequipment.html", form=addEquipmentForm())
+        return render_template("equipments/addequipment.html", form=AddEquipmentForm())
 
-    form = addEquipmentForm(request.form)
+    form = AddEquipmentForm(request.form)
 
     if form.validate():
-        newEquipment = Equipment(form.name.data)
+        new_equipment = Equipment(form.name.data)
         try:
-            db.session().add(newEquipment)
+            db.session().add(new_equipment)
             db.session().commit()
         except Exception:
             db.session().rollback()
             flash("Varuste on jo järjestelmässä!", "error")
-            return render_template("equipments/addequipment.html", form=addEquipmentForm())
+            return render_template("equipments/addequipment.html", form=AddEquipmentForm())
         flash('Varuste lisätty onnistuneesti!', "info")
         return redirect(url_for("equipment_add"))
     return render_template("equipments/addequipment.html", form=form)
@@ -36,19 +36,19 @@ def equipment_add():
 
 @app.route("/equipments/listandremove", methods=["GET", "POST"])
 @login_required(role="ADMIN")
-def equipment_listandremove():
-    form = listEquipmentForm()
+def equipment_list_and_remove():
+    form = ListEquipmentForm()
     for equipment in Equipment.query.order_by(Equipment.name.asc()).all():
-        equipmentform = equipmentSelectForm()
-        equipmentform.equip = equipment.name
-        equipmentform.equipment_id = equipment.equipment_id
-        equipmentform.selected = False
-        form.select.append_entry(equipmentform)
+        equipment_form = EquipmentSelectForm()
+        equipment_form.equip = equipment.name
+        equipment_form.equipment_id = equipment.equipment_id
+        equipment_form.selected = False
+        form.select.append_entry(equipment_form)
 
     if request.method == "GET":
         return render_template("equipments/list.html", form=form)
 
-    form = listEquipmentForm(request.form)
+    form = ListEquipmentForm(request.form)
     selected = []
     for entry in form.select.entries:
         if entry.data['selected'] == True:
@@ -64,7 +64,7 @@ def equipment_listandremove():
     except:
         db.session().rollback()
         flash("Poistettaessa tapahtui virhe! Välineitä ei poistettu!", "error")
-        return redirect(url_for('equipment_listandremove'))
+        return redirect(url_for('equipment_list_and_remove'))
 
     flash("Valitut välineet poistettu onnistuneesti!", "info")
-    return redirect(url_for("equipment_listandremove"))
+    return redirect(url_for("equipment_list_and_remove"))

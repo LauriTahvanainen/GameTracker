@@ -33,7 +33,7 @@ def observation_add():
         date_observed = form.date_observed.data
         time_observed = time(form.hour.data, form.minute.data)
         datetime_observed = datetime.combine(date_observed, time_observed)
-        newObs = Observation(current_user.account_id,
+        new_obs = Observation(current_user.account_id,
                              date_observed, time_observed,
                              datetime_observed,
                              form.city.data, form.latitude.data,
@@ -43,7 +43,7 @@ def observation_add():
                              form.equipment.data,
                              form.info.data)
         try:
-            db.session().add(newObs)
+            db.session().add(new_obs)
             db.session().commit()
         except Exception:
             db.session().rollback()
@@ -377,32 +377,32 @@ def parseAnimalInfo(value, id):
 #     # datetimes are not passed in the right format as a parameter,
 #     # so they have to be formatted first
 #     if 'dateObservedLow' in args.keys():
-#         date_observedLow = args['dateObservedLow']
-#         date_observedLow = datetime.strptime(
-#             date_observedLow, '%Y-%m-%d').date()
-#         form.date_observedLow.data = date_observedLow
+#         date_observed_low = args['dateObservedLow']
+#         date_observed_low = datetime.strptime(
+#             date_observed_low, '%Y-%m-%d').date()
+#         form.date_observed_low.data = date_observed_low
 
 #     if 'dateObservedHigh' in args.keys():
-#         date_observedHigh = args['dateObservedHigh']
-#         date_observedHigh = datetime.strptime(
-#             date_observedHigh, '%Y-%m-%d').date()
-#         form.date_observedHigh.data = date_observedHigh
-#     form.hourHigh1.data = args.get('hourHigh1')
-#     form.hourHigh2.data = args.get('hourHigh2')
-#     form.hourLow1.data = args.get('hourLow1')
-#     form.hourLow2.data = args.get('hourLow2')
-#     form.minuteLow1.data = args.get('minuteLow1')
-#     form.minuteLow2.data = args.get('minuteLow2')
-#     form.minuteHigh1.data = args.get('minuteHigh1')
-#     form.minuteHigh2.data = args.get('minuteHigh2')
+#         date_observed_high = args['dateObservedHigh']
+#         date_observed_high = datetime.strptime(
+#             date_observed_high, '%Y-%m-%d').date()
+#         form.date_observed_high.data = date_observed_high
+#     form.hour_high1.data = args.get('hour_high1')
+#     form.hour_high2.data = args.get('hour_high2')
+#     form.hour_low1.data = args.get('hour_low1')
+#     form.hour_low2.data = args.get('hour_low2')
+#     form.minute_low1.data = args.get('minute_low1')
+#     form.minute_low2.data = args.get('minute_low2')
+#     form.minute_high1.data = args.get('minute_high1')
+#     form.minute_high2.data = args.get('minute_high2')
 #     form.city.data = args.getlist('city')
-#     form.latitudeLow.data = args.get('latitudeLow', type=float)
-#     form.latitudeHigh.data = args.get('latitudeHigh', type=float)
-#     form.longitudeLow.data = args.get('longitudeLow', type=float)
-#     form.longitudeHigh.data = args.get('longitudeHigh', type=float)
+#     form.latitude_low.data = args.get('latitude_low', type=float)
+#     form.latitude_high.data = args.get('latitude_high', type=float)
+#     form.longitude_low.data = args.get('longitude_low', type=float)
+#     form.longitude_high.data = args.get('longitude_high', type=float)
 #     form.animal.data = args.getlist('animal')
-#     form.weightLow.data = args.get('weightLow', type=float)
-#     form.weightHigh.data = args.get('weightHigh', type=float)
+#     form.weight_low.data = args.get('weight_low', type=float)
+#     form.weight_high.data = args.get('weight_high', type=float)
 #     form.sex.data = args.getlist('sex')
 #     form.observ_type.data = args.getlist('observ_type')
 #     form.equipment.data = args.getlist('equipment')

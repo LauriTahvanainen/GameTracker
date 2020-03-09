@@ -61,26 +61,26 @@
             <tbody class="table-bordered" style="border: hidden">
                 <tr>
                     <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
-                        {{ form.date_observedLow.label }}
+                        {{ form.date_observed_low.label }}
                     </td>
                     <td style="border: hidden">
-                        {{ form.date_observedLow }}
-                        {{ form.hourLow1 }}
-                        {{ form.minuteLow1 }}---
+                        {{ form.date_observed_low }}
+                        {{ form.hour_low1 }}
+                        {{ form.minute_low1 }}---
                     </td>
                     <td style="border: hidden">
-                        {{ form.date_observedHigh }}
-                        {{ form.hourHigh1 }}
-                        {{ form.minuteHigh1 }}
+                        {{ form.date_observed_high }}
+                        {{ form.hour_high1 }}
+                        {{ form.minute_high1 }}
                     </td>
                     <td style="border: hidden">
-                        {% if form.date_observedLow.errors %}
-                        <div>{{ form.date_observedLow.errors[0] }}</div>
+                        {% if form.date_observed_low.errors %}
+                        <div>{{ form.date_observed_low.errors[0] }}</div>
                         {% endif %}
                     </td>
                     <td style="border: hidden">
-                        {% if form.date_observedHigh.errors %}
-                        <div>{{ form.date_observedHigh.errors[0] }}</div>
+                        {% if form.date_observed_high.errors %}
+                        <div>{{ form.date_observed_high.errors[0] }}</div>
                         {% endif %}
                     </td>
                 </tr>
@@ -89,10 +89,10 @@
                         Havainnon Kellonaika
                     </td>
                     <td style="border: hidden">
-                        {{ form.hourLow2 }}
-                        {{ form.minuteLow2 }}---
-                        {{ form.hourHigh2 }}
-                        {{ form.minuteHigh2 }}
+                        {{ form.hour_low2 }}
+                        {{ form.minute_low2 }}---
+                        {{ form.hour_high2 }}
+                        {{ form.minute_high2 }}
                     </td>
                 </tr>
                 <tr>
@@ -110,43 +110,43 @@
                 </tr>
                 <tr>
                     <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
-                        {{ form.latitudeLow.label }}
+                        {{ form.latitude_low.label }}
                     </td>
                     <td style="border: hidden">
-                        {{ form.latitudeLow }} -
+                        {{ form.latitude_low }} -
                     </td>
                     <td style="border: hidden">
-                        {{ form.latitudeHigh }}
+                        {{ form.latitude_high }}
                     </td>
                     <td style="border: hidden">
-                        {% if form.latitudeLow.errors %}
-                        <div>{{ form.latitudeLow.errors[0] }}</div>
+                        {% if form.latitude_low.errors %}
+                        <div>{{ form.latitude_low.errors[0] }}</div>
                         {% endif %}
                     </td>
                     <td style="border: hidden">
-                        {% if form.latitudeHigh.errors %}
-                        <div>{{ form.latitudeHigh.errors[0] }}</div>
+                        {% if form.latitude_high.errors %}
+                        <div>{{ form.latitude_high.errors[0] }}</div>
                         {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
-                        {{ form.longitudeLow.label }}
+                        {{ form.longitude_low.label }}
                     </td>
                     <td style="border: hidden">
-                        {{ form.longitudeLow }} -
+                        {{ form.longitude_low }} -
                     </td>
                     <td>
-                        {{ form.longitudeHigh }}
+                        {{ form.longitude_high }}
                     </td>
                     <td style="border: hidden">
-                        {% if form.longitudeLow.errors %}
-                        <div>{{ form.longitudeLow.errors[0] }}</div>
+                        {% if form.longitude_low.errors %}
+                        <div>{{ form.longitude_low.errors[0] }}</div>
                         {% endif %}
                     </td>
                     <td style="border: hidden">
-                        {% if form.longitudeHigh.errors %}
-                        <div>{{ form.longitudeHigh.errors[0] }}</div>
+                        {% if form.longitude_high.errors %}
+                        <div>{{ form.longitude_high.errors[0] }}</div>
                         {% endif %}
                     </td>
                 </tr>
@@ -165,22 +165,22 @@
                 </tr>
                 <tr>
                     <td style="background-color: rgba(255, 255, 255, 0.5); text-align: center; font-weight: bold">
-                        {{ form.weightLow.label }}
+                        {{ form.weight_low.label }}
                     </td>
                     <td style="border: hidden">
-                        {{ form.weightLow }} -
+                        {{ form.weight_low }} -
                     </td>
                     <td style="border: hidden">
-                        {{ form.weightHigh }}
+                        {{ form.weight_high }}
                     </td>
                     <td style="border: hidden">
-                        {% if form.weightLow.errors %}
-                        <div>{{ form.weightLow.errors[0] }}</div>
+                        {% if form.weight_low.errors %}
+                        <div>{{ form.weight_low.errors[0] }}</div>
                         {% endif %}
                     </td>
                     <td style="border: hidden">
-                        {% if form.weightHigh.errors %}
-                        <div>{{ form.weightHigh.errors[0] }}</div>
+                        {% if form.weight_high.errors %}
+                        <div>{{ form.weight_high.errors[0] }}</div>
                         {% endif %}
                     </td>
                 </tr>
@@ -313,7 +313,7 @@
                 {% else %}
                 <td class="table-light">{{ obs[1].name }}</td>
                 {% endif %}
-                <td class="table-light">{{ obs[0].date_observed }}</td>
+                <td class="table-light">{{ obs[0].datetime_observed }}</td>
                 <td class="table-light">{{ obs[0].city }}</td>
                 {% if not obs[0].latitude %}
                 <td class="table-light">Ei annettu</td>

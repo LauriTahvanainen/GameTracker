@@ -2,7 +2,7 @@
 
 {% block body %}
 <a href="{{ url_for('equipment_menu') }}" class="btn btn-outline-primary">Takaisin välinevalikkoon</a>
-<form method="POST" action="{{ url_for('equipment_listandremove') }}">
+<form method="POST" action="{{ url_for('equipment_list_and_remove') }}">
     {{ form.hidden_tag() }} 
     <h2><caption>Välineet</caption></h2>
     <table>

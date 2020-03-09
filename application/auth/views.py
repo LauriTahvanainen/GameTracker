@@ -46,10 +46,10 @@ def auth_create():
     form = CreateUserForm(request.form)
     # Create the new user from the form
     if form.validate():
-        newUser = User(form.username.data, form.name.data,
+        new_user = User(form.username.data, form.name.data,
                        form.password.data, form.city.data, form.age.data, 'USER')
         try:
-            db.session().add(newUser)
+            db.session().add(new_user)
             db.session().commit()
         except Exception:
             db.session().rollback()
@@ -100,8 +100,8 @@ def auth_changepw():
         if check_password_hash(current_user.password, form.oldPassword.data + current_user.salt):
             try:
                 salt = User.generate_salt()
-                stmt = text("UPDATE account SET password = :newpw, salt = :slt WHERE account_id = :cur_id").params(
-                newpw=generate_password_hash(form.password.data + salt), slt=salt, cur_id=current_user.account_id)
+                stmt = text("UPDATE account SET password = :new_pw, salt = :slt WHERE account_id = :cur_id").params(
+                new_pw=generate_password_hash(form.password.data + salt), slt=salt, cur_id=current_user.account_id)
                 db.engine.execute(stmt)
                 db.session().commit()
             except:

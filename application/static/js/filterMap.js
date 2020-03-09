@@ -14,20 +14,20 @@ var osm = new L.TileLayer(osmUrl, { minZoom: 2, maxZoom: 20, attribution: osmAtt
 map.setView([60.192, 24.945], 12);
 map.addLayer(osm);
 
-document.getElementById("latitudeLow").onchange = onLatLngUpdate;
-document.getElementById("latitudeHigh").onchange = onLatLngUpdate;
-document.getElementById("longitudeLow").onchange = onLatLngUpdate;
-document.getElementById("longitudeHigh").onchange = onLatLngUpdate;
+document.getElementById("latitude_low").onchange = onLatLngUpdate;
+document.getElementById("latitude_high").onchange = onLatLngUpdate;
+document.getElementById("longitude_low").onchange = onLatLngUpdate;
+document.getElementById("longitude_high").onchange = onLatLngUpdate;
 
 function onLatLngUpdate() {
-    document.getElementById("latitudeLow").value = document.getElementById("latitudeLow").value.trim();
-    document.getElementById("latitudeHigh").value = document.getElementById("latitudeHigh").value.trim();
-    document.getElementById("longitudeLow").value = document.getElementById("longitudeLow").value.trim();
-    document.getElementById("longitudeHigh").value = document.getElementById("longitudeHigh").value.trim();
-    var latLow = document.getElementById("latitudeLow").value;
-    var latHigh = document.getElementById("latitudeHigh").value;
-    var lngLow = document.getElementById("longitudeLow").value;
-    var lngHigh = document.getElementById("longitudeHigh").value;
+    document.getElementById("latitude_low").value = document.getElementById("latitude_low").value.trim();
+    document.getElementById("latitude_high").value = document.getElementById("latitude_high").value.trim();
+    document.getElementById("longitude_low").value = document.getElementById("longitude_low").value.trim();
+    document.getElementById("longitude_high").value = document.getElementById("longitude_high").value.trim();
+    var latLow = document.getElementById("latitude_low").value;
+    var latHigh = document.getElementById("latitude_high").value;
+    var lngLow = document.getElementById("longitude_low").value;
+    var lngHigh = document.getElementById("longitude_high").value;
     if (lat != "" && lng != "") {
         try {
             latLow = parseFloat(latLow);

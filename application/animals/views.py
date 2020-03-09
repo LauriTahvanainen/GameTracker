@@ -4,7 +4,7 @@ from application.animals.models import Animal
 from application.votes.models import Vote
 from application.observations.models import Observation
 from application.auth.models import User
-from application.animals.forms import addNewAnimalForm
+from application.animals.forms import AddNewAnimalForm
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import current_user
 
@@ -19,9 +19,9 @@ def animal_menu():
 @login_required(role="ADMIN")
 def animal_add():
     if request.method == "GET":
-        return render_template("animals/addanimal.html", form=addNewAnimalForm())
+        return render_template("animals/addanimal.html", form=AddNewAnimalForm())
 
-    form = addNewAnimalForm(request.form)
+    form = AddNewAnimalForm(request.form)
 
     if form.validate():
         if form.lat_name.data == "":
@@ -35,7 +35,7 @@ def animal_add():
         except Exception:
             db.session().rollback()
             flash("Eläimen nimi tai latinankielinen nimi on jo järjestelmässä!", "error")
-            return render_template("animals/addanimal.html", form=addNewAnimalForm())
+            return render_template("animals/addanimal.html", form=AddNewAnimalForm())
         flash('Eläin lisätty onnistuneesti!', "info")
         return redirect(url_for("animal_add"))
     return render_template("animals/addanimal.html", form=form)
@@ -56,13 +56,13 @@ def animal_edit_or_delete(animal_id):
         flash("Virheellinen osoite!", "error")
         return redirect(url_for("index"))
     if request.method == "GET":
-        form = addNewAnimalForm()
+        form = AddNewAnimalForm()
         form.name.data = animal.name
         form.lat_name.data = animal.lat_name
         form.info.data = animal.info
         return render_template("animals/editordelete.html", animal=animal, form=form)
 
-    form = addNewAnimalForm(request.form)
+    form = AddNewAnimalForm(request.form)
     if form.validate():
         try:
             animal = Animal.query.get(animal_id)
@@ -99,9 +99,9 @@ def animal_delete(animal_id):
 @login_required()
 def animal_suggest():
     if request.method == "GET":
-        return render_template("animals/suggestanimal.html", form=addNewAnimalForm())
+        return render_template("animals/suggestanimal.html", form=AddNewAnimalForm())
 
-    form = addNewAnimalForm(request.form)
+    form = AddNewAnimalForm(request.form)
 
     if form.validate():
         if (db.session().query(Animal.animal_id).filter(Animal.suggestion_flag == True).count() < 500):
@@ -118,7 +118,7 @@ def animal_suggest():
                 db.session().rollback()
                 flash(
                     "Eläimen nimi tai latinankielinen nimi on jo järjestelmässä!", "error")
-                return render_template("animals/suggestanimal.html", form=addNewAnimalForm())
+                return render_template("animals/suggestanimal.html", form=AddNewAnimalForm())
             flash('Eläimen lisäämistä ehdotettu onnistuneesti!', "info")
             return redirect(url_for("animal_suggest"))
         flash("Ehdotusten määrän raja (500) on täyttynyt. Ehdotusta ei lisätty! Yritä myöhemmin!")
@@ -137,15 +137,15 @@ def animal_list_suggested():
 @login_required()
 def animal_delete_suggestion(suggestion_id):
     try:
-        suggestedAnimal = Animal.query.get(suggestion_id)
-        if suggestedAnimal.account_id != current_user.account_id and current_user.get_urole() != "ADMIN":
+        suggested_animal = Animal.query.get(suggestion_id)
+        if suggested_animal.account_id != current_user.account_id and current_user.get_urole() != "ADMIN":
             flash("Sinulla ei ole käyttöoikeuksia kyseiseen toimintoon!", "error")
             return redirect(url_for("index"))
-        suggestion_owner = User.query.get(suggestedAnimal.account_id)
+        suggestion_owner = User.query.get(suggested_animal.account_id)
         if suggestion_owner is not None:
             suggestion_owner.suggestions_deleted = suggestion_owner.suggestions_deleted + 1
-        Vote.query.filter(Vote.animal_id == suggestedAnimal.animal_id).delete()
-        db.session.delete(suggestedAnimal)
+        Vote.query.filter(Vote.animal_id == suggested_animal.animal_id).delete()
+        db.session.delete(suggested_animal)
         db.session.commit()
     except:
         db.session.rollback()
@@ -158,46 +158,45 @@ def animal_delete_suggestion(suggestion_id):
 @app.route("/animals/edit_suggestion/<suggestion_id>", methods=["GET", "POST"])
 @login_required()
 def animal_edit_suggestion(suggestion_id):
-    suggestedAnimal = Animal.query.get(suggestion_id)
-    if suggestedAnimal is None:
+    suggested_animal = Animal.query.get(suggestion_id)
+    if suggested_animal is None:
         flash("Virheellinen osoite!", "error")
         return redirect(url_for("index"))
-    if suggestedAnimal.account_id != current_user.account_id and current_user.get_urole() != "ADMIN":
+    if suggested_animal.account_id != current_user.account_id and current_user.get_urole() != "ADMIN":
         flash("Sinulla ei ole käyttöoikeuksia kyseiseen toimintoon!", "error")
         return redirect(url_for("index"))
     if request.method == "GET":
-        form = addNewAnimalForm()
-        form.name.data = suggestedAnimal.name
-        form.lat_name.data = suggestedAnimal.lat_name
-        form.info.data = suggestedAnimal.info
-        return render_template("animals/editsuggestion.html", animal=suggestedAnimal, form=form)
+        form = AddNewAnimalForm()
+        form.name.data = suggested_animal.name
+        form.lat_name.data = suggested_animal.lat_name
+        form.info.data = suggested_animal.info
+        return render_template("animals/editsuggestion.html", animal=suggested_animal, form=form)
 
-    form = addNewAnimalForm(request.form)
+    form = AddNewAnimalForm(request.form)
     if form.validate():
         try:
-            # suggestedAnimal = Animal.query.get(suggestion_id)
-            suggestedAnimal.name = form.name.data
-            suggestedAnimal.lat_name = form.lat_name.data
-            suggestedAnimal.info = form.info.data
+            suggested_animal.name = form.name.data
+            suggested_animal.lat_name = form.lat_name.data
+            suggested_animal.info = form.info.data
             db.session().commit()
         except:
             db.session().rollback()
             flash("Eläimen nimi tai latinankielinen nimi on jo järjestelmässä! Eläintä ei muokattu!", "error")
-            return render_template("animals/editsuggestion.html", animal=suggestedAnimal, form=form)
+            return render_template("animals/editsuggestion.html", animal=suggested_animal, form=form)
         flash("Eläintä muokattu onnistuneesti!", "info")
         return redirect(url_for("animal_list_suggested"))
-    return render_template("animals/editsuggestion.html", animal=suggestedAnimal, form=form)
+    return render_template("animals/editsuggestion.html", animal=suggested_animal, form=form)
 
 @app.route("/animals/accept_suggestion/<suggestion_id>", methods=["GET","POST"])
 @login_required(role="ADMIN")
 def animal_accept_suggestion(suggestion_id):
     try:
-        suggestedAnimal = Animal.query.get(suggestion_id)
-        suggestedAnimal.suggestion_flag = 0
-        suggestion_owner = User.query.get(suggestedAnimal.account_id)
+        suggested_animal = Animal.query.get(suggestion_id)
+        suggested_animal.suggestion_flag = 0
+        suggestion_owner = User.query.get(suggested_animal.account_id)
         if suggestion_owner is not None:
             suggestion_owner.suggestions_accepted = suggestion_owner.suggestions_accepted + 1
-        Vote.query.filter(Vote.animal_id == suggestedAnimal.animal_id).delete()
+        Vote.query.filter(Vote.animal_id == suggested_animal.animal_id).delete()
         db.session.commit()
     except:
         db.session.rollback()

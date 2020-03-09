@@ -40,9 +40,9 @@ class BiggerThan(object):
             raise ValidationError(message % d)
 
 class DateBetween(object):
-    def __init__(self, dateMin=date.min, dateMax=date.today(), message=None):
-        self.dateMin = dateMin
-        self.dateMax = dateMax
+    def __init__(self, date_min=date.min, date_max=date.today(), message=None):
+        self.date_min = date_min
+        self.date_max = date_max
         if not message:
             self.message = 'Havainnon päivämäärä ei voi olla tulevaisuudessa!'
         else:
@@ -51,7 +51,7 @@ class DateBetween(object):
     def __call__(self, form, field):
         date = field.data
 
-        if date > self.dateMax or date < self.dateMin:
+        if date > self.date_max or date < self.date_min:
             raise ValidationError(self.message)
 
 class AddNewObservationForm(FlaskForm):
@@ -90,40 +90,40 @@ class AddNewObservationForm(FlaskForm):
 
 
 class ListFiltersForm(FlaskForm):
-    date_observedLow = DateField("Havainnon päivämäärän ja ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), BiggerThan('date_observedHigh'), DateBetween()], render_kw={'max': date.today().strftime('%Y-%m-%d'), 'class': 'datepicker'})
-    hourLow1 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
+    date_observed_low = DateField("Havainnon päivämäärän ja ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), BiggerThan('date_observed_high'), DateBetween()], render_kw={'max': date.today().strftime('%Y-%m-%d'), 'class': 'datepicker'})
+    hour_low1 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    minuteLow1 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
+    minute_low1 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    date_observedHigh = DateField("Havainnon päivämäärän ja ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), DateBetween()], render_kw={'max': date.today().strftime('%Y-%m-%d'), 'class': 'datepicker'})
-    hourHigh1 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
+    date_observed_high = DateField("Havainnon päivämäärän ja ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), DateBetween()], render_kw={'max': date.today().strftime('%Y-%m-%d'), 'class': 'datepicker'})
+    hour_high1 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    minuteHigh1 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
+    minute_high1 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    hourLow2 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
+    hour_low2 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    minuteLow2 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
+    minute_low2 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    hourHigh2 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
+    hour_high2 = SelectField("Tunti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
-    minuteHigh2 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
+    minute_high2 = SelectField("Minuutti", choices=[(-1, ''), (0, '00'), (1, '01'), (2, '02'), (3, '03'), (4, '04'), (5, '05'), (6, '06'), (7, '07'), (8, '08'), (9, '09'), (10, '10'), (11, '11'), (12, '12'), (13, '13'), (14, '14'), (15, '15'), (16, '16'), (17, '17'), (18, '18'), (19, '19'), (20, '20'), (21, '21'), (22, '22'), (23, '23'), (24, '24'), (25, '25'), (26, '26'), (27, '27'), (28, '28'), (29, '29'), (30, '30'), (31, '31'), (32, '32'), (33, '33'), (34, '34'), (35, '35'), (36, '36'), (37, '37'), (38, '38'), (39, '39'), (40, '40'), (41, '41'), (42, '42'), (43, '43'), (44, '44'), (45, '45'), (46, '46'), (47, '47'), (48, '48'), (49, '49'), (50, '50'), (51, '51'), (52, '52'), (53, '53'), (54, '54'), (55, '55'), (56, '56'), (57, '57'), (58, '58'), (59, '59')],
                         validators=[validators.optional(strip_whitespace=True)], coerce=int)
     city = SelectMultipleField("Kunta")
-    latitudeLow = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
-        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitudeHigh')], render_kw={"placeholder": "3.554446"})
-    latitudeHigh = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    latitude_low = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+        min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!"), BiggerThan('latitude_high')], render_kw={"placeholder": "3.554446"})
+    latitude_high = DecimalField("Leveysasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-90, max=90, message="Leveysasteen on oltava välillä -90.000000 ja 90.000000!")], render_kw={"placeholder": "83.456722"})
 
-    longitudeLow = DecimalField("Pituusasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
-        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!"), BiggerThan('longitudeHigh')], render_kw={"placeholder": "-104.234224"})
-    longitudeHigh = DecimalField("Pituusasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    longitude_low = DecimalField("Pituusasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+        min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!"), BiggerThan('longitude_high')], render_kw={"placeholder": "-104.234224"})
+    longitude_high = DecimalField("Pituusasteen ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=-180, max=180, message="Pituusasteen on oltava välillä -180.000000 ja 180.000000!")], render_kw={"placeholder": "80.224422"})
 
     animal = SelectMultipleField("Eläin", coerce=int)
 
-    weightLow = DecimalField("Painon ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
-        min=0, message="Paino ei voi olla negatiivinen!"), BiggerThan('weightHigh')], render_kw={"placeholder": "3"})
-    weightHigh = DecimalField("Painon ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+    weight_low = DecimalField("Painon ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
+        min=0, message="Paino ei voi olla negatiivinen!"), BiggerThan('weight_high')], render_kw={"placeholder": "3"})
+    weight_high = DecimalField("Painon ajan ala- ja yläraja", validators=[validators.optional(strip_whitespace=True), validators.number_range(
         min=0, message="Paino ei voi olla negatiivinen!")], render_kw={"placeholder": "50"})
     sex = SelectMultipleField("Sukupuoli", choices=[(
         0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], coerce=int)

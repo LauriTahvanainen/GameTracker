@@ -27,9 +27,9 @@ class CreateUserForm(FlaskForm):
         validators.Length(
             min=8, max=30, message='Salasanan on oltava pituudeltaan 8-30 merkkiä!'),
         validators.equal_to(
-            'confirmPwd', message='Salasanojen on oltava samat!')
+            'confirm_pwd', message='Salasanojen on oltava samat!')
     ], render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
-    confirmPwd = PasswordField("Vahvista salasana",
+    confirm_pwd = PasswordField("Vahvista salasana",
         render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
     name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z ÅÖÄåöä]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(
         message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Matti Meikäläinen"})

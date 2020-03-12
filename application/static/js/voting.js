@@ -40,6 +40,11 @@ function fetchOriginalVotes() {
         }
     };
     xhttp.open("GET", "/animals/list_suggested/vote/get_votes", true);
+    xhttp.setRequestHeader('cache-control', 'no-cache, must-revalidate, post-check=0, pre-check=0');
+    xhttp.setRequestHeader('cache-control', 'max-age=0');
+    xhttp.setRequestHeader('expires', '0');
+    xhttp.setRequestHeader('expires', 'Tue, 01 Jan 1980 1:00:00 GMT');
+    xhttp.setRequestHeader('pragma', 'no-cache');
     xhttp.send();
 };
 
@@ -56,7 +61,7 @@ function saveVotes() {
         updated_or_added_downvotes = Array.from(updated_or_added_downvotes);
         updated_or_added_upvotes = Array.from(updated_or_added_upvotes);
         votes_to_delete = Array.from(votes_to_delete);
-        var data = JSON.stringify({ "upvotes": updated_or_added_upvotes, "down_votes": updated_or_added_downvotes, "to_delete": votes_to_delete })
+        var data = JSON.stringify({ "upvotes": updated_or_added_upvotes, "downvotes": updated_or_added_downvotes, "to_delete": votes_to_delete })
         postToServer("POST", "/animals/list_suggested/vote/save", data)
     }
     return null;

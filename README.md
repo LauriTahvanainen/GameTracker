@@ -19,7 +19,7 @@ GameTracker offers a platforms for saving and observing observations of animals.
 
 [Task List](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/tasklist.md)
 
-[Database](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/database_structure.md)
+[Database Structure](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/database_structure.md)
 
 [User Stories](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/userstories.md)
 

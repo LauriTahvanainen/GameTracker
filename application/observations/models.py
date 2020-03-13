@@ -122,7 +122,7 @@ class Observation(Base):
         stmt = text("SELECT Account.account_id, Account.username, Account.date_created FROM Account"
                     " LEFT JOIN Observation ON Observation.account_id = Account.account_id"
                     " GROUP BY Account.account_id"
-                    " HAVING COUNT(Observation.observation_id) == 0"
+                    " HAVING COUNT(Observation.observation_id) = 0"
                     " ORDER BY Account.date_created ASC"
                     " LIMIT 10")
         res = db.engine.execute(stmt)

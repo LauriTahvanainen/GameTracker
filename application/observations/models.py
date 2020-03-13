@@ -122,7 +122,7 @@ class Observation(Base):
         stmt = text("SELECT Account.account_id, Account.username, Account.date_created FROM Account"
                     " LEFT JOIN Observation ON Observation.account_id = Account.account_id"
                     " GROUP BY Account.account_id"
-                    " HAVING COUNT(Observation.observation_id) = 0"
+                    " HAVING COUNT(Observation.observation_id) == 0"
                     " ORDER BY Account.date_created ASC"
                     " LIMIT 10")
         res = db.engine.execute(stmt)
@@ -136,7 +136,7 @@ class Observation(Base):
     def list_top_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
-                    " WHERE Animal.suggestion_flag = 0"
+                    " WHERE Animal.suggestion_flag == 0"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count DESC, Animal.name"
                     " LIMIT 10")
@@ -151,7 +151,7 @@ class Observation(Base):
     def list_bottom_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
-                    " WHERE Animal.suggestion_flag = 0"
+                    " WHERE Animal.suggestion_flag == 0"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count ASC, Animal.name"
                     " LIMIT 10")
@@ -192,7 +192,7 @@ class Observation(Base):
     def list_most_hunted_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
-                    " WHERE Observation.observ_type = 0 and Animal.suggestion_flag = 0"
+                    " WHERE Observation.observ_type == 0 and Animal.suggestion_flag == 0"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count DESC, Animal.name"
                     " LIMIT 10")

@@ -5,6 +5,7 @@ from flask_login import login_user, logout_user, current_user
 from flask import render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
+from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/auth/menu", methods=["GET"])
@@ -51,7 +52,7 @@ def auth_create():
         try:
             db.session().add(new_user)
             db.session().commit()
-        except Exception:
+        except IntegrityError:
             db.session().rollback()
             flash("Käyttäjänimi on jo käytössä!", "error")
             return render_template("auth/createuserform.html", form=CreateUserForm())

@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, validators, IntegerField
+from wtforms import PasswordField, StringField, validators, IntegerField, SelectField
 from datetime import date
+from application import city_choices
 
 
 class LoginForm(FlaskForm):
@@ -33,8 +34,7 @@ class CreateUserForm(FlaskForm):
         render_kw={"placeholder": "Min. 8, maks. 30 merkkiä"})
     name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z ÅÖÄåöä]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(
         message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Matti Meikäläinen"})
-    city = StringField("Asuinpaikka", validators=[validators.Regexp(
-        '^[a-zA-ZåöäÅÖÄ]*$', message='Kaupungin nimessä on vain kirjaimia!')], render_kw={"placeholder": "Nurmes"})
+    city = SelectField("Asuinpaikka", choices=city_choices, validators=[validators.input_required()], render_kw={"placeholder": "Nurmes"})
     age = IntegerField("Syntymävuosi", [validators.number_range(min=int(date.today().year) - 125, max=int(date.today().year), message=(
         "Syntymävuoden on oltava välillä " + str((int(date.today().year) - 125)) + " ja " + str(int(date.today().year))) + "!")], render_kw={"placeholder": "1982"})
 
@@ -69,8 +69,7 @@ class ChangeUsernameForm(FlaskForm):
 class EditUserInfoForm(FlaskForm):
     name = StringField("Nimi", validators=[validators.Regexp('^[a-zA-Z ÅÖÄåöä]*$', message='Nimessä on vain kirjaimia!'), validators.input_required(
         message='Nimi ei voi olla tyhjä!')], render_kw={"placeholder": "Matti Meikäläinen"})
-    city = StringField("Asuinpaikka", validators=[validators.Regexp(
-        '^[a-zA-ZåöäÅÖÄ]*$', message='Kaupungin nimessä on vain kirjaimia!')], render_kw={"placeholder": "Nurmes"})
+    city = SelectField("Asuinpaikka", choices=city_choices, validators=[validators.input_required()], render_kw={"placeholder": "Nurmes"})
     age = IntegerField("Syntymävuosi", [validators.number_range(min=int(date.today().year) - 125, max=int(date.today().year), message=(
         "Syntymävuoden on oltava välillä " + str((int(date.today().year) - 125)) + " ja " + str(int(date.today().year))) + "!")], render_kw={"placeholder": "1982"})
 

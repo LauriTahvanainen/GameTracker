@@ -59,6 +59,12 @@ def login_required(role="ANY"):
         return decorated_view
     return wrapper
 
+# Load cities choices
+city_choices = []
+with open("application/static/cities/kunnat.txt") as cities:
+    for city in cities:
+        city_choices.append((city.strip(), city.strip()))
+
 from application import views
 
 from application.observations import models

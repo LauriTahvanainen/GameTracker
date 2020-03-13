@@ -1,5 +1,6 @@
 # Tasks to complete
 
+* Make restrictions on selecting observations type and certain equipment
 1. Filter observations from the map.
 2. Change selecting time to a more easily to use format.
 3. If there are no Animals and the user goes to add an observation, the user will be redirected to adding/suggesting an animal. Could also be done with a button in observation add-view.

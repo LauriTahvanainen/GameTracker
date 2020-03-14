@@ -1,5 +1,6 @@
 from application import app, db, login_required
 from application.auth.models import User
+from application.animals.models import Animal
 from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm, ChangeUsernameForm, EditUserInfoForm
 from flask_login import login_user, logout_user, current_user
 from flask import render_template, request, redirect, url_for, flash, jsonify
@@ -66,9 +67,11 @@ def auth_create():
 def auth_delete():
     if request.method == "GET":
         return render_template("auth/deleteuserform.html")
-
     try:
-        User.delete_account(current_user.account_id)
+        user = User.query.get(current_user.account_id)
+        Animal.delete_users_votes(current_user.account_id)
+        db.session.delete(user)
+        db.session.commit()
         logout_user()
     except:
         db.session().rollback()
@@ -82,12 +85,15 @@ def auth_delete():
 @login_required(role="ADMIN")
 def auth_delete_account(account_id):
     try:
-        User.delete_account(account_id)
+        user = User.query.get(account_id)
+        Animal.delete_users_votes(account_id)
+        db.session.delete(user)
+        db.session.commit()
         flash("Käyttäjä poistettu onnistuneesti!", "info")
         return redirect(url_for("index"))
-    except Exception as e:
+    except:
         flash("Poistaminen epäonnistui!", "error")
-        return redirect(url_for("index")), jsonify(e)
+        return redirect(url_for("index"))
 
 
 @app.route("/auth/changepw", methods=["GET", "POST"])

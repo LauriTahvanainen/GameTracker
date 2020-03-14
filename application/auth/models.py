@@ -21,11 +21,11 @@ class User(Base):
     suggestions_deleted = db.Column(db.Integer, default=0)
 
     observations = db.relationship(
-        "Observation", backref='account', lazy=True)
+        "Observation", backref='account', cascade="all,delete", lazy=True)
     added_animals = db.relationship(
         "Animal", backref='account', lazy=True)
     votes = db.relationship(
-        "Vote", backref='account', lazy=True)
+        "Vote", backref='account', cascade="all,delete", lazy=True)
 
     def __init__(self, username, name, password, city, age, urole):
         self.username = username
@@ -77,17 +77,6 @@ class User(Base):
             response.append(
                 {"username": row[0], "name": row[1], "city": row[2], "age": row[3]})
         return response
-
-    # Could not get the cascading to works so deletion is done with two statements
-    @staticmethod
-    def delete_account(account_id):
-        stmt1 = text("DELETE FROM account WHERE account_id = :account_id").params(
-            account_id=account_id)
-        stmt2 = text("DELETE FROM observation WHERE account_id = :account_id").params(
-            account_id=account_id)
-        db.engine.execute(stmt2)
-        db.engine.execute(stmt1)
-        db.session().commit()
 
     @staticmethod
     def generate_salt():

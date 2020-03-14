@@ -85,9 +85,11 @@ def animal_edit_or_delete(animal_id):
 def animal_delete(animal_id):
     try:
         # Could not get cascade working so deleting observations separately
-        Observation.query.filter_by(animal_id=animal_id).delete()
-        Animal.query.filter_by(animal_id=animal_id).delete()
-        db.session().commit()
+        animal = Animal.query.get(animal_id)
+        db.session.delete(animal)
+        # Observation.query.filter_by(animal_id=animal_id).delete()
+        # Animal.query.filter_by(animal_id=animal_id).delete()
+        db.session.commit()
     except:
         flash("Poistettaessa tapahtui virhe! Eläintä ei poistettu!", "error")
         return render_template("animals/listanimals.html", animals=Animal.query.order_by(Animal.name.asc()).all())

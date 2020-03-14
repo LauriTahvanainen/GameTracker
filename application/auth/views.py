@@ -2,7 +2,7 @@ from application import app, db, login_required
 from application.auth.models import User
 from application.auth.forms import LoginForm, CreateUserForm, ChangePasswordForm, ChangeUsernameForm, EditUserInfoForm
 from flask_login import login_user, logout_user, current_user
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.sql import text
 from sqlalchemy.exc import IntegrityError
@@ -85,9 +85,9 @@ def auth_delete_account(account_id):
         User.delete_account(account_id)
         flash("Käyttäjä poistettu onnistuneesti!", "info")
         return redirect(url_for("index"))
-    except:
+    except Exception as e:
         flash("Poistaminen epäonnistui!", "error")
-        return redirect(url_for("index"))
+        return redirect(url_for("index")), jsonify(e)
 
 
 @app.route("/auth/changepw", methods=["GET", "POST"])

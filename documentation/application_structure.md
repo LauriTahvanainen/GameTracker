@@ -42,4 +42,4 @@ The browser also does some simple checks to make sure the arrays are the of the 
 
 On the server side, there are checks to make sure, that there are not more votes than suggestions etc. The arrays are also turned again to sets, so that possible multiples of votes are deleted.
 
-All the cases that can happen with the votes given by the user are taken in to account and the votes are saved. If the amount of votes for one suggestions goes over or under the limits, the suggestion is either accepted or deleted accordingly. The amount of accepted or deleted animals are returned to the user.
+All the cases that can happen with the votes given by the user are taken into account and the votes are saved. If the amount of votes for one suggestions goes over or under the limits, the suggestion is either accepted or deleted accordingly. The amount of accepted or deleted animals are returned to the user.

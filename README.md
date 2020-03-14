@@ -27,7 +27,7 @@ GameTracker offers a platforms for saving and observing observations of animals.
 
 [Limitations, Missing Features and Ideas](https://github.com/LauriTahvanainen/GameTracker/blob/master/documentation/LimitsNIdeas.md)
 
-## Testing account in Heroku
+## Testing accounts in Heroku
 **Admin**
 
     Username: admin

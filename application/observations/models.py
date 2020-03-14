@@ -136,7 +136,7 @@ class Observation(Base):
     def list_top_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
-                    " WHERE Animal.suggestion_flag == '0'"
+                    " WHERE Animal.suggestion_flag = '0'"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count DESC, Animal.name"
                     " LIMIT 10")
@@ -151,7 +151,7 @@ class Observation(Base):
     def list_bottom_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
-                    " WHERE Animal.suggestion_flag == '0'"
+                    " WHERE Animal.suggestion_flag = '0'"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count ASC, Animal.name"
                     " LIMIT 10")
@@ -192,7 +192,7 @@ class Observation(Base):
     def list_most_hunted_animals():
         stmt = text("SELECT Animal.animal_id, Animal.name, Animal.lat_name, Animal.info, COUNT(Observation.observation_id) as count, AVG(Observation.weight) as avg FROM Animal"
                     " LEFT JOIN Observation ON (Animal.animal_id = Observation.animal_id)"
-                    " WHERE Observation.observ_type == 0 and Animal.suggestion_flag == '0'"
+                    " WHERE Observation.observ_type = 0 and Animal.suggestion_flag = '0'"
                     " GROUP BY Animal.animal_id"
                     " ORDER BY count DESC, Animal.name"
                     " LIMIT 10")

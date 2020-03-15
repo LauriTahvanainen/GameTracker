@@ -37,8 +37,8 @@ def vote():
             acc_id = current_user.account_id
             # Handle votes that are deleted, meaning that the user retracts their vote
             deleted, accepted = handle_to_delete(to_delete, acc_id)
-            accepted_suggestions = accepted + accepted_suggestions
-            deleted_suggestions = deleted + deleted_suggestions
+            accepted_suggestions = accepted_suggestions + accepted
+            deleted_suggestions = deleted_suggestions + deleted
             # Handle downvotes
             deleted_suggestions = deleted_suggestions + handle_downvotes(downvotes, acc_id)
             # Handle upvotes
@@ -71,15 +71,11 @@ def handle_to_delete(to_delete, current_user_id):
     accepted = 0
     for suggestion_id in to_delete:
         vote = Vote.query.filter(Vote.animal_id == suggestion_id, Vote.account_id == current_user_id).first()
-        # Handle nonexistent votes
-        if vote is None:
-            break
-
         suggestion = Animal.query.get(suggestion_id)
         if vote.value:
-            if suggestion.votes_num - 1 < -2:
-                suggestion_owner = User.query.get(suggestion.account_id)
-                if suggestion_owner is not None:
+            if suggestion.votes_num - 1 < -2 and suggestion.suggestion_flag == True:
+                if suggestion.account_id is not None:
+                    suggestion_owner = User.query.get(suggestion.account_id)
                     suggestion_owner.suggestions_deleted = suggestion_owner.suggestions_deleted + 1
                 Vote.query.filter(Vote.animal_id == suggestion.animal_id).delete()
                 db.session.delete(suggestion)
@@ -88,8 +84,8 @@ def handle_to_delete(to_delete, current_user_id):
                 suggestion.votes_num = suggestion.votes_num - 1
         else:
             if suggestion.votes_num + 1 > 2 and suggestion.suggestion_flag == True:
-                suggestion_owner = User.query.get(suggestion.account_id)
-                if suggestion_owner is not None:
+                if suggestion.account_id is not None:
+                    suggestion_owner = User.query.get(suggestion.account_id)
                     suggestion_owner.suggestions_accepted = suggestion_owner.suggestions_accepted + 1
                 suggestion.suggestion_flag = False
                 accepted = accepted + 1
@@ -107,9 +103,9 @@ def handle_downvotes(downvotes, current_user_id):
             Vote.animal_id == suggestion_id, Vote.account_id == current_user_id).first()
         suggestion = Animal.query.get(suggestion_id)
         if vote is None:
-            if suggestion.votes_num - 1 < -2:
-                suggestion_owner = User.query.get(suggestion.account_id)
-                if suggestion_owner is not None:
+            if suggestion.votes_num - 1 < -2 and suggestion.suggestion_flag == True:
+                if suggestion.account_id is not None:
+                    suggestion_owner = User.query.get(suggestion.account_id)
                     suggestion_owner.suggestions_deleted = suggestion_owner.suggestions_deleted + 1
                 Vote.query.filter(Vote.animal_id == suggestion.animal_id).delete()
                 db.session.delete(suggestion)
@@ -119,9 +115,9 @@ def handle_downvotes(downvotes, current_user_id):
                 db.session.add(vote)
                 suggestion.votes_num = suggestion.votes_num - 1
         else:
-            if suggestion.votes_num - 2 < -2:
-                suggestion_owner = User.query.get(suggestion.account_id)
-                if suggestion_owner is not None:
+            if suggestion.votes_num - 2 < -2 and suggestion.suggestion_flag == True:
+                if suggestion.account_id is not None:
+                    suggestion_owner = User.query.get(suggestion.account_id)
                     suggestion_owner.suggestions_deleted = suggestion_owner.suggestions_deleted + 1
                 Vote.query.filter(Vote.animal_id == suggestion.animal_id).delete()
                 db.session.delete(suggestion)
@@ -140,8 +136,8 @@ def handle_upvotes(upvotes, current_user_id):
         suggestion = Animal.query.get(suggestion_id)
         if vote is None:
             if suggestion.votes_num + 1 > 2 and suggestion.suggestion_flag == True:
-                suggestion_owner = User.query.get(suggestion.account_id)
-                if suggestion_owner is not None:
+                if suggestion.account_id is not None:
+                    suggestion_owner = User.query.get(suggestion.account_id)
                     suggestion_owner.suggestions_accepted = suggestion_owner.suggestions_accepted + 1
                 suggestion.suggestion_flag = False
                 accepted = accepted + 1
@@ -152,8 +148,8 @@ def handle_upvotes(upvotes, current_user_id):
                 suggestion.votes_num = suggestion.votes_num + 1
         else:
             if suggestion.votes_num + 2 > 2 and suggestion.suggestion_flag == True:
-                suggestion_owner = User.query.get(suggestion.account_id)
-                if suggestion is not None:
+                if suggestion.account_id is not None:
+                    suggestion_owner = User.query.get(suggestion.account_id)
                     suggestion_owner.suggestions_accepted = suggestion_owner.suggestions_accepted + 1
                 suggestion.suggestion_flag = False
                 accepted = accepted + 1

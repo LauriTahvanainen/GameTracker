@@ -61,7 +61,7 @@ def login_required(role="ANY"):
 
 # Load cities choices
 city_choices = []
-with open("application/static/cities/kunnat.txt") as cities:
+with open("./application/static/cities/kunnat.txt") as cities:
     for city in cities:
         city_choices.append((city.strip(), city.strip()))
 

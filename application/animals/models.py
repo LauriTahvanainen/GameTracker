@@ -34,9 +34,12 @@ class Animal(Base):
 
     @staticmethod
     def delete_users_votes(account_id):
-        animals = Animal.query.join(Vote, Vote.animal_id == Animal.animal_id).filter(Vote.account_id == account_id)
+        animals = Animal.query.join(Vote, Vote.animal_id == Animal.animal_id).filter(Vote.account_id == account_id).all()
         for animal in animals:
-            animal.votes_num = animal.votes_num - 1
+            if animal.votes[0].value:
+                animal.votes_num = animal.votes_num - 1
+            else:
+                animal.votes_num = animal.votes_num + 1
 
 # Might be used when implementing proposing for editing of existing animals
 # class AnimalSuggestion(Base):

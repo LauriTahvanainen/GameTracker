@@ -33,6 +33,10 @@ def observation_add():
         date_observed = form.date_observed.data
         time_observed = time(form.hour.data, form.minute.data)
         datetime_observed = datetime.combine(date_observed, time_observed)
+        equipment = Equipment.query.get(form.equipment.data)
+        if not equipment.get_allowed_value_by_index(form.observ_type.data):
+            flash("Tapahtui virhe, valittua välinettä ei voi valita valitun havaintotyypin kanssa!", "error")
+            return render_template("observations/addobservation.html", form=form)
         new_obs = Observation(current_user.account_id,
                              date_observed, time_observed,
                              datetime_observed,

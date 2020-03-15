@@ -69,7 +69,7 @@ class AddNewObservationForm(FlaskForm):
         min=0, message="Paino ei voi olla negatiivinen!")], places=3, render_kw={"placeholder": "Kilogrammoina"})
     sex = SelectField("Sukupuoli", choices=[(0, "Ei tiedossa"),(1, "Uros"), (2, "Naaras"), (3, "Muu")], validators=[
                       validators.input_required(message="Sukupuoli pitää valita!")], coerce=int)
-    observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], validators=[
+    observ_type = SelectField("Havaintotapa", choices=[(0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Liikenneonnettomuus"), (4, "Onnettomuus")], validators=[
                               validators.input_required(message="Havaintotapa pitää valita!")], coerce=int)
 
     equipment = SelectField("Väline",  validators=[validators.input_required(
@@ -120,7 +120,7 @@ class ListFiltersForm(FlaskForm):
     sex = SelectMultipleField("Sukupuoli", choices=[(
         0, "Uros"), (1, "Naaras"), (2, "Muu"), (3, "Ei tiedossa")], coerce=int)
     observ_type = SelectMultipleField("Havaintotapa", choices=[(
-        0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Onnettomuus")], coerce=int)
+        0, "Saalis"), (1, "Näköhavainto"), (2, "Kiinniotto"), (3, "Liikenneonnettomuus"), (4, "Onnettomuus")], coerce=int)
 
     equipment = SelectMultipleField("Väline", coerce=int)
     info = TextAreaField("Muita tietoja", validators=[validators.optional(), validators.Regexp('^[\w.?!, ]*$', message="Vain kirjaimet, numerot ja '. ? ! , ' ovat sallittuja merkkejä!"), validators.length(

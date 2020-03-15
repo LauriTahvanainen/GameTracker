@@ -18,6 +18,19 @@
             </td>
         </tr>
         <tr>
+            <td style="font-size: 20px">
+                {{ form.allowed_types.label }}
+            </td>
+            <td>
+                {{ form.allowed_types }}
+            </td>
+            <td>
+                {% if form.allowed_types.errors %}
+                <div>{{ form.allowed_types.errors[0] }}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <input type="submit" value="Lisää väline" class="btn btn-success btn-lg"/>
             </td>

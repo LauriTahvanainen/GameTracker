@@ -4,6 +4,7 @@ from application.equipments.forms import AddEquipmentForm, ListEquipmentForm
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
 from application.equipments.forms import EquipmentSelectForm
+from flask import jsonify
 
 
 @app.route("/equipments/menu", methods=["GET"])
@@ -21,15 +22,16 @@ def equipment_add():
     form = AddEquipmentForm(request.form)
 
     if form.validate():
-        new_equipment = Equipment(form.name.data)
+        allowed_types = parse_allowed_types(form.allowed_types.data)
+        new_equipment = Equipment(form.name.data, allowed_types[0], allowed_types[1], allowed_types[2], allowed_types[3], allowed_types[4])
         try:
             db.session().add(new_equipment)
             db.session().commit()
         except Exception:
             db.session().rollback()
-            flash("Varuste on jo järjestelmässä!", "error")
+            flash("Väline on jo järjestelmässä!", "error")
             return render_template("equipments/addequipment.html", form=AddEquipmentForm())
-        flash('Varuste lisätty onnistuneesti!', "info")
+        flash('Väline lisätty onnistuneesti!', "info")
         return redirect(url_for("equipment_add"))
     return render_template("equipments/addequipment.html", form=form)
 
@@ -68,3 +70,29 @@ def equipment_list_and_remove():
 
     flash("Valitut välineet poistettu onnistuneesti!", "info")
     return redirect(url_for("equipment_list_and_remove"))
+
+@app.route("/equipments/fetchAll", methods=["GET"])
+@login_required()
+def fetchAll():
+    return jsonify(serialize_equipment(Equipment.query.order_by(Equipment.name.asc()).all()))
+
+def parse_allowed_types(allowed_data):
+    bool_array = [False,False,False,False,False]
+    for value in allowed_data:
+        bool_array[value] = True
+    return bool_array
+
+def serialize_equipment(equipments):
+    array = []
+    for equipment in equipments:
+        array.append({
+                'equipment_id': equipment.equipment_id,
+                'name': equipment.name,
+                'catch_type_allowed': equipment.catch_type_allowed,
+                'sighting_type_allowed': equipment.sighting_type_allowed,
+                'capture_type_allowed': equipment.capture_type_allowed,
+                'road_accident_type_allowed': equipment.road_accident_type_allowed,
+                'accident_type_allowed': equipment.accident_type_allowed
+            }
+        )
+    return array

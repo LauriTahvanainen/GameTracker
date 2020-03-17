@@ -368,7 +368,9 @@
     crossorigin=""></script>
 <script src="{{ url_for('static', filename='js/filterMap.js') }}"></script>
 <script src="{{ url_for('static', filename='js/filterRequests.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dynamicSelectionsFilter.js') }}"></script>
 <script>
     sendObsRequest(-2);
+    fetchEquipments(-2);
 </script>
 {% endblock %}

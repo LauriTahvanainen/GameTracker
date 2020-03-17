@@ -80,7 +80,7 @@ function sendObsRequest() {
         }
     }
     if (obs_id == 'add') {
-        xhttp.open("GET", "/observations/listuser?page=0", true);
+        xhttp.open("GET", "/observations/list/user?page=0", true);
     } else {
         var user_id = document.getElementById("acc_id").innerHTML
         xhttp.open("GET", "/observations/list/" + user_id + "?page=0", true);

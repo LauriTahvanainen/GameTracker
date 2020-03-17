@@ -107,7 +107,7 @@ function sendObsRequest(userId) {
     };
     // Adding timestamp to the end to disable caching of results
     if (userId == -1) {
-        xhttp.open("POST", "/observations/listuser?page=0&" + (new Date().getTime()), true);
+        xhttp.open("POST", "/observations/list/user?page=0&" + (new Date().getTime()), true);
     } else if (userId == -2) {
         xhttp.open("POST", "/observations/list/all?page=0&" + (new Date().getTime()), true);
     } else {

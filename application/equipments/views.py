@@ -1,5 +1,6 @@
 from application import app, db, login_required
 from application.equipments.models import Equipment
+from application.observations.models import Observation
 from application.equipments.forms import AddEquipmentForm, ListEquipmentForm
 from flask_login import current_user
 from flask import render_template, request, redirect, url_for, flash
@@ -75,6 +76,20 @@ def equipment_list_and_remove():
 @login_required()
 def fetchAll():
     return jsonify(serialize_equipment(Equipment.query.order_by(Equipment.name.asc()).all()))
+
+@app.route("/equipments/fetchUser/<user_id>", methods=["GET"])
+@login_required()
+def fetchUser(user_id):
+    user_id = int(user_id)
+    return jsonify(serialize_equipment(Equipment.query.outerjoin(Observation).filter(Observation.account_id == user_id).order_by(Equipment.name.asc()).all()))
+
+@app.route("/equipments/fetchCurrentUser", methods=["GET"])
+@login_required()
+def fetchCurrentUser():
+    return jsonify(serialize_equipment(Equipment.query.outerjoin(Observation).filter(Observation.account_id == current_user.account_id).order_by(Equipment.name.asc()).all()))
+
+
+
 
 def parse_allowed_types(allowed_data):
     bool_array = [False,False,False,False,False]

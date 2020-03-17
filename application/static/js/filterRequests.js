@@ -5,7 +5,7 @@ function OnSubmitFilters(user_id = -1) {
     } else if (user_id > 0) {
         action_string = `/observations/list/${user_id}?page=${page}`
     } else {
-        action_string = `/observations/listuser?page=${page}`;
+        action_string = `/observations/list/user?page=${page}`;
     }
     document.filterForm.action = action_string; 
 };

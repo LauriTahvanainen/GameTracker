@@ -60,7 +60,7 @@ def observation_add():
     return render_template("observations/addobservation.html", form=form)
 
 #TODO Fetch all observation information for the table and the map with one request to the database.
-@app.route("/observations/listuser", methods=["GET", "POST"])
+@app.route("/observations/list/user", methods=["GET", "POST"])
 @login_required()
 def observation_listuser():
     # The ajax request that fills the map on a page with observations also uses this function.
@@ -174,8 +174,7 @@ def observation_list_all():
     form = fill_choices_with_cities(form)
     if form.validate():
         if page == 0:
-            observations = Observation.list_filtered(
-                form, 0)
+            observations = Observation.list_filtered(form, 0)
             marker_data = jsonify(serialize(observations.all()))
             return marker_data
         pagination = Observation.list_filtered(form, page)

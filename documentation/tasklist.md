@@ -6,6 +6,7 @@
 * Automatical city selection
 * User saved observation base form
 * Own web-server
+* Logging
 * Add weather data input
 * Automatically fill weather data from the observations closest weather station
 * Restore password

@@ -1,9 +1,13 @@
 {% extends "layout.html" %}
 
 {% block body %}
+{% if form.animal.choices != [] %}
 <a href="{{ url_for('observation_menu') }}" class="btn btn-outline-primary">Takaisin havaintovalikkoon</a>
-<a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi
-    eläin!</a>
+{% if current_user.urole == "ADMIN" %}
+<a href="{{ url_for('animal_add') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä lisäämään uusi eläin!</a>
+{% else %}
+<a href="{{ url_for('animal_suggest') }}" class="btn btn-primary">Eikö havaittua eläintä löydy? Siirry tästä ehdottamaan uutta eläintä!</a>
+{% endif %}
 <form method="POST" action="{{ url_for('observation_add') }}">
     <table class="table-bordered" style="border: hidden">
         <h3>*-merkillä merkatut kentät ovat pakollisia</h3>
@@ -177,4 +181,11 @@
     sendObsRequest();
     fetchEquipments();
 </script>
+{% else %}
+{% if current_user.urole == "ADMIN" %}
+<a href="{{ url_for('animal_add') }}" class="btn btn-primary">Järjestelmässä ei eläimiä! Siirry tästä lisäämään uusi eläin!</a>
+{% else %}
+<a href="{{ url_for('animal_suggest') }}" class="btn btn-primary">Järjestelmässä ei eläimiä! Siirry tästä ehdottamaan uutta eläintä!</a>
+{% endif %}
+{% endif %}
 {% endblock %}

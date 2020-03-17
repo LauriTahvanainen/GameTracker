@@ -206,47 +206,27 @@ class Observation(Base):
 def filter_dates(query, form):
     date_observed_low = form.date_observed_low.data
     date_observed_high = form.date_observed_high.data
-    hour_low1 = form_time_value_to_int(form.hour_low1.data)
-    hour_low2 = form_time_value_to_int(form.hour_low2.data)
-    minute_low1 = form_time_value_to_int(form.minute_low1.data)
-    minute_low2 = form_time_value_to_int(form.minute_low2.data)
-    hour_high1 = form_time_value_to_int(form.hour_high1.data)
-    hour_high2 = form_time_value_to_int(form.hour_high2.data)
-    minute_high1 = form_time_value_to_int(form.minute_high1.data)
-    minute_high2 = form_time_value_to_int(form.minute_high2.data)
+    time_low1 = form.time_low1.data
+    time_low2 = form.time_low2.data
+    time_high1 = form.time_high1.data
+    time_high2 = form.time_high2.data
 
     if date_observed_low is not None:
-        if hour_low1 != -1 and minute_low1 != -1:
-            dateFilter = datetime.combine(date_observed_low, time(hour_low1, minute_low1))
-        elif hour_low1 != -1:
-            dateFilter = datetime.combine(date_observed_low, time(hour_low1, 0))
+        if time_low1 is not None:
+            dateFilter = datetime.combine(date_observed_low, time_low1)
         else:
             dateFilter = datetime.combine(date_observed_low, time(0,0))
         query = query.filter(Observation.datetime_observed >= dateFilter)
     if date_observed_high is not None:
-        if hour_high1 != -1 and minute_high1 != -1:
-            dateFilter = datetime.combine(date_observed_high, time(hour_high1, minute_high1))
-        elif hour_high1 != -1:
-             dateFilter = datetime.combine(date_observed_high, time(hour_high1, 0))
+        if time_high1 is not None:
+            dateFilter = datetime.combine(date_observed_high, time_high1)
         else:
-            dateFilter = datetime.combine(date_observed_high, time(0,0))
+            dateFilter = datetime.combine(date_observed_high, time(23,59))
         query = query.filter(Observation.datetime_observed <= dateFilter)
-    if hour_low2 != -1 and hour_low2 is not None:
-        if minute_low2 == -1:
-            timeFilter = time(hour_low2, 0)
-        else:
-            timeFilter = time(hour_low2, minute_low2)
+    if time_low2 is not None:
+        timeFilter = time_low2
         query = query.filter(Observation.time_observed >= timeFilter)
-    if hour_high2 != -1 and hour_high2 is not None:
-        if minute_high2 == -1:
-            timeFilter = time(hour_high2, 0)
-        else:
-            timeFilter = time(hour_high2, minute_high2)
+    if time_high2 is not None:
+        timeFilter = time_high2
         query = query.filter(Observation.time_observed <= timeFilter)
     return query
-
-def form_time_value_to_int(value):
-    try:
-        return int(value)
-    except:
-        return -1

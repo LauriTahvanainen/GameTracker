@@ -39,13 +39,11 @@
                     {{ 'Kellonaika' }}
                 </td>
                 <td style="border: hidden; color: white">
-                    {{ form.hour }}
-                    {{ form.minute }} *
+                    {{ form.time }} *
                 </td> 
-                {% if form.hour.errors or form.minute.errors %}
+                {% if form.time.errors %}
                 <td style="border: hidden">
-                    <div>{{ form.hour.errors[0] }}</div>
-                    <div>{{ form.minute.errors[0] }}</div>
+                    <div>{{ form.time.errors[0] }}</div>
                 </td>
                 {% endif %}
             </tr>

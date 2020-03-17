@@ -19,13 +19,11 @@
                     </td>
                     <td style="border: hidden">
                         {{ form.date_observed_low }}
-                        {{ form.hour_low1 }}
-                        {{ form.minute_low1 }}---
+                        {{ form.time_low1 }}---
                     </td>
                     <td style="border: hidden">
                         {{ form.date_observed_high }}
-                        {{ form.hour_high1 }}
-                        {{ form.minute_high1 }}
+                        {{ form.time_high1 }}
                     </td>
                     <td style="border: hidden">
                         {% if form.date_observed_low.errors %}
@@ -43,10 +41,8 @@
                         Havainnon Kellonaika
                     </td>
                     <td style="border: hidden">
-                        {{ form.hour_low2 }}
-                        {{ form.minute_low2 }}---
-                        {{ form.hour_high2 }}
-                        {{ form.minute_high2 }}
+                        {{ form.time_low2 }}---
+                        {{ form.time_high2 }}
                     </td>
                 </tr>
                 <tr>

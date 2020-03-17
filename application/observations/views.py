@@ -31,7 +31,7 @@ def observation_add():
     form = fill_choices(form)
     if form.validate():
         date_observed = form.date_observed.data
-        time_observed = time(form.hour.data, form.minute.data)
+        time_observed = form.time.data
         datetime_observed = datetime.combine(date_observed, time_observed)
         equipment = Equipment.query.get(form.equipment.data)
         if not equipment.get_allowed_value_by_index(form.observ_type.data):

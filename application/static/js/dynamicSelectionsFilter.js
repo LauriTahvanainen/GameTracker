@@ -5,6 +5,7 @@ var sighting_equipments = [];
 var capture_equipments = [];
 var road_accident_equipments = [];
 var accident_equipments = [];
+var all_equipments = [];
 var options = [];
 
 document.getElementById("observ_type").onchange = changePossibleEquipmentFilterForm;
@@ -33,6 +34,7 @@ function fetchEquipments(user_id) {
                     } if (equipments[i].sighting_type_allowed) {
                         sighting_equipments.push(option);
                     };
+                    all_equipments.push(option);
                     i = i + 1;
                 };
                 options.push(catch_equipments, sighting_equipments, capture_equipments, road_accident_equipments, accident_equipments);
@@ -67,7 +69,6 @@ function changePossibleEquipmentFilterForm() {
         options_set = new Set()
         for (var equip_options of list_of_option_lists) {
             for (var option of equip_options) {
-                option.selected = false;
                 options_set.add(option);
             };
         };
@@ -79,10 +80,8 @@ function changePossibleEquipmentFilterForm() {
 };
 
 function fillOptionsWithAllEquipments() {
-    for (var equip_options of options) {
-        for (var option of equip_options) {
-            equipment_field.options.add(new Option(option.name, option.id, option.selected_val, option.default_val));
-        };
+    for (var option of all_equipments) {
+        equipment_field.options.add(new Option(option.name, option.id, option.selected_val, option.default_val));
     };
 };
 

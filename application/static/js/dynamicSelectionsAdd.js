@@ -55,12 +55,3 @@ function changePossibleEquipment() {
         equipment_field.options.add(option);
     };
 };
-
-
-function fillOptionsWithAllEquipments() {
-    for (var equip_options of options) {
-        for (var option of equip_options) {
-            equipment_field.options.add(option);
-        };
-    };
-};
